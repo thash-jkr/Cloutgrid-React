@@ -16,7 +16,7 @@ export function AppRoutes() {
       <Route path="/register/creator" element={<RegisterCreator />} />
       <Route path="/register/brand" element={<RegisterBrand />} />
       <Route path="/password/forgot" element={<ForgotPassword />} />
-      <Route path="/password/reset" element={<ResetPassword />} />
+      <Route path="/password/reset/:uid/:token" element={<ResetPassword />} />
     </Routes>
   );
 }

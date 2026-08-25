@@ -1,14 +1,12 @@
 import NavBar from "@/components/NavBar";
 import kidImage from "@/assets/kid.png";
-import {
-  faBriefcase,
-  faVideo,
-} from "@fortawesome/free-solid-svg-icons";
+import { faBriefcase, faVideo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, SegmentedButton, SegmentedButtonSet } from "actify";
 import { useState } from "react";
 import iOSLogo from "@/assets/app_store_logo.png";
 import androidLogo from "@/assets/play_store_logo.png";
+import { Link } from "react-router-dom";
 
 interface EmojiIcon {
   codepoint: string;
@@ -47,7 +45,7 @@ export default function LandingPage() {
     <div className="container min-h-dvh  mx-auto">
       <NavBar />
 
-      <main className="mx-auto flex min-h-dvh px-4 pt-28 pb-6">
+      <main className="mx-auto flex min-h-dvh px-4">
         <div className="flex flex-col flex-1 justify-center items-center lg:items-start gap-5">
           <h1 className="text-3xl font-bold leading-tight sm:text-4xl w-full">
             <span className="text-primary">Clout</span>
@@ -138,14 +136,16 @@ export default function LandingPage() {
                 </a>
               </div>
             ) : (
-              <Button>
-                <span>
-                  Join{" "}
-                  <span className="font-bold text-primary">
-                    Clout<span className="text-secondary">grid</span>
+              <Link to="/register/brand">
+                <Button>
+                  <span>
+                    Join{" "}
+                    <span className="font-bold text-primary">
+                      Clout<span className="text-secondary">grid</span>
+                    </span>
                   </span>
-                </span>
-              </Button>
+                </Button>
+              </Link>
             )}
           </div>
         </div>

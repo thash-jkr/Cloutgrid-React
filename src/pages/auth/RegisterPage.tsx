@@ -1,13 +1,19 @@
 import reg_bg from "@/assets/gradient_bg.jpg";
-import NavBar from "@/components/NavBar";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
+import logo from "@/assets/cloutgrid_logo_icon.png"
 
 const RegisterPage = () => {
   return (
     <div className="min-h-dvh mx-auto">
-      <NavBar />
+      <Link to="/" className="p-0 absolute top-1 left-1">
+        <img
+          src={logo}
+          alt="Cloutgrid logo"
+          className="h-14 w-14 object-center"
+        />
+      </Link>
 
       <div className="flex">
         <div className="flex flex-col flex-1 justify-center items-center h-dvh gap-7">
@@ -40,7 +46,7 @@ const RegisterPage = () => {
             </Link>
 
             <Link
-              to="/register/business"
+              to="/register/brand"
               className="flex flex-1 justify-center w-3/4"
             >
               <div
@@ -66,10 +72,7 @@ const RegisterPage = () => {
           <div className="flex flex-col justify-center items-center font-semibold gap-2">
             <div className="flex justify-center items-center gap-2">
               <span>Already have an account?</span>
-              <Link
-                className=" hover:text-secondary font-bold"
-                to={"/login"}
-              >
+              <Link className=" hover:text-secondary font-bold" to={"/login"}>
                 Login
               </Link>
             </div>
