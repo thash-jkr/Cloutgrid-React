@@ -50,14 +50,14 @@ const LoginPage = () => {
           </Button>
 
           <div className="flex flex-col justify-center items-center font-semibold gap-2">
-            <div className=" hover:text-secondary font-extrabold">
+            <div className=" hover:text-secondary font-bold">
               <Link to={"/forgot-password"}>Forgot password?</Link>
             </div>
             <div>
-              <span>
+              <span className="flex justify-center items-center gap-2">
                 Not a {type}?{" "}
                 <span
-                  className=" hover:text-secondary font-extrabold cursor-pointer"
+                  className=" hover:text-secondary font-bold cursor-pointer"
                   onClick={() =>
                     setType(type == "creator" ? "brand" : "creator")
                   }
@@ -66,10 +66,10 @@ const LoginPage = () => {
                 </span>
               </span>
             </div>
-            <div className="flex justify-center items-center">
+            <div className="flex justify-center items-center gap-2">
               <span>Don't have an account?</span>
               <Link
-                className=" hover:text-secondary font-extrabold ml-1"
+                className=" hover:text-secondary font-bold"
                 to={"/register"}
               >
                 Register
@@ -79,7 +79,7 @@ const LoginPage = () => {
         </div>
 
         <div className="hidden lg:flex flex-2 h-dvh">
-          <img className="object-cover" src={login_bg} alt="Couples" />
+          <img className="object-cover" src={login_bg} alt="Login Cover" />
         </div>
       </div>
     </div>

@@ -43,7 +43,7 @@ export default function NavBar() {
             </Button>
           </Link>
 
-          <Link to="/">
+          <Link to="/register">
             <Button color="primary" variant="filled" className="gap-0">
               <span>
                 Join the <span className="font-bold text-secondary">grid</span>
