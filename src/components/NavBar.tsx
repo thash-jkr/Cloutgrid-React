@@ -37,7 +37,7 @@ export default function NavBar() {
         </div>
 
         <div className="flex items-center gap-3 pr-3">
-          <Link to="/">
+          <Link to="/login">
             <Button color="primary" variant="filled">
               Login
             </Button>
