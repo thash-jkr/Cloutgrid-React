@@ -1,4 +1,3 @@
-import NavBar from "@/components/NavBar";
 import login_bg from "@/assets/carol-magalhaes-dSsXm15D9hg-unsplash.jpg";
 import { Button, IconButton, TextField } from "actify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -10,6 +9,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import logo from "@/assets/cloutgrid_logo_icon.png"
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,7 +17,13 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-dvh mx-auto">
-      <NavBar />
+        <Link to="/" className="p-0 absolute top-1 left-1">
+          <img
+            src={logo}
+            alt="Cloutgrid logo"
+            className="h-14 w-14 object-center"
+          />
+        </Link>
 
       <div className="flex">
         <div className="flex flex-col flex-1 justify-center items-center gap-7 h-dvh">
@@ -51,7 +57,7 @@ const LoginPage = () => {
 
           <div className="flex flex-col justify-center items-center font-semibold gap-2">
             <div className=" hover:text-secondary font-bold">
-              <Link to={"/forgot-password"}>Forgot password?</Link>
+              <Link to={"/password/forgot"}>Forgot password?</Link>
             </div>
             <div>
               <span className="flex justify-center items-center gap-2">

@@ -22,7 +22,7 @@ interface FeatureTileProps {
 
 function FeatureTile({ label, icon }: FeatureTileProps) {
   return (
-    <div className="flex items-center justify-center gap-1.5 text-center">
+    <div className="flex items-center justify-center gap-2 text-center">
       <picture>
         <source
           srcSet={`https://fonts.gstatic.com/s/e/notoemoji/latest/${icon.codepoint}/512.webp`}
@@ -31,11 +31,11 @@ function FeatureTile({ label, icon }: FeatureTileProps) {
         <img
           src={`https://fonts.gstatic.com/s/e/notoemoji/latest/${icon.codepoint}/512.gif`}
           alt={icon.alt}
-          width={20}
-          height={20}
+          width={25}
+          height={25}
         />
       </picture>
-      <p className="text-sm font-bold">{label}</p>
+      <p className="font-semibold">{label}</p>
     </div>
   );
 }
@@ -49,7 +49,7 @@ export default function LandingPage() {
 
       <main className="mx-auto flex min-h-dvh px-4 pt-28 pb-6">
         <div className="flex flex-col flex-1 justify-center items-center lg:items-start gap-5">
-          <h1 className="text-3xl font-extrabold leading-tight sm:text-4xl w-full">
+          <h1 className="text-3xl font-bold leading-tight sm:text-4xl w-full">
             <span className="text-primary">Clout</span>
             <span className="text-secondary">grid</span>
             <br />
@@ -154,7 +154,7 @@ export default function LandingPage() {
           <img
             src={kidImage}
             alt="Cloutgrid illustration"
-            className="h-full object-cover"
+            className="w-full object-cover"
           />
 
           {/* <span className="flex items-center gap-3">
