@@ -38,7 +38,7 @@ export const initializeAuth = createAsyncThunk<AuthState>(
     const user = userJson ? (JSON.parse(userJson) as UserContainer) : null;
 
     if (!refresh) {
-      return { ...initialAuthState };
+      return { ...initialAuthState, isInitializing: false };
     }
 
     try {
@@ -50,6 +50,7 @@ export const initializeAuth = createAsyncThunk<AuthState>(
         localStorage.setItem("refresh", response.data.refresh);
       return {
         isAuth: true,
+        isInitializing: false,
         user,
         type,
         access: response.data.access,

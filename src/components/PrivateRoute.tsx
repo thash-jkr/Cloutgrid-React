@@ -2,10 +2,10 @@ import { useAppSelector } from '@/app/hooks';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 const PrivateRoute = () => {
-  const { isAuth, isLoading } = useAppSelector((state) => state.auth);
+  const { isAuth, isInitializing } = useAppSelector((state) => state.auth);
   const location = useLocation();
 
-  if (isLoading) {
+  if (isInitializing) {
     return <p className="p-4 text-sm text-gray-500">Loading…</p>;
   }
 

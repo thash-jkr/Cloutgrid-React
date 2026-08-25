@@ -53,6 +53,7 @@ export interface LoginResponse {
 
 export interface AuthState {
   isAuth: boolean;
+  isInitializing: boolean;
   user: UserContainer | null;
   type: string | null;
   access: string | null;
@@ -62,6 +63,7 @@ export interface AuthState {
 
 export const initialAuthState: AuthState = {
   isAuth: false,
+  isInitializing: true,
   user: null,
   type: null,
   access: null,
