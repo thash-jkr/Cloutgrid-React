@@ -47,7 +47,7 @@ export default function LandingPage() {
 
       <main className="mx-auto flex min-h-dvh px-4">
         <div className="flex flex-col flex-1 justify-center items-center lg:items-start gap-5">
-          <h1 className="text-3xl font-bold leading-tight sm:text-4xl w-full">
+          <h1 className="text-3xl font-bold leading-tight w-full">
             <span className="text-primary">Clout</span>
             <span className="text-secondary">grid</span>
             <br />
