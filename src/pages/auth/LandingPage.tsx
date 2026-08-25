@@ -1,14 +1,8 @@
 import NavBar from "@/components/NavBar";
 import kidImage from "@/assets/kid.png";
 import {
-  faBarChart,
   faBriefcase,
-  faCircle,
-  faRocket,
-  faShield,
   faVideo,
-  faWandSparkles,
-  type IconDefinition,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, SegmentedButton, SegmentedButtonSet } from "actify";
@@ -17,8 +11,8 @@ import iOSLogo from "@/assets/app_store_logo.png";
 import androidLogo from "@/assets/play_store_logo.png";
 
 interface EmojiIcon {
-  codepoint: string; // e.g. '1f680' for 🚀
-  alt: string; // e.g. '🚀'
+  codepoint: string;
+  alt: string;
 }
 
 interface FeatureTileProps {
