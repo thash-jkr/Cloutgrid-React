@@ -8,22 +8,37 @@ import {
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import logo from "@/assets/cloutgrid_logo_icon.png"
+import { Link, useNavigate } from "react-router-dom";
+import logo from "@/assets/cloutgrid_logo_icon.png";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { login } from "@/slices/authSlice";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [type, setType] = useState("creator");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { isLoading, errorMessage } = useAppSelector((state) => state.auth);
+
+  const handleLogin = async () => {
+    const result = await dispatch(login({ email, password, type }));
+    if (login.fulfilled.match(result)) {
+      navigate("/");
+    }
+  };
 
   return (
     <div className="min-h-dvh mx-auto">
-        <Link to="/" className="p-0 absolute top-1 left-1">
-          <img
-            src={logo}
-            alt="Cloutgrid logo"
-            className="h-14 w-14 object-center"
-          />
-        </Link>
+      <Link to="/" className="p-0 absolute top-1 left-1">
+        <img
+          src={logo}
+          alt="Cloutgrid logo"
+          className="h-14 w-14 object-center"
+        />
+      </Link>
 
       <div className="flex">
         <div className="flex flex-col flex-1 justify-center items-center gap-7 h-dvh">
@@ -35,6 +50,8 @@ const LoginPage = () => {
             <TextField
               label="Email"
               variant="outlined"
+              value={email}
+              onChange={setEmail}
               leadingIcon={<FontAwesomeIcon icon={faEnvelope} />}
             />
 
@@ -42,17 +59,28 @@ const LoginPage = () => {
               label="Password"
               variant="outlined"
               type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={setPassword}
               leadingIcon={<FontAwesomeIcon icon={faLock} />}
               trailingIcon={
                 <IconButton onPress={() => setShowPassword(!showPassword)}>
-                  {<FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />}
+                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
                 </IconButton>
               }
             />
+
+            {errorMessage && (
+              <p className="text-sm text-red-500">{errorMessage}</p>
+            )}
           </div>
 
-          <Button color="primary" variant="filled">
-            Login
+          <Button
+            color="primary"
+            variant="filled"
+            onClick={handleLogin}
+            isDisabled={isLoading}
+          >
+            {isLoading ? "Logging in…" : "Login"}
           </Button>
 
           <div className="flex flex-col justify-center items-center font-semibold gap-2">
