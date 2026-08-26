@@ -1,52 +1,30 @@
-export interface UserProfile {
+interface BaseUserProfile {
   id: number;
   name: string;
-  username: string;
   email: string;
-  bio?: string;
-  user_type: string;
+  username: string;
   profile_photo: string;
+  bio?: string;
   followers_count: number;
   following_count: number;
+  category?: string;
 }
 
-export interface UserContainerDTO {
-  user: UserProfile;
-  area?: string;
-  instagram_connected?: boolean;
-  youtube_connected?: boolean;
-  target_audience?: string;
+export interface CreatorProfile extends BaseUserProfile {
+  type: 'creator';
+  instagram_connected: boolean;
+  youtube_connected: boolean;
+}
+
+export interface BusinessProfile extends BaseUserProfile {
+  type: 'business';
   website?: string;
-  is_following?: boolean;
-  is_blocking?: boolean;
-  is_blocker?: boolean;
 }
 
-export interface UserContainer {
-  profile: UserProfile;
-  area?: string;
-  instagram_connected?: boolean;
-  youtube_connected?: boolean;
-  target_audience?: string;
-  website?: string;
-  is_following?: boolean;
-  is_blocking?: boolean;
-  is_blocker?: boolean;
-}
-
-export function mapUserContainer(dto: UserContainerDTO): UserContainer {
-  const { user, ...rest } = dto;
-  return { profile: user, ...rest };
-}
-
-export interface LoginResponseDTO {
-  user: UserContainerDTO;
-  access: string;
-  refresh: string;
-}
+export type UserProfile = CreatorProfile | BusinessProfile;
 
 export interface LoginResponse {
-  user: UserContainer;
+  user: UserProfile;
   access: string;
   refresh: string;
 }
@@ -54,7 +32,7 @@ export interface LoginResponse {
 export interface AuthState {
   isAuth: boolean;
   isInitializing: boolean;
-  user: UserContainer | null;
+  user: UserProfile | null;
   type: string | null;
   access: string | null;
   isLoading: boolean;

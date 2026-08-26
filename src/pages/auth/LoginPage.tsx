@@ -77,7 +77,7 @@ const LoginPage = () => {
           <Button
             color="primary"
             variant="filled"
-            onClick={handleLogin}
+            onPress={handleLogin}
             isDisabled={isLoading}
           >
             {isLoading ? "Logging in…" : "Login"}
