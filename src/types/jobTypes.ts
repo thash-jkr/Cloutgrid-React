@@ -34,9 +34,16 @@ export interface ApplicationModel {
 
 export interface JobState {
   jobs: JobModel[];
-  jobsNextPageUrl: string | null;
-  jobsHasMore: boolean;
   applications: ApplicationModel[];
   jobLoading: boolean;
   jobError: string | null;
+  jobSuccessMessage: string | null;
 }
+
+export const initialJobState: JobState = {
+  jobs: [],
+  applications: [],
+  jobLoading: false,
+  jobError: null,
+  jobSuccessMessage: null,
+};

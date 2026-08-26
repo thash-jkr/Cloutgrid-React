@@ -95,6 +95,25 @@ export interface IntegrationState {
   instagramMedia: InstagramMediaModel[];
   youtubeChannel: YoutubeChannelModel | null;
   youtubeMedia: YoutubeMediaModel[];
+
+  otherInstagramPage: InstagramPageModel | null;
+  otherInstagramMedia: InstagramMediaModel[];
+  otherYoutubeChannel: YoutubeChannelModel | null;
+  otherYoutubeMedia: YoutubeMediaModel[];
+
   integrationLoading: boolean;
   integrationError: string | null;
+}
+
+export const initialIntegrationState: IntegrationState = {
+  instagramPage: null,
+  instagramMedia: [],
+  youtubeChannel: null,
+  youtubeMedia: [],
+  otherInstagramPage: null,
+  otherInstagramMedia: [],
+  otherYoutubeChannel: null,
+  otherYoutubeMedia: [],
+  integrationLoading: false,
+  integrationError: null
 }

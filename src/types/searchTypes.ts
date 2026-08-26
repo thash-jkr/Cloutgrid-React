@@ -6,8 +6,17 @@ export interface AllUsersResponse {
 }
 
 export interface SearchState {
-  creators: UserProfile[];
-  businesses: UserProfile[];
+  suggestions: UserProfile[];
+  results: UserProfile[];
+  collabs: UserProfile[];
   searchLoading: boolean;
   searchError: string | null;
 }
+
+export const initialSearchState: SearchState = {
+  suggestions: [],
+  results: [],
+  collabs: [],
+  searchLoading: false,
+  searchError: null,
+};

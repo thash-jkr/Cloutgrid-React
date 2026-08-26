@@ -8,16 +8,19 @@ interface BaseUserProfile {
   followers_count: number;
   following_count: number;
   category?: string;
+  is_following?: boolean;
+  is_blocking?: boolean;
+  is_blocker?: boolean;
 }
 
 export interface CreatorProfile extends BaseUserProfile {
-  type: 'creator';
+  type: "creator";
   instagram_connected: boolean;
   youtube_connected: boolean;
 }
 
 export interface BusinessProfile extends BaseUserProfile {
-  type: 'business';
+  type: "business";
   website?: string;
 }
 
