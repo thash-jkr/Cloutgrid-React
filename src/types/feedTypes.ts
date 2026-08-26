@@ -1,4 +1,4 @@
-import type { UserContainer, UserProfile } from './authTypes';
+import type { UserProfile } from './authTypes';
 
 export interface NotificationModel {
   id: number;
@@ -10,9 +10,8 @@ export interface NotificationModel {
 
 export interface PostModel {
   id: number;
-  author: UserProfile;
-  posted_by: UserContainer;
-  collaboration?: UserContainer;
+  posted_by: UserProfile;
+  collaboration?: UserProfile;
   like_count: number;
   comment_count: number;
   is_liked: boolean;
