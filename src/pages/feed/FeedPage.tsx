@@ -1,105 +1,30 @@
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { logout } from "@/slices/authSlice";
-import { Button } from "actify";
+import { useAppSelector } from "@/app/hooks";
+import NavBar from "@/components/NavBar";
 import { useEffect } from "react";
+import FeedLeft from "./FeedLeft";
+import FeedMiddle from "./FeedMiddle";
+import FeedRight from "./FeedRight";
 
 export default function FeedPage() {
-  const dispatch = useAppDispatch();
-  const { user, type } = useAppSelector((state) => state.auth);
+  const { user } = useAppSelector((state) => state.auth);
 
-  useEffect(() => {
-    console.log(user);
-  }, []);
+  useEffect(() => {}, []);
 
   if (!user) {
     return <p className="p-4 text-sm text-gray-500">No user data available.</p>;
   }
 
   return (
-    <div className="mx-auto max-w-xl p-4">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Feed</h1>
-        <Button
-          variant="outlined"
-          color="error"
-          onPress={() => dispatch(logout())}
-        >
-          Logout
-        </Button>
+    <div className="container mx-auto flex items-start mt-20 lg:mt-22 gap-3">
+      <NavBar />
+      <div className="hidden lg:flex basis-1/4 w-full noselect">
+        <FeedLeft />
       </div>
-
-      <div className="rounded-2xl border border-gray-200 p-5 shadow-sm">
-        <div className="flex items-center gap-4">
-          <img
-            src={user.profile_photo}
-            alt={user.username}
-            className="h-16 w-16 rounded-full object-cover"
-          />
-          <div>
-            <p className="text-lg font-bold">{user.name}</p>
-            <p className="text-sm text-gray-500">@{user.username}</p>
-          </div>
-        </div>
-
-        {user.bio && <p className="mt-4 text-sm text-gray-700">{user.bio}</p>}
-
-        <div className="mt-4 flex gap-6 text-sm">
-          <span>
-            <span className="font-semibold">{user.followers_count}</span>{" "}
-            <span className="text-gray-500">Followers</span>
-          </span>
-          <span>
-            <span className="font-semibold">{user.following_count}</span>{" "}
-            <span className="text-gray-500">Following</span>
-          </span>
-        </div>
-
-        <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
-          <div>
-            <dt className="text-gray-500">Email</dt>
-            <dd className="font-medium">{user.email}</dd>
-          </div>
-          <div>
-            <dt className="text-gray-500">Account type</dt>
-            <dd className="font-medium capitalize">{type ?? user.type}</dd>
-          </div>
-          {user.category && (
-            <div>
-              <dt className="text-gray-500">Area</dt>
-              <dd className="font-medium">{user.category}</dd>
-            </div>
-          )}
-          {user.type == "business" && user.website && (
-            <div>
-              <dt className="text-gray-500">Website</dt>
-              <dd className="font-medium">{user.website}</dd>
-            </div>
-          )}
-        </dl>
-
-        {user.type == "creator" && (
-          <div className="mt-5 flex gap-2 text-sm">
-            <span
-              className={`rounded-full px-3 py-1 ${
-                user.instagram_connected
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-500"
-              }`}
-            >
-              Instagram{" "}
-              {user.instagram_connected ? "connected" : "not connected"}
-            </span>
-            <span
-              className={`rounded-full px-3 py-1 ${
-                user.youtube_connected
-                  ? "bg-green-100 text-green-700"
-                  : "bg-gray-100 text-gray-500"
-              }`}
-            >
-              YouTube {user.youtube_connected ? "connected" : "not connected"}
-            </span>
-          </div>
-        )}
+      <div className="flex lg:basis-2/4">
+        <FeedMiddle />
+      </div>
+      <div className="hidden lg:flex basis-1/4 w-full noselect">
+        <FeedRight />
       </div>
     </div>
   );
