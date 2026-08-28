@@ -1,7 +1,12 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { apiClient } from '@/app/client';
 import { buildFormData } from '@/utils/formData';
-import { initialAuthState, type AuthState, type LoginResponse, type UserProfile } from '@/types/authTypes';
+import {
+  initialAuthState,
+  type AuthState,
+  type LoginResponse,
+  type UserProfile,
+} from '@/types/authTypes';
 
 function persistSession(refresh: string, user: UserProfile, type: string) {
   localStorage.setItem('refresh', refresh);
@@ -31,7 +36,7 @@ export const initializeAuth = createAsyncThunk<AuthState>('auth/initializeAuth',
     const response = await apiClient.post<{ access: string; refresh?: string }>(
       '/token/refresh/',
       { refresh },
-      { requireAuth: false }
+      { requireAuth: false },
     );
     if (response.data.refresh) localStorage.setItem('refresh', response.data.refresh);
     return {
@@ -58,7 +63,7 @@ export const login = createAsyncThunk<
     const response = await apiClient.post<LoginResponse>(
       `/login/${type}/`,
       { email, password },
-      { requireAuth: false }
+      { requireAuth: false },
     );
     return { response: response.data, type };
   } catch (error) {
@@ -66,14 +71,17 @@ export const login = createAsyncThunk<
   }
 });
 
-export const logout = createAsyncThunk<void, void, { rejectValue: string }>('auth/logout', async () => {
-  const refresh = localStorage.getItem('refresh') ?? '';
-  try {
-    await apiClient.post('/logout/', { refresh });
-  } catch {
-    // Matches Flutter: logout failure is swallowed, session is cleared regardless.
-  }
-});
+export const logout = createAsyncThunk<void, void, { rejectValue: string }>(
+  'auth/logout',
+  async () => {
+    const refresh = localStorage.getItem('refresh') ?? '';
+    try {
+      await apiClient.post('/logout/', { refresh });
+    } catch {
+      // Matches Flutter: logout failure is swallowed, session is cleared regardless.
+    }
+  },
+);
 
 export const updateProfile = createAsyncThunk<
   UserProfile,
@@ -83,7 +91,7 @@ export const updateProfile = createAsyncThunk<
   try {
     const formData = buildFormData(
       data,
-      imageBlob ? { blob: imageBlob, key: 'profile_photo', filename: 'profile.jpg' } : undefined
+      imageBlob ? { blob: imageBlob, key: 'profile_photo', filename: 'profile.jpg' } : undefined,
     );
     const response = await apiClient.put<UserProfile>(`/profile/${type}/`, formData);
     return response.data;
@@ -124,7 +132,7 @@ export const resetPassword = createAsyncThunk<void, string, { rejectValue: strin
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const deleteAccount = createAsyncThunk<void, string, { rejectValue: string }>(
@@ -135,7 +143,7 @@ export const deleteAccount = createAsyncThunk<void, string, { rejectValue: strin
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 const authSlice = createSlice({
@@ -219,24 +227,35 @@ const authSlice = createSlice({
       })
 
       .addMatcher(
-        (action) => [register.pending.type, handleOTP.pending.type, resetPassword.pending.type].includes(action.type),
+        (action) =>
+          [register.pending.type, handleOTP.pending.type, resetPassword.pending.type].includes(
+            action.type,
+          ),
         (state) => {
           state.isLoading = true;
           state.errorMessage = null;
-        }
+        },
       )
       .addMatcher(
-        (action) => [register.fulfilled.type, handleOTP.fulfilled.type, resetPassword.fulfilled.type].includes(action.type),
+        (action) =>
+          [
+            register.fulfilled.type,
+            handleOTP.fulfilled.type,
+            resetPassword.fulfilled.type,
+          ].includes(action.type),
         (state) => {
           state.isLoading = false;
-        }
+        },
       )
       .addMatcher(
-        (action) => [register.rejected.type, handleOTP.rejected.type, resetPassword.rejected.type].includes(action.type),
+        (action) =>
+          [register.rejected.type, handleOTP.rejected.type, resetPassword.rejected.type].includes(
+            action.type,
+          ),
         (state, action: PayloadAction<string | undefined>) => {
           state.isLoading = false;
           state.errorMessage = action.payload ?? 'Something went wrong';
-        }
+        },
       );
   },
 });

@@ -1,9 +1,6 @@
-import {
-  createAsyncThunk,
-  createSlice,
-} from "@reduxjs/toolkit";
-import { apiClient } from "@/app/client";
-import { setInstagramConnected, setYoutubeConnected } from "./authSlice";
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { apiClient } from '@/app/client';
+import { setInstagramConnected, setYoutubeConnected } from './authSlice';
 import {
   initialIntegrationState,
   type InstagramMediaModel,
@@ -15,8 +12,8 @@ import {
   type YoutubeChannelResponse,
   type YoutubeMediaModel,
   type YoutubeMediaResponse,
-} from "@/types/integrationTypes";
-import type { AppDispatch, RootState } from "@/app/store";
+} from '@/types/integrationTypes';
+import type { AppDispatch, RootState } from '@/app/store';
 
 interface ThunkConfig {
   rejectValue: string;
@@ -27,13 +24,10 @@ interface ThunkConfig {
 // --- Instagram ---
 
 export const connectInstagram = createAsyncThunk<string, void, ThunkConfig>(
-  "integration/connectInstagram",
+  'integration/connectInstagram',
   async (_, { dispatch, rejectWithValue }) => {
     try {
-      const response = await apiClient.post<InstagramResponseModel>(
-        "/instagram/connect/",
-        {},
-      );
+      const response = await apiClient.post<InstagramResponseModel>('/instagram/connect/', {});
       dispatch(setInstagramConnected(true));
       return `@${response.data.ig_page} connected`;
     } catch (error) {
@@ -43,11 +37,11 @@ export const connectInstagram = createAsyncThunk<string, void, ThunkConfig>(
 );
 
 export const disconnectInstagram = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/disconnectInstagram",
+  'integration/disconnectInstagram',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setInstagramConnected(false));
-      await apiClient.post("/auth/instagram/disconnect/", {});
+      await apiClient.post('/auth/instagram/disconnect/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -55,11 +49,11 @@ export const disconnectInstagram = createAsyncThunk<void, void, ThunkConfig>(
 );
 
 export const purgeInstagram = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/purgeInstagram",
+  'integration/purgeInstagram',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setInstagramConnected(false));
-      await apiClient.post("/auth/instagram/purge/", {});
+      await apiClient.post('/auth/instagram/purge/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -67,31 +61,25 @@ export const purgeInstagram = createAsyncThunk<void, void, ThunkConfig>(
 );
 
 export const fetchInstagramProfile = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/fetchInstagramProfile",
+  'integration/fetchInstagramProfile',
   async (_, { rejectWithValue }) => {
     try {
-      await apiClient.post("/instagram/profile/fetch/", {});
+      await apiClient.post('/instagram/profile/fetch/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   },
 );
 
-async function readInstagramProfile(
-  username: string,
-): Promise<InstagramPageModel> {
+async function readInstagramProfile(username: string): Promise<InstagramPageModel> {
   const response = await apiClient.get<InstagramPageResponse>(
     `/instagram/profile/read/${username}/`,
   );
   return response.data.profile_data;
 }
 
-export const loadOwnInstagramProfile = createAsyncThunk<
-  InstagramPageModel,
-  string,
-  ThunkConfig
->(
-  "integration/loadOwnInstagramProfile",
+export const loadOwnInstagramProfile = createAsyncThunk<InstagramPageModel, string, ThunkConfig>(
+  'integration/loadOwnInstagramProfile',
   async (username, { rejectWithValue }) => {
     try {
       return await readInstagramProfile(username);
@@ -101,12 +89,8 @@ export const loadOwnInstagramProfile = createAsyncThunk<
   },
 );
 
-export const readOtherInstagramProfile = createAsyncThunk<
-  InstagramPageModel,
-  string,
-  ThunkConfig
->(
-  "integration/readOtherInstagramProfile",
+export const readOtherInstagramProfile = createAsyncThunk<InstagramPageModel, string, ThunkConfig>(
+  'integration/readOtherInstagramProfile',
   async (username, { rejectWithValue }) => {
     try {
       return await readInstagramProfile(username);
@@ -117,31 +101,25 @@ export const readOtherInstagramProfile = createAsyncThunk<
 );
 
 export const fetchInstagramMedia = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/fetchInstagramMedia",
+  'integration/fetchInstagramMedia',
   async (_, { rejectWithValue }) => {
     try {
-      await apiClient.post("/instagram/media/fetch/", {});
+      await apiClient.post('/instagram/media/fetch/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   },
 );
 
-async function readInstagramMedia(
-  username: string,
-): Promise<InstagramMediaModel[]> {
+async function readInstagramMedia(username: string): Promise<InstagramMediaModel[]> {
   const response = await apiClient.get<InstagramMediaResponse>(
     `/instagram/media/read/${username}/`,
   );
   return response.data.media;
 }
 
-export const loadOwnInstagramMedia = createAsyncThunk<
-  InstagramMediaModel[],
-  string,
-  ThunkConfig
->(
-  "integration/loadOwnInstagramMedia",
+export const loadOwnInstagramMedia = createAsyncThunk<InstagramMediaModel[], string, ThunkConfig>(
+  'integration/loadOwnInstagramMedia',
   async (username, { rejectWithValue }) => {
     try {
       return await readInstagramMedia(username);
@@ -151,12 +129,8 @@ export const loadOwnInstagramMedia = createAsyncThunk<
   },
 );
 
-export const readOtherInstagramMedia = createAsyncThunk<
-  InstagramMediaModel[],
-  string,
-  ThunkConfig
->(
-  "integration/readOtherInstagramMedia",
+export const readOtherInstagramMedia = createAsyncThunk<InstagramMediaModel[], string, ThunkConfig>(
+  'integration/readOtherInstagramMedia',
   async (username, { rejectWithValue }) => {
     try {
       return await readInstagramMedia(username);
@@ -169,11 +143,11 @@ export const readOtherInstagramMedia = createAsyncThunk<
 // --- YouTube ---
 
 export const disconnectYoutube = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/disconnectYoutube",
+  'integration/disconnectYoutube',
   async (_, { dispatch, rejectWithValue }) => {
     try {
       dispatch(setYoutubeConnected(false));
-      await apiClient.post("/auth/google/disconnect/", {});
+      await apiClient.post('/auth/google/disconnect/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -181,31 +155,25 @@ export const disconnectYoutube = createAsyncThunk<void, void, ThunkConfig>(
 );
 
 export const fetchYoutubeChannel = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/fetchYoutubeChannel",
+  'integration/fetchYoutubeChannel',
   async (_, { rejectWithValue }) => {
     try {
-      await apiClient.post("/youtube/channel/fetch/", {});
+      await apiClient.post('/youtube/channel/fetch/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   },
 );
 
-async function readYoutubeChannel(
-  username: string,
-): Promise<YoutubeChannelModel> {
+async function readYoutubeChannel(username: string): Promise<YoutubeChannelModel> {
   const response = await apiClient.get<YoutubeChannelResponse>(
     `/youtube/channel/read/${username}/`,
   );
   return response.data.channel_data;
 }
 
-export const loadOwnYoutubeChannel = createAsyncThunk<
-  YoutubeChannelModel,
-  string,
-  ThunkConfig
->(
-  "integration/loadOwnYoutubeChannel",
+export const loadOwnYoutubeChannel = createAsyncThunk<YoutubeChannelModel, string, ThunkConfig>(
+  'integration/loadOwnYoutubeChannel',
   async (username, { rejectWithValue }) => {
     try {
       return await readYoutubeChannel(username);
@@ -215,12 +183,8 @@ export const loadOwnYoutubeChannel = createAsyncThunk<
   },
 );
 
-export const readOtherYoutubeChannel = createAsyncThunk<
-  YoutubeChannelModel,
-  string,
-  ThunkConfig
->(
-  "integration/readOtherYoutubeChannel",
+export const readOtherYoutubeChannel = createAsyncThunk<YoutubeChannelModel, string, ThunkConfig>(
+  'integration/readOtherYoutubeChannel',
   async (username, { rejectWithValue }) => {
     try {
       return await readYoutubeChannel(username);
@@ -231,43 +195,34 @@ export const readOtherYoutubeChannel = createAsyncThunk<
 );
 
 export const fetchYoutubeMedia = createAsyncThunk<void, void, ThunkConfig>(
-  "integration/fetchYoutubeMedia",
+  'integration/fetchYoutubeMedia',
   async (_, { rejectWithValue }) => {
     try {
-      await apiClient.post("/youtube/media/fetch/", {});
+      await apiClient.post('/youtube/media/fetch/', {});
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   },
 );
 
-async function readYoutubeMedia(
-  username: string,
-): Promise<YoutubeMediaModel[]> {
-  const response = await apiClient.get<YoutubeMediaResponse>(
-    `/youtube/media/read/${username}/`,
-  );
+async function readYoutubeMedia(username: string): Promise<YoutubeMediaModel[]> {
+  const response = await apiClient.get<YoutubeMediaResponse>(`/youtube/media/read/${username}/`);
   return response.data.media_data;
 }
 
-export const loadOwnYoutubeMedia = createAsyncThunk<
-  YoutubeMediaModel[],
-  string,
-  ThunkConfig
->("integration/loadOwnYoutubeMedia", async (username, { rejectWithValue }) => {
-  try {
-    return await readYoutubeMedia(username);
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
+export const loadOwnYoutubeMedia = createAsyncThunk<YoutubeMediaModel[], string, ThunkConfig>(
+  'integration/loadOwnYoutubeMedia',
+  async (username, { rejectWithValue }) => {
+    try {
+      return await readYoutubeMedia(username);
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
 
-export const readOtherYoutubeMedia = createAsyncThunk<
-  YoutubeMediaModel[],
-  string,
-  ThunkConfig
->(
-  "integration/readOtherYoutubeMedia",
+export const readOtherYoutubeMedia = createAsyncThunk<YoutubeMediaModel[], string, ThunkConfig>(
+  'integration/readOtherYoutubeMedia',
   async (username, { rejectWithValue }) => {
     try {
       return await readYoutubeMedia(username);

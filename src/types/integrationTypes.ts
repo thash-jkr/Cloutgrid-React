@@ -115,5 +115,5 @@ export const initialIntegrationState: IntegrationState = {
   otherYoutubeChannel: null,
   otherYoutubeMedia: [],
   integrationLoading: false,
-  integrationError: null
-}
+  integrationError: null,
+};

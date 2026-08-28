@@ -11,7 +11,10 @@ function normalizeError(error: AxiosError): ApiError {
   if (error.response) {
     const data = error.response.data;
     const message =
-      typeof data === 'object' && data !== null && 'message' in data && typeof data.message === 'string'
+      typeof data === 'object' &&
+      data !== null &&
+      'message' in data &&
+      typeof data.message === 'string'
         ? data.message
         : `An error occurred, status code: ${error.response.status}`;
     return new ServerError(message);
@@ -50,7 +53,7 @@ apiClient.interceptors.response.use(
       const refreshResponse = await apiClient.post<{ access: string; refresh?: string }>(
         '/token/refresh/',
         { refresh },
-        { isRefreshRequest: true }
+        { isRefreshRequest: true },
       );
 
       const newAccess = refreshResponse.data.access;
@@ -64,5 +67,5 @@ apiClient.interceptors.response.use(
       store.dispatch({ type: 'auth/clearSession' });
       return Promise.reject(normalizeError(error));
     }
-  }
+  },
 );

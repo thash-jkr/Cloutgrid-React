@@ -14,7 +14,7 @@ export const fetchSuggestions = createAsyncThunk<UserProfile[], void, { rejectVa
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const handleSearch = createAsyncThunk<UserProfile[], string, { rejectValue: string }>(
@@ -26,20 +26,23 @@ export const handleSearch = createAsyncThunk<UserProfile[], string, { rejectValu
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
-export const handleSearchBusiness = createAsyncThunk<UserProfile[], string, { rejectValue: string }>(
-  'search/handleSearchBusiness',
-  async (query, { rejectWithValue }) => {
-    try {
-      const response = await apiClient.get<UserProfile[]>('/search-business', { params: { q: query } });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
+export const handleSearchBusiness = createAsyncThunk<
+  UserProfile[],
+  string,
+  { rejectValue: string }
+>('search/handleSearchBusiness', async (query, { rejectWithValue }) => {
+  try {
+    const response = await apiClient.get<UserProfile[]>('/search-business', {
+      params: { q: query },
+    });
+    return response.data;
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
   }
-);
+});
 
 function shuffle<T>(items: T[]): T[] {
   const array = [...items];

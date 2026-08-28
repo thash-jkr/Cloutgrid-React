@@ -13,7 +13,7 @@ export const fetchJobs = createAsyncThunk<JobModel[], void, { rejectValue: strin
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const fetchBusinessJobs = createAsyncThunk<JobModel[], void, { rejectValue: string }>(
@@ -25,20 +25,21 @@ export const fetchBusinessJobs = createAsyncThunk<JobModel[], void, { rejectValu
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
-export const fetchApplications = createAsyncThunk<ApplicationModel[], JobModel, { rejectValue: string }>(
-  'job/fetchApplications',
-  async (job, { rejectWithValue }) => {
-    try {
-      const response = await apiClient.get<ApplicationModel[]>(`/jobs/my-jobs/${job.id}/`);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
+export const fetchApplications = createAsyncThunk<
+  ApplicationModel[],
+  JobModel,
+  { rejectValue: string }
+>('job/fetchApplications', async (job, { rejectWithValue }) => {
+  try {
+    const response = await apiClient.get<ApplicationModel[]>(`/jobs/my-jobs/${job.id}/`);
+    return response.data;
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
   }
-);
+});
 
 export const createJob = createAsyncThunk<
   void,
@@ -69,7 +70,7 @@ export const createJob = createAsyncThunk<
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const deleteJob = createAsyncThunk<number, number, { rejectValue: string }>(
@@ -81,7 +82,7 @@ export const deleteJob = createAsyncThunk<number, number, { rejectValue: string 
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const submitApplication = createAsyncThunk<
@@ -91,7 +92,7 @@ export const submitApplication = createAsyncThunk<
 >('job/submitApplication', async ({ id, answers }, { rejectWithValue }) => {
   try {
     const stringKeyedAnswers = Object.fromEntries(
-      Object.entries(answers).map(([key, value]) => [key, value])
+      Object.entries(answers).map(([key, value]) => [key, value]),
     );
     await apiClient.post(`/jobs/${id}/apply/`, { answers: stringKeyedAnswers });
     return id;
@@ -188,7 +189,7 @@ const jobSlice = createSlice({
         state.jobLoading = false;
         state.jobSuccessMessage = 'Application submitted';
         state.jobs = state.jobs.map((j) =>
-          j.id === action.payload ? { ...j, is_applied: true } : j
+          j.id === action.payload ? { ...j, is_applied: true } : j,
         );
       })
       .addCase(submitApplication.rejected, (state, action) => {

@@ -1,15 +1,11 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
-import { apiClient } from "@/app/client";
-import { saveUser } from "./authSlice";
-import { likePost as likeFeedPost } from "./feedSlice";
-import { initialProfileState } from "@/types/profileTypes";
-import type { UserProfile } from "@/types/authTypes";
-import type { PostModel } from "@/types/feedTypes";
-import type { AppDispatch, RootState } from "@/app/store";
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { apiClient } from '@/app/client';
+import { saveUser } from './authSlice';
+import { likePost as likeFeedPost } from './feedSlice';
+import { initialProfileState } from '@/types/profileTypes';
+import type { UserProfile } from '@/types/authTypes';
+import type { PostModel } from '@/types/feedTypes';
+import type { AppDispatch, RootState } from '@/app/store';
 
 interface ThunkConfig {
   rejectValue: string;
@@ -21,62 +17,51 @@ export const fetchProfile = createAsyncThunk<
   { user: UserProfile; other: boolean },
   { username: string; other: boolean },
   ThunkConfig
->(
-  "profile/fetchProfile",
-  async ({ username, other }, { dispatch, rejectWithValue }) => {
-    try {
-      const response = await apiClient.get<UserProfile>(
-        `/profiles/${username}/`,
-      );
-      if (!other) {
-        dispatch(saveUser(response.data));
-      }
-      return { user: response.data, other };
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
+>('profile/fetchProfile', async ({ username, other }, { dispatch, rejectWithValue }) => {
+  try {
+    const response = await apiClient.get<UserProfile>(`/profiles/${username}/`);
+    if (!other) {
+      dispatch(saveUser(response.data));
     }
-  },
-);
+    return { user: response.data, other };
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
+  }
+});
 
 export const fetchPosts = createAsyncThunk<
   { posts: PostModel[]; other: boolean },
   { username: string; other?: boolean },
   ThunkConfig
->(
-  "profile/fetchPosts",
-  async ({ username, other = false }, { rejectWithValue }) => {
-    try {
-      const response = await apiClient.get<PostModel[]>(`/posts/${username}/`);
-      return { posts: response.data, other };
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  },
-);
+>('profile/fetchPosts', async ({ username, other = false }, { rejectWithValue }) => {
+  try {
+    const response = await apiClient.get<PostModel[]>(`/posts/${username}/`);
+    return { posts: response.data, other };
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
+  }
+});
 
 export const fetchCollabs = createAsyncThunk<
   { collabs: PostModel[]; other: boolean },
   { username?: string; other?: boolean },
   ThunkConfig
->(
-  "profile/fetchCollabs",
-  async ({ username, other = false }, { rejectWithValue }) => {
-    const endpoint = other ? `/posts/collabs/${username}/` : "/posts/collabs/";
-    try {
-      const response = await apiClient.get<PostModel[]>(endpoint);
-      return { collabs: response.data, other };
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  },
-);
+>('profile/fetchCollabs', async ({ username, other = false }, { rejectWithValue }) => {
+  const endpoint = other ? `/posts/collabs/${username}/` : '/posts/collabs/';
+  try {
+    const response = await apiClient.get<PostModel[]>(endpoint);
+    return { collabs: response.data, other };
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
+  }
+});
 
 export const handleBlock = createAsyncThunk<
   boolean,
   { username: string; block: boolean },
   ThunkConfig
->("profile/handleBlock", async ({ username, block }, { rejectWithValue }) => {
-  const action = block ? "block" : "unblock";
+>('profile/handleBlock', async ({ username, block }, { rejectWithValue }) => {
+  const action = block ? 'block' : 'unblock';
   try {
     await apiClient.post(`/profiles/${username}/${action}/`);
     return block;
@@ -89,8 +74,8 @@ export const handleFollow = createAsyncThunk<
   boolean,
   { username: string; follow: boolean },
   ThunkConfig
->("profile/handleFollow", async ({ username, follow }, { rejectWithValue }) => {
-  const action = follow ? "follow" : "unfollow";
+>('profile/handleFollow', async ({ username, follow }, { rejectWithValue }) => {
+  const action = follow ? 'follow' : 'unfollow';
   try {
     await apiClient.post(`/profiles/${username}/${action}/`);
     return follow;
@@ -103,7 +88,7 @@ export const likePost = createAsyncThunk<
   { postId: number; liked: boolean; likeCount: number },
   number,
   ThunkConfig
->("profile/likePost", async (postId, { dispatch, rejectWithValue }) => {
+>('profile/likePost', async (postId, { dispatch, rejectWithValue }) => {
   try {
     const result = await dispatch(likeFeedPost(postId)).unwrap();
     return { postId, liked: result.liked, likeCount: result.like_count };
@@ -115,7 +100,7 @@ export const likePost = createAsyncThunk<
 // --- slice ---
 
 const profileSlice = createSlice({
-  name: "profile",
+  name: 'profile',
   initialState: initialProfileState,
   reducers: {
     clearOtherProfileData(state) {
@@ -145,7 +130,7 @@ const profileSlice = createSlice({
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.profileLoading = false;
-        state.profileError = action.payload ?? "Something went wrong";
+        state.profileError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(fetchPosts.pending, (state) => {
@@ -163,7 +148,7 @@ const profileSlice = createSlice({
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.profileLoading = false;
-        state.profileError = action.payload ?? "Something went wrong";
+        state.profileError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(fetchCollabs.pending, (state) => {
@@ -180,7 +165,7 @@ const profileSlice = createSlice({
       })
       .addCase(fetchCollabs.rejected, (state, action) => {
         state.profileLoading = false;
-        state.profileError = action.payload ?? "Something went wrong";
+        state.profileError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(handleBlock.pending, (state) => {
@@ -195,7 +180,7 @@ const profileSlice = createSlice({
       })
       .addCase(handleBlock.rejected, (state, action) => {
         state.profileLoading = false;
-        state.profileError = action.payload ?? "Something went wrong";
+        state.profileError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(handleFollow.fulfilled, (state, action) => {
@@ -205,26 +190,23 @@ const profileSlice = createSlice({
         }
       })
       .addCase(handleFollow.rejected, (state, action) => {
-        state.profileError = action.payload ?? "Something went wrong";
+        state.profileError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(likePost.fulfilled, (state, action) => {
         const { postId, liked, likeCount } = action.payload;
         const updateIfMatch = (p: PostModel): PostModel =>
-          p.id === postId
-            ? { ...p, is_liked: liked, like_count: likeCount }
-            : p;
+          p.id === postId ? { ...p, is_liked: liked, like_count: likeCount } : p;
         state.posts = state.posts.map(updateIfMatch);
         state.collabs = state.collabs.map(updateIfMatch);
         state.otherPosts = state.otherPosts.map(updateIfMatch);
         state.otherCollabs = state.otherCollabs.map(updateIfMatch);
       })
       .addCase(likePost.rejected, (state, action) => {
-        state.profileError = action.payload ?? "Something went wrong";
+        state.profileError = action.payload ?? 'Something went wrong';
       });
   },
 });
 
-export const { clearOtherProfileData, removePost, addNewPost } =
-  profileSlice.actions;
+export const { clearOtherProfileData, removePost, addNewPost } = profileSlice.actions;
 export default profileSlice.reducer;

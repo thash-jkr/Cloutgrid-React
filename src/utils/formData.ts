@@ -1,6 +1,6 @@
 export function buildFormData(
   params: Record<string, string>,
-  file?: { blob: Blob; key: string; filename?: string }
+  file?: { blob: Blob; key: string; filename?: string },
 ): FormData {
   const formData = new FormData();
   Object.entries(params).forEach(([key, value]) => formData.append(key, value));

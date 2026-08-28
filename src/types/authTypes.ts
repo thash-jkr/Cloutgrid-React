@@ -14,13 +14,13 @@ interface BaseUserProfile {
 }
 
 export interface CreatorProfile extends BaseUserProfile {
-  type: "creator";
+  type: 'creator';
   instagram_connected: boolean;
   youtube_connected: boolean;
 }
 
 export interface BusinessProfile extends BaseUserProfile {
-  type: "business";
+  type: 'business';
   website?: string;
 }
 

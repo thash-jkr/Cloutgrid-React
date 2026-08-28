@@ -1,12 +1,12 @@
-import NavBar from "@/components/NavBar";
-import kidImage from "@/assets/kid.png";
-import { faBriefcase, faVideo } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, SegmentedButton, SegmentedButtonSet } from "actify";
-import { useState } from "react";
-import iOSLogo from "@/assets/app_store_logo.png";
-import androidLogo from "@/assets/play_store_logo.png";
-import { Link } from "react-router-dom";
+import NavBar from '@/components/NavBar';
+import kidImage from '@/assets/kid.png';
+import { faBriefcase, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button, SegmentedButton, SegmentedButtonSet } from 'actify';
+import { useState } from 'react';
+import iOSLogo from '@/assets/app_store_logo.png';
+import androidLogo from '@/assets/play_store_logo.png';
+import { Link } from 'react-router-dom';
 
 interface EmojiIcon {
   codepoint: string;
@@ -39,7 +39,7 @@ function FeatureTile({ label, icon }: FeatureTileProps) {
 }
 
 export default function LandingPage() {
-  const [type, setType] = useState("creator");
+  const [type, setType] = useState('creator');
 
   return (
     <div className="container min-h-dvh  mx-auto">
@@ -57,23 +57,16 @@ export default function LandingPage() {
           </h1>
 
           <div className="flex items-center w-full lg:w-1/2 gap-4">
-            <SegmentedButtonSet
-              role="presentation"
-              className="w-full"
-              aria-label="Color mode"
-            >
-              <div
-                role="group"
-                className="h-10 grid w-full grid-flow-col auto-rows-auto"
-              >
+            <SegmentedButtonSet role="presentation" className="w-full" aria-label="Color mode">
+              <div role="group" className="h-10 grid w-full grid-flow-col auto-rows-auto">
                 <SegmentedButton
                   title="Creator"
                   label="Creator"
                   data-value="creator"
                   className="rounded-l-full"
-                  selected={type == "creator"}
+                  selected={type == 'creator'}
                   icon={<FontAwesomeIcon icon={faVideo} />}
-                  onPress={() => setType("creator")}
+                  onPress={() => setType('creator')}
                 />
 
                 <SegmentedButton
@@ -81,9 +74,9 @@ export default function LandingPage() {
                   label="Brand"
                   data-value="brand"
                   className="rounded-r-full"
-                  selected={type == "brand"}
+                  selected={type == 'brand'}
                   icon={<FontAwesomeIcon icon={faBriefcase} />}
-                  onPress={() => setType("brand")}
+                  onPress={() => setType('brand')}
                 />
               </div>
             </SegmentedButtonSet>
@@ -91,35 +84,24 @@ export default function LandingPage() {
 
           <div className="flex flex-col items-start gap-5 w-full">
             <FeatureTile
-              label={
-                type == "creator" ? "Unlimited campaigns" : "Post campaigns"
-              }
-              icon={{ codepoint: "1f680", alt: "🚀" }}
+              label={type == 'creator' ? 'Unlimited campaigns' : 'Post campaigns'}
+              icon={{ codepoint: '1f680', alt: '🚀' }}
             />
             <FeatureTile
               label={
-                type == "creator"
-                  ? "Instagram & YouTube analytics"
-                  : "Verified creator analytics"
+                type == 'creator' ? 'Instagram & YouTube analytics' : 'Verified creator analytics'
               }
-              icon={{ codepoint: "1f4ca", alt: "📊" }}
+              icon={{ codepoint: '1f4ca', alt: '📊' }}
             />
+            <FeatureTile label="Safe escrow payments" icon={{ codepoint: '1f4b8', alt: '💸' }} />
             <FeatureTile
-              label="Safe escrow payments"
-              icon={{ codepoint: "1f4b8", alt: "💸" }}
-            />
-            <FeatureTile
-              label={
-                type == "creator"
-                  ? "AI-powered brand matching"
-                  : "AI-powered creator search"
-              }
-              icon={{ codepoint: "1fa84", alt: "🪄" }}
+              label={type == 'creator' ? 'AI-powered brand matching' : 'AI-powered creator search'}
+              icon={{ codepoint: '1fa84', alt: '🪄' }}
             />
           </div>
 
           <div className="flex h-14 w-full items-center justify-center mb-5 lg:w-1/2">
-            {type == "creator" ? (
+            {type == 'creator' ? (
               <div className="flex w-3/4 lg:w-full mb-5 justify-center">
                 <a
                   className="w-1/2 h-auto hover:scale-105 transition-all duration-500 cursor-pointer"
@@ -139,7 +121,7 @@ export default function LandingPage() {
               <Link to="/register/brand">
                 <Button>
                   <span>
-                    Join{" "}
+                    Join{' '}
                     <span className="font-bold text-primary">
                       Clout<span className="text-secondary">grid</span>
                     </span>
@@ -151,11 +133,7 @@ export default function LandingPage() {
         </div>
 
         <div className="hidden lg:flex flex-col flex-1 items-center justify-center">
-          <img
-            src={kidImage}
-            alt="Cloutgrid illustration"
-            className="w-full object-cover"
-          />
+          <img src={kidImage} alt="Cloutgrid illustration" className="w-full object-cover" />
 
           {/* <span className="flex items-center gap-3">
             Connect{" "}

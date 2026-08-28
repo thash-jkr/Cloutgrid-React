@@ -28,5 +28,7 @@ export const categories: Category[] = [
 ];
 
 export function getCategoryLabel(value?: string): string {
-  return value != null ? categories.find((category) => category.value === value)?.label ?? value : "";
+  return value != null
+    ? (categories.find((category) => category.value === value)?.label ?? value)
+    : '';
 }

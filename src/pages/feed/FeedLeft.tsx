@@ -1,6 +1,6 @@
-import defaultProfilePhoto from "@/assets/default_profile.png";
-import { useAppSelector } from "@/app/hooks";
-import { getCategoryLabel } from "@/utils/categories";
+import defaultProfilePhoto from '@/assets/default_profile.png';
+import { useAppSelector } from '@/app/hooks';
+import { getCategoryLabel } from '@/utils/categories';
 
 export default function FeedLeft() {
   const { user } = useAppSelector((state) => state.auth);

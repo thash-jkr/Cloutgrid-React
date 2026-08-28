@@ -1,9 +1,9 @@
-import { useAppSelector } from "@/app/hooks";
-import NavBar from "@/components/NavBar";
-import { useEffect } from "react";
-import FeedLeft from "./FeedLeft";
-import FeedMiddle from "./FeedMiddle";
-import FeedRight from "./FeedRight";
+import { useAppSelector } from '@/app/hooks';
+import NavBar from '@/components/NavBar';
+import { useEffect } from 'react';
+import FeedLeft from './FeedLeft';
+import FeedMiddle from './FeedMiddle';
+import FeedRight from './FeedRight';
 
 export default function FeedPage() {
   const { user } = useAppSelector((state) => state.auth);
@@ -15,7 +15,7 @@ export default function FeedPage() {
   }
 
   return (
-    <div className="container mx-auto flex items-start mt-20 lg:mt-22 gap-3">
+    <div className="container mx-auto flex items-start mt-18 lg:mt-22 gap-3">
       <NavBar />
       <div className="hidden lg:flex basis-1/4 w-full noselect">
         <FeedLeft />

@@ -1,16 +1,13 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faSquare,
-  faHeart as unlike,
-} from "@fortawesome/free-regular-svg-icons";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSquare, faHeart as unlike } from '@fortawesome/free-regular-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 // import toast, { Toaster } from 'react-hot-toast';
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { fetchFeed, likePost } from "@/slices/feedSlice";
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { fetchFeed, likePost } from '@/slices/feedSlice';
 // import CommentModal from '@/components/CommentModal';
-import type { PostModel } from "@/types/feedTypes";
+import type { PostModel } from '@/types/feedTypes';
 
 export default function FeedMiddle() {
   const [selectedPost, setSelectedPost] = useState<PostModel | null>(null);
@@ -42,8 +39,8 @@ export default function FeedMiddle() {
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [dispatch, postsHasMore]);
 
   const handleTap = (id: number, isLiked: boolean) => {
@@ -87,10 +84,7 @@ export default function FeedMiddle() {
       <div className="w-full flex flex-col gap-3">
         {posts.length > 0 ? (
           posts.map((post) => (
-            <div
-              key={post.id}
-              className="flex flex-col rounded-xl bg-white shadow divide-y"
-            >
+            <div key={post.id} className="flex flex-col rounded-xl bg-white shadow divide-y">
               <div className="p-3 flex w-full items-center justify-start font-semibold">
                 <img
                   src={post.posted_by.profile_photo}
@@ -98,9 +92,7 @@ export default function FeedMiddle() {
                   className="mr-2 h-8 w-8 rounded-full object-cover"
                 />
                 <h3
-                  onClick={() =>
-                    navigate(`/profiles/${post.posted_by.username}`)
-                  }
+                  onClick={() => navigate(`/profiles/${post.posted_by.username}`)}
                   className="cursor-pointer hover:text-secondary"
                 >
                   {post.posted_by.name}
@@ -109,9 +101,7 @@ export default function FeedMiddle() {
                   <>
                     <span className="mx-1 font-normal text-gray-500">with</span>
                     <h3
-                      onClick={() =>
-                        navigate(`/profiles/${post.collaboration!.username}`)
-                      }
+                      onClick={() => navigate(`/profiles/${post.collaboration!.username}`)}
                       className="cursor-pointer hover:text-secondary"
                     >
                       {post.collaboration.name}
@@ -138,19 +128,17 @@ export default function FeedMiddle() {
                 <FontAwesomeIcon
                   icon={post.is_liked ? faHeart : unlike}
                   className={`text-3xl transition-transform duration-300 ${
-                    post.is_liked ? "text-secondary" : ""
-                  } ${animatingId === post.id ? "scale-125" : ""}`}
+                    post.is_liked ? 'text-secondary' : ''
+                  } ${animatingId === post.id ? 'scale-125' : ''}`}
                   onClick={() => handleClick(post.id, post.is_liked)}
                 />
                 <div className="flex w-1/2 items-center justify-center font-semibold">
                   <p className="flex w-full items-center justify-center gap-1">
                     {post.like_count}
+                    <span className="text-gray-500">{post.like_count == 1 ? 'Like' : 'Likes'}</span>
+                    • {post.comment_count}{' '}
                     <span className="text-gray-500">
-                      {post.like_count == 1 ? "Like" : "Likes"}
-                    </span>
-                    • {post.comment_count}{" "}
-                    <span className="text-gray-500">
-                      {post.comment_count == 1 ? "Comment" : "Comments"}
+                      {post.comment_count == 1 ? 'Comment' : 'Comments'}
                     </span>
                   </p>
                 </div>

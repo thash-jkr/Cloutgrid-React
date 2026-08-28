@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --color-primary: #001845;
@@ -30,11 +30,11 @@
   --md-sys-color-background: var(--color-background);
   --md-sys-color-surface: var(--color-background);
 
-  --md-ref-typeface-plain: "Inter", sans-serif;
+  --md-ref-typeface-plain: 'Inter', sans-serif;
 }
 
 body {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: var(--color-background);
 }
 

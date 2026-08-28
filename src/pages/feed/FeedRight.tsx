@@ -1,15 +1,9 @@
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBell,
-  faChevronDown,
-  faClose,
-  faTrashAlt,
-  faX,
-} from "@fortawesome/free-solid-svg-icons";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { fetchNotifications, readNotification } from "@/slices/feedSlice";
-import { timeAgo } from "@/utils/timeAgo";
+import { useEffect, useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBell, faChevronDown, faClose } from '@fortawesome/free-solid-svg-icons';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { fetchNotifications, readNotification } from '@/slices/feedSlice';
+import { timeAgo } from '@/utils/timeAgo';
 
 export default function FeedRight() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -44,17 +38,14 @@ export default function FeedRight() {
               <FontAwesomeIcon icon={faBell} />
             </span>
             <div className="flex justify-center items-center h-5 w-5 rounded-full bg-secondary p-3">
-              <span
-                className={`text-white ${count < 10 ? "text-sm" : "text-xs"} font-bold`}
-              >
+              <span className={`text-white ${count < 10 ? 'text-sm' : 'text-xs'} font-bold`}>
                 {count}
               </span>
             </div>
             <span
               className={`absolute right-3 transition-transform duration-500 ${
-                !dropDownOpen &&
-                "duration-300 group-hover:scale-125 group-hover:rotate-12"
-              } ${dropDownOpen ? "rotate-180" : ""}`}
+                !dropDownOpen && 'duration-300 group-hover:scale-125 group-hover:rotate-12'
+              } ${dropDownOpen ? 'rotate-180' : ''}`}
             >
               <FontAwesomeIcon icon={faChevronDown} />
             </span>
@@ -63,7 +54,7 @@ export default function FeedRight() {
 
         <div
           className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
-            dropDownOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+            dropDownOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
           }`}
         >
           <div className="overflow-hidden">
@@ -71,24 +62,25 @@ export default function FeedRight() {
               {notifications.length > 0 ? (
                 <ul className="w-full divide-y">
                   {notifications.map((notification) => (
-                    <li key={notification.id} className="w-full">
-                      <div className="flex w-full items-center justify-between p-2 hover:bg-slate-50 gap-1">
-                        <div className="flex justify-center items-start gap-3 w-full">
+                    <li key={notification.id} className="group/item w-full">
+                      <div className="flex w-full items-center justify-between gap-1 p-2 hover:bg-slate-50">
+                        <div className="flex w-full items-start justify-center gap-3">
                           <img
                             className="h-10 w-10 rounded-full object-cover"
                             src={notification.photo}
                             alt="Profile"
                           />
-
-                          <div className="flex flex-col w-full">
+                          <div className="flex w-full flex-col">
                             <span className="text-sm font-semibold">{notification.message}</span>
-                            <span className="text-xs text-slate-500">{timeAgo(notification.created_at)}</span>
+                            <span className="text-xs text-slate-500">
+                              {timeAgo(notification.created_at)}
+                            </span>
                           </div>
                         </div>
 
                         <FontAwesomeIcon
                           icon={faClose}
-                          className="text-gray-200 hover:text-secondary"
+                          className="text-gray-200 opacity-0 transition-opacity duration-200 group-hover/item:opacity-100 hover:text-secondary"
                           onClick={() => handleClose(notification.id)}
                         />
                       </div>

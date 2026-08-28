@@ -1,13 +1,13 @@
-import { Route, Routes } from "react-router-dom";
-import LoginPage from "@/pages/auth/LoginPage";
-import RegisterPage from "@/pages/auth/RegisterPage";
-import RegisterCreator from "@/pages/auth/RegisterCreator";
-import RegisterBrand from "@/pages/auth/RegisterBrand";
-import ResetPassword from "@/pages/auth/ResetPassword";
-import ForgotPassword from "@/pages/auth/ForgotPassword";
-import PublicRoute from "@/components/PublicRoute";
-import PrivateRoute from "@/components/PrivateRoute";
-import HomePage from "@/pages/feed/HomePage";
+import { Route, Routes } from 'react-router-dom';
+import LoginPage from '@/pages/auth/LoginPage';
+import RegisterPage from '@/pages/auth/RegisterPage';
+import RegisterCreator from '@/pages/auth/RegisterCreator';
+import RegisterBrand from '@/pages/auth/RegisterBrand';
+import ResetPassword from '@/pages/auth/ResetPassword';
+import ForgotPassword from '@/pages/auth/ForgotPassword';
+import PublicRoute from '@/components/PublicRoute';
+import PrivateRoute from '@/components/PrivateRoute';
+import HomePage from '@/pages/feed/HomePage';
 
 export function AppRoutes() {
   return (

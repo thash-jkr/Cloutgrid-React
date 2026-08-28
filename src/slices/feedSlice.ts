@@ -1,9 +1,5 @@
-import {
-  createAsyncThunk,
-  createSlice,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
-import { apiClient } from "@/app/client";
+import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { apiClient } from '@/app/client';
 import type {
   CommentModel,
   FeedState,
@@ -11,7 +7,7 @@ import type {
   NotificationModel,
   PostModel,
   PostResponse,
-} from "@/types/feedTypes";
+} from '@/types/feedTypes';
 
 const initialState: FeedState = {
   posts: [],
@@ -29,38 +25,35 @@ export const fetchNotifications = createAsyncThunk<
   NotificationModel[],
   void,
   { rejectValue: string }
->("feed/fetchNotifications", async (_, { rejectWithValue }) => {
+>('feed/fetchNotifications', async (_, { rejectWithValue }) => {
   try {
-    const response = await apiClient.get<NotificationModel[]>(
-      "/notifications/?all=false/",
-    );
+    const response = await apiClient.get<NotificationModel[]>('/notifications/?all=false/');
     return response.data;
   } catch (error) {
     return rejectWithValue((error as Error).message);
   }
 });
 
-export const readNotification = createAsyncThunk<
-  number,
-  number,
-  { rejectValue: string }
->("feed/readNotification", async (id, { rejectWithValue }) => {
-  try {
-    await apiClient.post(`/notifications/${id}/mark_as_read/`);
-    return id;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
+export const readNotification = createAsyncThunk<number, number, { rejectValue: string }>(
+  'feed/readNotification',
+  async (id, { rejectWithValue }) => {
+    try {
+      await apiClient.post(`/notifications/${id}/mark_as_read/`);
+      return id;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
 
 export const fetchFeed = createAsyncThunk<
   { response: PostResponse; isFirstPage: boolean },
   { isFirstPage: boolean },
   { rejectValue: string; state: { feed: FeedState } }
->("feed/fetchFeed", async ({ isFirstPage }, { getState, rejectWithValue }) => {
-  const url = isFirstPage ? "/posts/" : getState().feed.postsNextPageUrl;
+>('feed/fetchFeed', async ({ isFirstPage }, { getState, rejectWithValue }) => {
+  const url = isFirstPage ? '/posts/' : getState().feed.postsNextPageUrl;
   if (!url) {
-    return rejectWithValue("No more posts to load");
+    return rejectWithValue('No more posts to load');
   }
   try {
     // Non-first-page URLs from DRF pagination are absolute — axios uses them
@@ -76,56 +69,46 @@ export const likePost = createAsyncThunk<
   LikeResponse & { postId: number },
   number,
   { rejectValue: string }
->("feed/likePost", async (postId, { rejectWithValue }) => {
+>('feed/likePost', async (postId, { rejectWithValue }) => {
   try {
-    const response = await apiClient.post<LikeResponse>(
-      `/posts/${postId}/like/`,
-      {},
-    );
+    const response = await apiClient.post<LikeResponse>(`/posts/${postId}/like/`, {});
     return { ...response.data, postId };
   } catch (error) {
     return rejectWithValue((error as Error).message);
   }
 });
 
-export const deletePost = createAsyncThunk<
-  number,
-  number,
-  { rejectValue: string }
->("feed/deletePost", async (postId, { rejectWithValue }) => {
-  try {
-    await apiClient.delete(`/posts/${postId}/`);
-    return postId;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
+export const deletePost = createAsyncThunk<number, number, { rejectValue: string }>(
+  'feed/deletePost',
+  async (postId, { rejectWithValue }) => {
+    try {
+      await apiClient.delete(`/posts/${postId}/`);
+      return postId;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
 
-export const fetchComments = createAsyncThunk<
-  CommentModel[],
-  number,
-  { rejectValue: string }
->("feed/fetchComments", async (postId, { rejectWithValue }) => {
-  try {
-    const response = await apiClient.get<CommentModel[]>(
-      `/posts/${postId}/comments/`,
-    );
-    return response.data;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
+export const fetchComments = createAsyncThunk<CommentModel[], number, { rejectValue: string }>(
+  'feed/fetchComments',
+  async (postId, { rejectWithValue }) => {
+    try {
+      const response = await apiClient.get<CommentModel[]>(`/posts/${postId}/comments/`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
 
 export const addComment = createAsyncThunk<
   { comment: CommentModel; postId: number },
   { postId: number; content: string },
   { rejectValue: string }
->("feed/addComment", async ({ postId, content }, { rejectWithValue }) => {
+>('feed/addComment', async ({ postId, content }, { rejectWithValue }) => {
   try {
-    const response = await apiClient.post<CommentModel>(
-      `/posts/${postId}/comments/`,
-      { content },
-    );
+    const response = await apiClient.post<CommentModel>(`/posts/${postId}/comments/`, { content });
     return { comment: response.data, postId };
   } catch (error) {
     return rejectWithValue((error as Error).message);
@@ -136,7 +119,7 @@ export const deleteComment = createAsyncThunk<
   { commentId: number; postId: number },
   { postId: number; commentId: number },
   { rejectValue: string }
->("feed/deleteComment", async ({ postId, commentId }, { rejectWithValue }) => {
+>('feed/deleteComment', async ({ postId, commentId }, { rejectWithValue }) => {
   try {
     await apiClient.delete(`/posts/${postId}/comment/${commentId}/`);
     return { commentId, postId };
@@ -148,7 +131,7 @@ export const deleteComment = createAsyncThunk<
 // --- slice ---
 
 const feedSlice = createSlice({
-  name: "feed",
+  name: 'feed',
   initialState,
   reducers: {
     addNewPost(state, action: PayloadAction<PostModel>) {
@@ -156,9 +139,7 @@ const feedSlice = createSlice({
     },
     handleBlock(state, action: PayloadAction<string>) {
       const username = action.payload;
-      state.posts = state.posts.filter(
-        (p) => p.posted_by.username !== username,
-      );
+      state.posts = state.posts.filter((p) => p.posted_by.username !== username);
     },
     clearFeed(state) {
       Object.assign(state, initialState);
@@ -174,9 +155,7 @@ const feedSlice = createSlice({
       })
 
       .addCase(readNotification.fulfilled, (state, action) => {
-        state.notifications = state.notifications.filter(
-          (n) => n.id !== action.payload,
-        );
+        state.notifications = state.notifications.filter((n) => n.id !== action.payload);
       })
 
       .addCase(fetchFeed.pending, (state) => {
@@ -184,9 +163,7 @@ const feedSlice = createSlice({
       })
       .addCase(fetchFeed.fulfilled, (state, action) => {
         const { response, isFirstPage } = action.payload;
-        state.posts = isFirstPage
-          ? response.results
-          : [...state.posts, ...response.results];
+        state.posts = isFirstPage ? response.results : [...state.posts, ...response.results];
         state.postsNextPageUrl = response.next ?? null;
         state.postsHasMore = Boolean(response.next);
         state.feedLoading = false;
@@ -202,7 +179,7 @@ const feedSlice = createSlice({
         );
       })
       .addCase(likePost.rejected, (state, action) => {
-        state.feedError = action.payload ?? "Something went wrong";
+        state.feedError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(deletePost.fulfilled, (state, action) => {
@@ -239,6 +216,5 @@ const feedSlice = createSlice({
   },
 });
 
-export const { addNewPost, handleBlock, clearFeed, clearComments } =
-  feedSlice.actions;
+export const { addNewPost, handleBlock, clearFeed, clearComments } = feedSlice.actions;
 export default feedSlice.reducer;

@@ -27,38 +27,41 @@ export const searchBusiness = createAsyncThunk<UserProfile[], string, ThunkConfi
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
-  }
+  },
 );
 
 export const handlePostImage = createAsyncThunk<
   boolean,
   { imageBlob: Blob; caption: string; aspect: string; collab?: string },
   ThunkConfig
->('create/handlePostImage', async ({ imageBlob, caption, aspect, collab }, { dispatch, rejectWithValue }) => {
-  try {
-    const formData = new FormData();
-    formData.append('image', imageBlob, 'post.jpg');
-    formData.append('caption', caption);
-    formData.append('aspect', aspect);
-    formData.append('collaboration', collab ?? 'null');
+>(
+  'create/handlePostImage',
+  async ({ imageBlob, caption, aspect, collab }, { dispatch, rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('image', imageBlob, 'post.jpg');
+      formData.append('caption', caption);
+      formData.append('aspect', aspect);
+      formData.append('collaboration', collab ?? 'null');
 
-    const response = await apiClient.post<PostModel>('/posts/', formData);
+      const response = await apiClient.post<PostModel>('/posts/', formData);
 
-    const newPost: PostModel = {
-      ...response.data,
-      image: response.data.image.startsWith('http')
-        ? response.data.image
-        : ApiConfig.baseUrl + response.data.image,
-    };
+      const newPost: PostModel = {
+        ...response.data,
+        image: response.data.image.startsWith('http')
+          ? response.data.image
+          : ApiConfig.baseUrl + response.data.image,
+      };
 
-    dispatch(addFeedPost(newPost));
-    dispatch(addProfilePost(newPost));
+      dispatch(addFeedPost(newPost));
+      dispatch(addProfilePost(newPost));
 
-    return true;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
+      return true;
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
 
 // --- slice ---
 
