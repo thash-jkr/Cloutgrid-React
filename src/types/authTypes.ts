@@ -38,8 +38,8 @@ export interface AuthState {
   user: UserProfile | null;
   type: string | null;
   access: string | null;
-  isLoading: boolean;
-  errorMessage: string | null;
+  authLoading: boolean;
+  authError: string | null;
 }
 
 export const initialAuthState: AuthState = {
@@ -48,6 +48,6 @@ export const initialAuthState: AuthState = {
   user: null,
   type: null,
   access: null,
-  isLoading: false,
-  errorMessage: null,
+  authLoading: false,
+  authError: null,
 };

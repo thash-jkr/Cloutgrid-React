@@ -45,8 +45,8 @@ export const initializeAuth = createAsyncThunk<AuthState>('auth/initializeAuth',
       user,
       type,
       access: response.data.access,
-      isLoading: false,
-      errorMessage: null,
+      authLoading: false,
+      authError: null,
     };
   } catch {
     clearStoredSession();
@@ -156,7 +156,7 @@ const authSlice = createSlice({
     },
     clearSession(state) {
       clearStoredSession();
-      Object.assign(state, initialAuthState);
+      Object.assign(state, initialAuthState, { isInitializing: false });
     },
     saveUser(state, action: PayloadAction<UserProfile>) {
       state.user = action.payload;
@@ -181,8 +181,8 @@ const authSlice = createSlice({
       .addCase(initializeAuth.fulfilled, (_state, action) => action.payload)
 
       .addCase(login.pending, (state) => {
-        state.isLoading = true;
-        state.errorMessage = null;
+        state.authLoading = true;
+        state.authError = null;
       })
       .addCase(login.fulfilled, (state, action) => {
         const { response, type } = action.payload;
@@ -191,39 +191,39 @@ const authSlice = createSlice({
         state.user = response.user;
         state.type = type;
         state.access = response.access;
-        state.isLoading = false;
+        state.authLoading = false;
       })
       .addCase(login.rejected, (state, action) => {
-        state.isLoading = false;
-        state.errorMessage = action.payload ?? 'Something went wrong';
+        state.authLoading = false;
+        state.authError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(logout.pending, (state) => {
-        state.isLoading = true;
+        state.authLoading = true;
       })
       .addCase(logout.fulfilled, (state) => {
         clearStoredSession();
-        Object.assign(state, initialAuthState);
+        Object.assign(state, initialAuthState, { isInitializing: false });
       })
 
       .addCase(updateProfile.pending, (state) => {
-        state.isLoading = true;
-        state.errorMessage = null;
+        state.authLoading = true;
+        state.authError = null;
       })
       .addCase(updateProfile.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isAuth = true;
-        state.isLoading = false;
+        state.authLoading = false;
         persistUser(action.payload);
       })
       .addCase(updateProfile.rejected, (state, action) => {
-        state.isLoading = false;
-        state.errorMessage = action.payload ?? 'Something went wrong';
+        state.authLoading = false;
+        state.authError = action.payload ?? 'Something went wrong';
       })
 
       .addCase(deleteAccount.fulfilled, (state) => {
         clearStoredSession();
-        Object.assign(state, initialAuthState);
+        Object.assign(state, initialAuthState, { isInitializing: false });
       })
 
       .addMatcher(
@@ -232,8 +232,8 @@ const authSlice = createSlice({
             action.type,
           ),
         (state) => {
-          state.isLoading = true;
-          state.errorMessage = null;
+          state.authLoading = true;
+          state.authError = null;
         },
       )
       .addMatcher(
@@ -244,7 +244,7 @@ const authSlice = createSlice({
             resetPassword.fulfilled.type,
           ].includes(action.type),
         (state) => {
-          state.isLoading = false;
+          state.authLoading = false;
         },
       )
       .addMatcher(
@@ -253,8 +253,8 @@ const authSlice = createSlice({
             action.type,
           ),
         (state, action: PayloadAction<string | undefined>) => {
-          state.isLoading = false;
-          state.errorMessage = action.payload ?? 'Something went wrong';
+          state.authLoading = false;
+          state.authError = action.payload ?? 'Something went wrong';
         },
       );
   },

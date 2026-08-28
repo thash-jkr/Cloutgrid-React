@@ -4,8 +4,8 @@ interface ApiEnvironment {
 }
 
 const development: ApiEnvironment = {
-  baseUrl: 'http://localhost:8000',
-  socketUrl: 'ws://localhost:8000/ws',
+  baseUrl: 'http://192.168.0.232:8000',
+  socketUrl: 'ws://192.168.0.232:8000/ws',
 };
 
 const production: ApiEnvironment = {
