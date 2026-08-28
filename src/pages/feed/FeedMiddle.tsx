@@ -84,12 +84,12 @@ export default function FeedMiddle() {
   return (
     <div className="flex flex-col items-center justify-center select-none mx-3 lg:mx-0">
       {/* <Toaster /> */}
-      <div className="w-full">
+      <div className="w-full flex flex-col gap-3">
         {posts.length > 0 ? (
           posts.map((post) => (
             <div
               key={post.id}
-              className="mb-5 flex flex-col rounded-xl bg-white shadow"
+              className="flex flex-col rounded-xl bg-white shadow divide-y"
             >
               <div className="p-3 flex w-full items-center justify-start font-semibold">
                 <img

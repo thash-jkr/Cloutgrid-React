@@ -12,6 +12,14 @@
   --color-background: var(--color-background);
 }
 
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-gray-200);
+  }
+}
+
 :root {
   --md-sys-color-primary: var(--color-primary); /* #001845 */
   --md-sys-color-on-primary: #ffffff;
@@ -32,4 +40,27 @@ body {
 
 :root {
   --md-outlined-text-field-container-shape: 12px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-secondary) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(0 0 0 / 0.2);
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(0 0 0 / 0.35);
 }

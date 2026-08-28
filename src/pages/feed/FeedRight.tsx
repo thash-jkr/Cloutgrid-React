@@ -3,10 +3,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBell,
   faChevronDown,
+  faClose,
   faTrashAlt,
+  faX,
 } from "@fortawesome/free-solid-svg-icons";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { fetchNotifications, readNotification } from "@/slices/feedSlice";
+import { timeAgo } from "@/utils/timeAgo";
 
 export default function FeedRight() {
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -58,28 +61,46 @@ export default function FeedRight() {
           </h1>
         </div>
 
-        <div className={`${dropDownOpen ? "flex border-t" : "hidden"}`}>
-          <div className="flex max-h-96 w-full overflow-y-scroll rounded-xl p-1">
-            {notifications.length > 0 ? (
-              <ul className="w-full divide-y">
-                {notifications.map((notification) => (
-                  <li key={notification.id} className="w-full">
-                    <div className="flex w-full items-center justify-between p-2 hover:bg-slate-50">
-                      <p>{notification.message}</p>
-                      <FontAwesomeIcon
-                        icon={faTrashAlt}
-                        className="text-gray-200 hover:text-red-700"
-                        onClick={() => handleClose(notification.id)}
-                      />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <div className="null-text">
-                <p>No unread notifications!</p>
-              </div>
-            )}
+        <div
+          className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+            dropDownOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          }`}
+        >
+          <div className="overflow-hidden">
+            <div className="thin-scrollbar flex max-h-96 w-full overflow-y-scroll border-t p-0">
+              {notifications.length > 0 ? (
+                <ul className="w-full divide-y">
+                  {notifications.map((notification) => (
+                    <li key={notification.id} className="w-full">
+                      <div className="flex w-full items-center justify-between p-2 hover:bg-slate-50 gap-1">
+                        <div className="flex justify-center items-start gap-3 w-full">
+                          <img
+                            className="h-10 w-10 rounded-full object-cover"
+                            src={notification.photo}
+                            alt="Profile"
+                          />
+
+                          <div className="flex flex-col w-full">
+                            <span className="text-sm font-semibold">{notification.message}</span>
+                            <span className="text-xs text-slate-500">{timeAgo(notification.created_at)}</span>
+                          </div>
+                        </div>
+
+                        <FontAwesomeIcon
+                          icon={faClose}
+                          className="text-gray-200 hover:text-secondary"
+                          onClick={() => handleClose(notification.id)}
+                        />
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="null-text">
+                  <p>No unread notifications!</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

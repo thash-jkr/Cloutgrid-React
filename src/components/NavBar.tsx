@@ -20,7 +20,7 @@ export default function NavBar() {
       top-3
       ease-in-out left-0 right-0 px-3 lg:px-0`}
     >
-      <nav className="flex flex-wrap justify-between items-center px-1 py-1 rounded-2xl shadow bg-white">
+      <nav className="flex flex-wrap justify-between items-center px-1 py-0 rounded-2xl shadow bg-white h-16">
         <Link to="/" className="p-0">
           <img
             src={logo}
