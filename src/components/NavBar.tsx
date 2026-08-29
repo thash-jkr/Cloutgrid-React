@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'actify';
 import logo from '@/assets/cloutgrid_logo_icon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCircle, faClose } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faBars, faCircle, faClose, faHandshake, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import defaultProfilePhoto from '@/assets/default_profile.png';
 import { useAppSelector } from '@/app/hooks';
@@ -48,21 +48,60 @@ export default function NavBar() {
 
         {isAuth ? (
           <div className="hidden lg:flex items-center gap-3 pr-3">
-            <Link to="/login">
+            <Link to="/" className="group">
               <Button color="primary" variant="filled">
-                Connect
+                <div className="center flex items-center">
+                  <div
+                    className="lg:max-w-0 overflow-hidden group-hover:max-w-200 
+                      transition-all duration-1000 ease-in-out"
+                  >
+                    <h3 className="mr-2 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+                      Connect
+                    </h3>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faSearch}
+                    className="transition-transform duration-1000 group-hover:rotate-360"
+                  />
+                </div>
               </Button>
             </Link>
 
-            <Link to="/login">
+            <Link to="/" className="group">
               <Button color="primary" variant="filled">
-                Create
+                <div className="center flex items-center">
+                  <div
+                    className="lg:max-w-0 overflow-hidden group-hover:max-w-200 
+                      transition-all duration-1000 ease-in-out"
+                  >
+                    <h3 className="mr-2 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+                      Create
+                    </h3>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faAdd}
+                    className="transition-transform duration-1000 group-hover:rotate-360"
+                  />
+                </div>
               </Button>
             </Link>
 
-            <Link to="/login">
+            <Link to="/" className="group">
               <Button color="primary" variant="filled">
-                Collaborate
+                <div className="center flex items-center">
+                  <div
+                    className="lg:max-w-0 overflow-hidden group-hover:max-w-200 
+                      transition-all duration-1000 ease-in-out"
+                  >
+                    <h3 className="mr-2 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
+                      Collaborate
+                    </h3>
+                  </div>
+                  <FontAwesomeIcon
+                    icon={faHandshake}
+                    className="transition-transform duration-1000 group-hover:rotate-360"
+                  />
+                </div>
               </Button>
             </Link>
 
