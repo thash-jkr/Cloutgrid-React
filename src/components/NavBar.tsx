@@ -6,9 +6,12 @@ import { faBars, faCircle, faClose } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import defaultProfilePhoto from '@/assets/default_profile.png';
 import { useAppSelector } from '@/app/hooks';
+import CloutModal from './CloutModal';
+import Notifications from '@/pages/feed/Notifications';
 
 export default function NavBar() {
   const [menu, setMenu] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const { user, isAuth } = useAppSelector((state) => state.auth);
 
@@ -104,28 +107,77 @@ export default function NavBar() {
         : 'pointer-events-none flex translate-x-full opacity-0'
     }`}
         >
-          <div className="flex flex-col divide-y">
-            <div
-              className="flex items-center justify-start p-3 hover:text-secondary"
-              onClick={() => {
-                setMenu(false);
-                navigate('/login');
-              }}
-            >
-              <h1 className="mr-1">Login</h1>
+          {isAuth ? (
+            <div className="flex flex-col divide-y">
+              <div
+                className="flex items-center justify-start p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  navigate('/login');
+                }}
+              >
+                <h1 className="mr-1">Connect</h1>
+              </div>
+              <div
+                className="flex items-center justify-start p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  navigate('/register');
+                }}
+              >
+                <h1 className="mr-1">Create</h1>
+              </div>
+              <div
+                className="flex items-center justify-start p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  navigate('/login');
+                }}
+              >
+                <h1 className="mr-1">Collaborate</h1>
+              </div>
+              <div
+                className="flex items-center justify-start p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  setShowNotifications(true);
+                }}
+              >
+                <h1 className="mr-1">Notifications</h1>
+              </div>
             </div>
-            <div
-              className="flex items-center justify-start p-3 hover:text-secondary"
-              onClick={() => {
-                setMenu(false);
-                navigate('/register');
-              }}
-            >
-              <h1 className="mr-1">Register</h1>
+          ) : (
+            <div className="flex flex-col divide-y">
+              <div
+                className="flex items-center justify-start p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  navigate('/login');
+                }}
+              >
+                <h1 className="mr-1">Login</h1>
+              </div>
+              <div
+                className="flex items-center justify-start p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  navigate('/register');
+                }}
+              >
+                <h1 className="mr-1">Register</h1>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </nav>
+
+      <CloutModal
+        isOpen={showNotifications}
+        onClose={() => setShowNotifications(false)}
+        title="Notifications"
+      >
+        <Notifications />
+      </CloutModal>
     </div>
   );
 }
