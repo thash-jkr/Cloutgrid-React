@@ -5,8 +5,8 @@ import RegisterCreator from '@/pages/auth/RegisterCreator';
 import RegisterBrand from '@/pages/auth/RegisterBrand';
 import ResetPassword from '@/pages/auth/ResetPassword';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
-import PublicRoute from '@/components/PublicRoute';
-import PrivateRoute from '@/components/PrivateRoute';
+import PublicRoute from '@/navigation/PublicRoute';
+import PrivateRoute from '@/navigation/PrivateRoute';
 import HomePage from '@/pages/feed/HomePage';
 
 export function AppRoutes() {
