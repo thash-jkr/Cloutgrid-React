@@ -35,7 +35,8 @@ export default function CloutModal({ isOpen, onClose, children, title }: ModalPr
       onClick={onClose}
     >
       <div
-        className="flex lg:aspect-3/4 h-[75vh] lg:h-2/3 flex-col overflow-hidden rounded-2xl bg-white shadow-xl mx-3 lg:mx-0"
+        className="container flex h-[75vh] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-xl mx-3
+           lg:mx-0 lg:h-2/3 lg:w-auto lg:aspect-3/4"
         onClick={(e) => e.stopPropagation()}
       >
         {title && (

@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 
 const Notifications = () => {
   const dispatch = useAppDispatch();
-  const { notifications } = useAppSelector((state) => state.feed);
+  const { notifications, feedLoading } = useAppSelector((state) => state.feed);
 
   useEffect(() => {
     dispatch(fetchNotifications());
@@ -20,7 +20,7 @@ const Notifications = () => {
   };
 
   return (
-    <div className="h-full min-h-0 w-full overflow-y-auto border-t p-0">
+    <div className="h-full min-h-0 w-full border-t p-0 overflow-y-scroll">
       {notifications.length > 0 ? (
         <ul className="w-full divide-y">
           {notifications.map((notification) => (
@@ -50,7 +50,7 @@ const Notifications = () => {
           ))}
         </ul>
       ) : (
-        <CloutEmpty icon={bell} message="No new notifications!" />
+        <CloutEmpty icon={bell} message="No new notifications!" isLoading={feedLoading} />
       )}
     </div>
   );

@@ -8,10 +8,12 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { fetchFeed, likePost } from '@/slices/feedSlice';
 // import CommentModal from '@/components/CommentModal';
 import type { PostModel } from '@/types/feedTypes';
+import CloutModal from '@/components/CloutModal';
+import Comments from './Comments';
 
 export default function FeedMiddle() {
   const [selectedPost, setSelectedPost] = useState<PostModel | null>(null);
-  const [showCommentModal, setShowCommentModal] = useState(false);
+  const [showComments, setShowComments] = useState(false);
   const [animatingId, setAnimatingId] = useState(-1);
 
   const navigate = useNavigate();
@@ -75,7 +77,7 @@ export default function FeedMiddle() {
 
   const handleComment = (post: PostModel) => {
     setSelectedPost(post);
-    setShowCommentModal(true);
+    setShowComments(true);
   };
 
   return (
@@ -157,9 +159,11 @@ export default function FeedMiddle() {
         )}
       </div>
 
-      {/* {showCommentModal && selectedPost && (
-        <CommentModal post={selectedPost} onClose={() => setShowCommentModal(false)} />
-      )} */}
+      {selectedPost && (
+        <CloutModal isOpen={showComments} onClose={() => setShowComments(false)} title='Comments'>
+          <Comments id={selectedPost?.id} />
+        </CloutModal>
+      )}
     </div>
   );
 }
