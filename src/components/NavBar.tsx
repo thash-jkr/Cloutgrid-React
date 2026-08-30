@@ -105,7 +105,7 @@ export default function NavBar() {
               </Button>
             </Link>
 
-            <Link to="/login">
+            <Link to="/profile">
               <img
                 className="h-10 w-10 rounded-full object-cover"
                 src={user ? `${user.profile_photo}` : defaultProfilePhoto}

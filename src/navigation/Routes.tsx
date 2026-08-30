@@ -8,6 +8,7 @@ import ForgotPassword from '@/pages/auth/ForgotPassword';
 import PublicRoute from '@/navigation/PublicRoute';
 import PrivateRoute from '@/navigation/PrivateRoute';
 import HomePage from '@/pages/feed/HomePage';
+import ProfilePage from '@/pages/profile/ProfilePage';
 
 export function AppRoutes() {
   return (
@@ -23,7 +24,9 @@ export function AppRoutes() {
         <Route path="/password/reset/:uid/:token" element={<ResetPassword />} />
       </Route>
 
-      <Route element={<PrivateRoute />}></Route>
+      <Route element={<PrivateRoute />}>
+        <Route path="/profile" element={<ProfilePage />} />
+      </Route>
     </Routes>
   );
 }
