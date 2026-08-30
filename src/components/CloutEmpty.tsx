@@ -20,7 +20,7 @@ const CloutEmpty = ({ icon, message, isLoading = false }: CloutEmptyProps) => {
             <CloutLoading size="lg" />
           </span>
           <span
-            className={`col-start-1 row-start-1 font-semibold transition-opacity duration-200 ${
+            className={`col-start-1 row-start-1 font-semibold text-gray-500 transition-opacity duration-200 ${
               isLoading ? 'opacity-0' : 'opacity-100'
             }`}
           >

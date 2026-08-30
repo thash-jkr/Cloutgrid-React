@@ -9,6 +9,7 @@ import PublicRoute from '@/navigation/PublicRoute';
 import PrivateRoute from '@/navigation/PrivateRoute';
 import HomePage from '@/pages/feed/HomePage';
 import ProfilePage from '@/pages/profile/ProfilePage';
+import JobPage from '@/pages/job/JobPage';
 
 export function AppRoutes() {
   return (
@@ -26,6 +27,7 @@ export function AppRoutes() {
 
       <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/campaigns" element={<JobPage />} />
       </Route>
     </Routes>
   );

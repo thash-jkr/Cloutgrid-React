@@ -15,7 +15,6 @@
 html,
 body,
 #root {
-  min-height: 100lvh;
   background-color: var(--color-background);
 }
 

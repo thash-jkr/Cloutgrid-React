@@ -5,7 +5,7 @@ import Instagram from '../integration/Instagram';
 import YouTube from '../integration/YouTube';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faImages, faBriefcase, faCheck, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faBriefcase, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import type { UserProfile } from '@/types/authTypes';
 import { Button } from 'actify';
 

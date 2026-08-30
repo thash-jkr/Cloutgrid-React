@@ -86,7 +86,7 @@ export default function NavBar() {
               </Button>
             </Link>
 
-            <Link to="/" className="group">
+            <Link to="campaigns" className="group">
               <Button color="primary" variant="filled">
                 <div className="center flex items-center">
                   <div
@@ -172,7 +172,7 @@ export default function NavBar() {
                 className="flex items-center justify-between p-3 hover:text-secondary"
                 onClick={() => {
                   setMenu(false);
-                  navigate('/login');
+                  navigate('/campaigns');
                 }}
               >
                 <h1 className="mr-1">Collaborate</h1>
