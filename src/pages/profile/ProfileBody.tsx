@@ -66,7 +66,7 @@ const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
             <span className="flex items-center gap-1">
               <FontAwesomeIcon icon={tab.icon} />
 
-              {tab.label}
+              <span className='hidden lg:flex'>{tab.label}</span>
 
               {tab.id == 'instagram' &&
                 user.type == 'creator' &&

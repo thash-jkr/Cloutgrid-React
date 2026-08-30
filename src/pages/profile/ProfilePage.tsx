@@ -19,14 +19,14 @@ const ProfilePage = () => {
   }, [dispatch, user]);
 
   return (
-    <div className="container mx-auto flex flex-col lg:flex-row items-start mt-18 lg:mt-22 gap-3">
+    <div className="container mx-auto flex flex-col lg:flex-row items-start mt-18 lg:mt-22 gap-3 mb-20">
       <NavBar />
 
-      <div className="flex lg:basis-1/4 w-full noselect">
+      <div className="flex lg:basis-1/4 w-full noselect px-3 lg:px-0">
         <ProfileHeader />
       </div>
 
-      <div className="flex w-full lg:basis-2/4">
+      <div className="flex w-full lg:basis-2/4 px-3 lg:px-0">
         {user != null && <ProfileBody posts={posts} collabs={collabs} user={user} />}
       </div>
 

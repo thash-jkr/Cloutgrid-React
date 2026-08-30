@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'actify';
 import logo from '@/assets/cloutgrid_logo_icon.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faAdd, faBars, faCircle, faClose, faHandshake, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faBars, faBell, faCircle, faClose, faHandshake, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import defaultProfilePhoto from '@/assets/default_profile.png';
 import { useAppSelector } from '@/app/hooks';
@@ -21,7 +21,7 @@ export default function NavBar() {
     <div
       className={`container mx-auto fixed z-50  transition-all duration-700 
       top-3
-      ease-in-out left-0 right-0 px-3 lg:px-0`}
+      ease-in-out left-0 right-0 px-3 lg:px-0 noselect`}
     >
       <nav className="flex flex-wrap justify-between items-center px-1 py-0 rounded-2xl shadow bg-white h-12 lg:h-16">
         <Link to="/" className="h-full">
@@ -149,40 +149,54 @@ export default function NavBar() {
           {isAuth ? (
             <div className="flex flex-col divide-y">
               <div
-                className="flex items-center justify-start p-3 hover:text-secondary"
+                className="flex items-center justify-between p-3 hover:text-secondary"
                 onClick={() => {
                   setMenu(false);
                   navigate('/login');
                 }}
               >
                 <h1 className="mr-1">Connect</h1>
+                <FontAwesomeIcon icon={faSearch} />
               </div>
               <div
-                className="flex items-center justify-start p-3 hover:text-secondary"
+                className="flex items-center justify-between p-3 hover:text-secondary"
                 onClick={() => {
                   setMenu(false);
                   navigate('/register');
                 }}
               >
                 <h1 className="mr-1">Create</h1>
+                <FontAwesomeIcon icon={faAdd} />
               </div>
               <div
-                className="flex items-center justify-start p-3 hover:text-secondary"
+                className="flex items-center justify-between p-3 hover:text-secondary"
                 onClick={() => {
                   setMenu(false);
                   navigate('/login');
                 }}
               >
                 <h1 className="mr-1">Collaborate</h1>
+                <FontAwesomeIcon icon={faHandshake} />
               </div>
               <div
-                className="flex items-center justify-start p-3 hover:text-secondary"
+                className="flex items-center justify-between p-3 hover:text-secondary"
                 onClick={() => {
                   setMenu(false);
                   setShowNotifications(true);
                 }}
               >
                 <h1 className="mr-1">Notifications</h1>
+                <FontAwesomeIcon icon={faBell} />
+              </div>
+              <div
+                className="flex items-center justify-between p-3 hover:text-secondary"
+                onClick={() => {
+                  setMenu(false);
+                  navigate('/profile');
+                }}
+              >
+                <h1 className="mr-1">Profile</h1>
+                <img src={user?.profile_photo} className='w-6 h-auto object-cover rounded-full' />
               </div>
             </div>
           ) : (

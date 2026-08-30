@@ -13,8 +13,9 @@ const ProfileHeader = () => {
           xl:text-lg md:text-base"
       >
         <div className="flex flex-col justify-center items-center w-full border-b gap-3 py-3">
-          <h1 className="text-center">{user?.name}</h1>
-          <h1 className="text-gray-600">@{user?.username}</h1>
+          <h1 className="text-center">
+            {user?.name} • <span className="text-gray-600">@{user?.username}</span>
+          </h1>
 
           <p
             className="px-5 py-2 bg-secondary text-white rounded-full font-extrabold text-sm 
@@ -65,7 +66,7 @@ const ProfileHeader = () => {
           )}
         </div>
 
-        <div className="p-3 w-full flex flex-col justify-start items-start">
+        <div className="p-3 w-full flex flex-col justify-start items-start font-normal text-base">
           <span>{user?.bio}</span>
         </div>
       </div>
