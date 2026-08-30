@@ -19,15 +19,16 @@ const Settings = () => {
 
   return (
     <div
-      className="flex flex-col justify-center items-center shadow w-full rounded-xl cursor-pointer 
-          hover:shadow relative group bg-white center"
+      className="group relative flex w-full cursor-pointer flex-col items-center justify-center
+          rounded-xl bg-white shadow hover:shadow"
     >
-      <div className="w-full flex justify-center items-center" onClick={() => setSettingsDropdown(!settingsDropdown)}>
-        <div className="font-bold text-xl my-3 flex justify-center items-center">
+      <div
+        className="flex w-full items-center justify-center"
+        onClick={() => setSettingsDropdown(!settingsDropdown)}
+      >
+        <div className="my-3 flex items-center justify-center text-xl font-bold transition-all duration-300 ease-in-out">
           <h1 className="mr-1">Settings</h1>
-          <span
-            className={`transition-transform duration-500 ${settingsDropdown ? 'rotate-180' : ''}`}
-          >
+          <span className={`transition-transform duration-500 ${settingsDropdown ? 'rotate-180' : ''}`}>
             <FontAwesomeIcon icon={faGear} />
           </span>
           <span
@@ -41,46 +42,46 @@ const Settings = () => {
       </div>
 
       <div
-        className={`${
-          settingsDropdown ? 'flex' : 'hidden'
-        } flex-col w-full divide-y font-semibold text-lg`}
+        className={`grid w-full transition-[grid-template-rows] duration-300 ease-in-out ${
+          settingsDropdown ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        }`}
       >
-        <div className="p-3 flex items-center justify-start hover:bg-slate-50" onClick={() => {}}>
-          <FontAwesomeIcon icon={faLifeRing} />
-          <h1 className="ml-1">Help</h1>
-        </div>
-        {/* <div className="p-3 flex items-center justify-star hover:bg-slate-50">
-                <FontAwesomeIcon icon={faCircleInfo} />
-                <h1 className="ml-1">About</h1>
-              </div> */}
-        <div
-          className="p-3 flex items-center justify-start hover:bg-slate-50"
-          onClick={() => navigate('/privacypolicy')}
-        >
-          <FontAwesomeIcon icon={faFileContract} />
-          <h1 className="ml-1">Privacy Policy</h1>
-        </div>
-        <div
-          className="p-3 flex items-center justify-start hover:bg-slate-50"
-          onClick={() => navigate('/eula')}
-        >
-          <FontAwesomeIcon icon={faHandshake} />
-          <h1 className="ml-1">EULA</h1>
-        </div>
-        <div className="p-3 flex items-center justify-start hover:bg-slate-50" onClick={() => {}}>
-          <FontAwesomeIcon icon={faComments} />
-          <h1 className="ml-1">Feedback</h1>
-        </div>
-        <div className="p-3 flex items-center justify-start hover:bg-slate-50" onClick={() => {}}>
-          <FontAwesomeIcon icon={faEdit} />
-          <h1 className="ml-1">Edit Profile</h1>
-        </div>
-        <div
-          className="p-3 flex items-center justify-start hover:bg-slate-50 rounded-b-2xl"
-          onClick={() => navigate('/logout')}
-        >
-          <FontAwesomeIcon icon={faArrowRightFromBracket} />
-          <h1 className="ml-1">Logout</h1>
+        <div className="overflow-hidden">
+          <div className="flex w-full flex-col divide-y text-lg font-semibold border-t">
+            <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
+              <FontAwesomeIcon icon={faLifeRing} />
+              <h1 className="ml-1">Help</h1>
+            </div>
+            <div
+              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              onClick={() => navigate('/privacypolicy')}
+            >
+              <FontAwesomeIcon icon={faFileContract} />
+              <h1 className="ml-1">Privacy Policy</h1>
+            </div>
+            <div
+              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              onClick={() => navigate('/eula')}
+            >
+              <FontAwesomeIcon icon={faHandshake} />
+              <h1 className="ml-1">EULA</h1>
+            </div>
+            <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
+              <FontAwesomeIcon icon={faComments} />
+              <h1 className="ml-1">Feedback</h1>
+            </div>
+            <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
+              <FontAwesomeIcon icon={faEdit} />
+              <h1 className="ml-1">Edit Profile</h1>
+            </div>
+            <div
+              className="flex items-center justify-start rounded-b-2xl p-3 hover:bg-slate-50"
+              onClick={() => navigate('/logout')}
+            >
+              <FontAwesomeIcon icon={faArrowRightFromBracket} />
+              <h1 className="ml-1">Logout</h1>
+            </div>
+          </div>
         </div>
       </div>
     </div>
