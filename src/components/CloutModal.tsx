@@ -50,7 +50,7 @@ export default function CloutModal({ isOpen, onClose, children, title }: ModalPr
           </div>
         )}
 
-        <div className="min-h-0 flex-1">{children}</div>
+        <div className="min-h-0 flex-1 border-t">{children}</div>
       </div>
     </div>,
     document.body,

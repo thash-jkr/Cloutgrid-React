@@ -33,65 +33,69 @@ const Comments = ({ id }: CommentProps) => {
   }, [dispatch]);
 
   return (
-    <div className="flex h-full min-h-0 w-full flex-col border-t">
-  <div className="min-h-0 flex-1 overflow-y-scroll">
-    {comments.length > 0 ? (
-      <ul className="w-full divide-y">
-        {comments.map((comment) => (
-          <li key={comment.id} className="group/item w-full">
-            <div className="flex w-full items-center justify-between gap-1 p-2 hover:bg-slate-50">
-              <div className="flex w-full items-start justify-center gap-3">
-                <img
-                  className="h-10 w-10 rounded-full object-cover"
-                  src={comment.user.profile_photo}
-                  alt="Profile"
-                />
-                <div className="flex w-full flex-col">
-                  <span className="text-sm font-semibold">{comment.content}</span>
-                  <span className="text-xs text-slate-500">
-                    {comment.user.name} • {timeAgo(comment.commented_at)}
-                  </span>
-                </div>
-              </div>
+    <div className="flex h-full min-h-0 w-full flex-col">
+      <div className="min-h-0 flex-1 overflow-y-scroll">
+        {comments.length > 0 ? (
+          <ul className="w-full divide-y">
+            {comments.map((comment) => (
+              <li key={comment.id} className="group/item w-full">
+                <div className="flex w-full items-center justify-between gap-1 p-2 hover:bg-slate-50">
+                  <div className="flex w-full items-start justify-center gap-3">
+                    <img
+                      className="h-10 w-10 rounded-full object-cover"
+                      src={comment.user.profile_photo}
+                      alt="Profile"
+                    />
+                    <div className="flex w-full flex-col">
+                      <span className="text-sm font-semibold">{comment.content}</span>
+                      <span className="text-xs text-slate-500">
+                        {comment.user.name} • {timeAgo(comment.commented_at)}
+                      </span>
+                    </div>
+                  </div>
 
-              <FontAwesomeIcon
-                icon={comment.user.username == user?.username ? faTrash : faWarning}
-                className="text-gray-200 opacity-0 transition-opacity duration-200
+                  <FontAwesomeIcon
+                    icon={comment.user.username == user?.username ? faTrash : faWarning}
+                    className="text-gray-200 opacity-0 transition-opacity duration-200
                 group-hover/item:opacity-100 hover:text-secondary"
-                onClick={() => {}}
-              />
-            </div>
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <CloutEmpty icon={comment} message="No comments yet!" isLoading={feedLoading} />
-    )}
-  </div>
+                    onClick={() => {}}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <CloutEmpty icon={comment} message="No comments yet!" isLoading={feedLoading} />
+        )}
+      </div>
 
-  <div className="w-full shrink-0 p-3 border-t">
-    <TextField
-      label="Comment"
-      type="textarea"
-      variant="outlined"
-      leadingIcon={
-        <img className="h-8 w-8 rounded-full object-cover" src={user?.profile_photo} alt="Profile" />
-      }
-      trailingIcon={
-        <IconButton onPress={() => {}}>
-          <FontAwesomeIcon icon={faPaperPlane} className="rotate-45 cursor-pointer" />
-        </IconButton>
-      }
-      inputProps={
-        {
-          rows: rowCount,
-          value: text,
-          onChange: (q) => setText(q.target.value),
-        } as React.InputHTMLAttributes<HTMLInputElement>
-      }
-    />
-  </div>
-</div>
+      <div className="w-full shrink-0 p-3 border-t">
+        <TextField
+          label="Comment"
+          type="textarea"
+          variant="outlined"
+          leadingIcon={
+            <img
+              className="h-8 w-8 rounded-full object-cover"
+              src={user?.profile_photo}
+              alt="Profile"
+            />
+          }
+          trailingIcon={
+            <IconButton onPress={() => {}}>
+              <FontAwesomeIcon icon={faPaperPlane} className="rotate-45 cursor-pointer" />
+            </IconButton>
+          }
+          inputProps={
+            {
+              rows: rowCount,
+              value: text,
+              onChange: (q) => setText(q.target.value),
+            } as React.InputHTMLAttributes<HTMLInputElement>
+          }
+        />
+      </div>
+    </div>
   );
 };
 

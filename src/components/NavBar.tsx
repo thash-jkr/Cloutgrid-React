@@ -86,7 +86,7 @@ export default function NavBar() {
               </Button>
             </Link>
 
-            <Link to="campaigns" className="group">
+            <Link to="/campaigns" className="group">
               <Button color="primary" variant="filled">
                 <div className="center flex items-center">
                   <div

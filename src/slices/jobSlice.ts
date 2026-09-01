@@ -2,8 +2,6 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiClient } from '@/app/client';
 import { initialJobState, type ApplicationModel, type JobModel } from '@/types/jobTypes';
 
-// --- thunks ---
-
 export const fetchJobs = createAsyncThunk<JobModel[], void, { rejectValue: string }>(
   'job/fetchJobs',
   async (_, { rejectWithValue }) => {
@@ -100,8 +98,6 @@ export const submitApplication = createAsyncThunk<
     return rejectWithValue((error as Error).message);
   }
 });
-
-// --- slice ---
 
 const jobSlice = createSlice({
   name: 'job',

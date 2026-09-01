@@ -13,6 +13,11 @@ export interface AnswerModel {
   question: number;
 }
 
+export interface RequirementModel {
+  id: number;
+  content: string;
+}
+
 export interface JobModel {
   id: number;
   posted_by: UserProfile;
@@ -20,7 +25,7 @@ export interface JobModel {
   is_applied: boolean;
   title: string;
   description: string;
-  requirements: string;
+  requirements: RequirementModel[];
   target_creator: string;
   created_at: string;
 }
