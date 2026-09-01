@@ -8,6 +8,7 @@ import { submitApplication } from '@/slices/jobSlice';
 import toast, { Toaster } from 'react-hot-toast';
 import CloutModal from '@/components/CloutModal';
 import Questions from './Questions';
+import CloutAlert from '@/components/CloutAlert';
 
 interface JobDetailScope {
   id: number | null;
@@ -15,6 +16,7 @@ interface JobDetailScope {
 
 const JobDetail = ({ id }: JobDetailScope) => {
   const [showQuestions, setShowQuestions] = useState(false);
+  const [applyConfirm, setApplyConfirm] = useState(false);
 
   const { jobs } = useAppSelector((state) => state.job);
 
@@ -59,7 +61,7 @@ const JobDetail = ({ id }: JobDetailScope) => {
             variant="outlined"
             isDisabled={job.is_applied}
             onPress={() => {
-              job.questions.length > 0 ? setShowQuestions(true) : handleApply({});
+              job.questions.length > 0 ? setShowQuestions(true) : setApplyConfirm(true);
             }}
           >
             <span>{job.is_applied ? 'Applied' : 'Apply'}</span>
@@ -90,6 +92,17 @@ const JobDetail = ({ id }: JobDetailScope) => {
       >
         <Questions questions={job?.questions ?? []} onSubmit={handleApply} />
       </CloutModal>
+
+      <CloutAlert
+        title="Apply for the campaign?"
+        body="Are you sure you want to apply for this campaign?"
+        isOpen={applyConfirm}
+        onClose={() => setApplyConfirm(false)}
+        onSubmit={() => {
+          handleApply({});
+          setApplyConfirm(false);
+        }}
+      />
     </div>
   );
 };
