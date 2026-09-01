@@ -6,7 +6,6 @@ import { faHeart } from '@fortawesome/free-solid-svg-icons';
 // import toast, { Toaster } from 'react-hot-toast';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { fetchFeed, likePost } from '@/slices/feedSlice';
-// import CommentModal from '@/components/CommentModal';
 import type { PostModel } from '@/types/feedTypes';
 import CloutModal from '@/components/CloutModal';
 import Comments from './Comments';
@@ -23,11 +22,9 @@ export default function FeedMiddle() {
   const { posts, postsHasMore } = useAppSelector((state) => state.feed);
 
   useEffect(() => {
-    dispatch(fetchFeed({ isFirstPage: true }))
-      .unwrap()
-      .catch(() => {
-        // toast.error('Error fetching posts');
-      });
+    if (posts.length == 0) {
+      dispatch(fetchFeed({ isFirstPage: true }))
+    }
   }, [dispatch]);
 
   useEffect(() => {

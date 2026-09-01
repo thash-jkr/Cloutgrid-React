@@ -4,7 +4,7 @@ import Settings from './Settings';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import ProfileBody from './ProfileBody';
 import { useEffect } from 'react';
-import { fetchPosts } from '@/slices/profileSlice';
+import { fetchPosts, fetchProfile } from '@/slices/profileSlice';
 
 const ProfilePage = () => {
   const { user } = useAppSelector((state) => state.auth);
@@ -13,10 +13,11 @@ const ProfilePage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (user != null) {
+    if (user != null && posts.length == 0) {
+      dispatch(fetchProfile({username: user.username, other: false}))
       dispatch(fetchPosts({ username: user.username }));
-    }
-  }, [dispatch, user]);
+    } 
+  }, [dispatch]);
 
   return (
     <div className="container mx-auto flex flex-col lg:flex-row items-start mt-18 lg:mt-22 gap-3 mb-20">

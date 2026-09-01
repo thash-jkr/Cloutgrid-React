@@ -12,7 +12,9 @@ const Notifications = () => {
   const { notifications, feedLoading } = useAppSelector((state) => state.feed);
 
   useEffect(() => {
-    dispatch(fetchNotifications());
+    if (notifications.length == 0) {
+      dispatch(fetchNotifications());
+    }
   }, [dispatch]);
 
   const handleClose = (id: number) => {
