@@ -6,7 +6,7 @@ interface PostGridScope {
 }
 
 const PostGrid = ({posts, onSelect}: PostGridScope) => {
-  return <div className="p-1 lg:p-1 grid grid-cols-3 gap-1 w-full">
+  return <div className="p-1 lg:p-1 grid grid-cols-3 lg:grid-cols-4 gap-1 w-full">
       {posts.length > 0 ? (
         posts.map((post) => (
           <div

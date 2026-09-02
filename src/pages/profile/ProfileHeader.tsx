@@ -12,20 +12,13 @@ const ProfileHeader = () => {
         className="flex flex-col justify-center items-center shadow w-full rounded-xl bg-white font-semibold text-xl 
           xl:text-lg md:text-base"
       >
-        <div className="flex flex-col justify-center items-center w-full border-b gap-3 py-3">
-          <h1 className="text-center">
-            {user?.name} • <span className="text-gray-600">@{user?.username}</span>
-          </h1>
+        <div className="flex flex-col justify-center items-center w-full border-b gap-1 p-3">
+          <h1 className="text-center">{user?.name}</h1>
 
-          <p
-            className="px-5 py-2 bg-secondary text-white rounded-full font-extrabold text-sm 
-               transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow"
-          >
-            {getCategoryLabel(user?.category)}
-          </p>
+          <span className="text-gray-600">@{user?.username}</span>
         </div>
 
-        <div className="flex flex-col justify-center items-center w-full p-5 border-b">
+        <div className="flex flex-col justify-center items-center w-full p-3 border-b gap-3">
           <div className="flex justify-around items-center w-full">
             <div className="w-1/2 flex flex-col justify-center items-center">
               <img
@@ -56,9 +49,16 @@ const ProfileHeader = () => {
             </div>
           </div>
 
+          <p
+            className="px-5 py-2 bg-secondary text-white rounded-full font-extrabold text-sm 
+               transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow"
+          >
+            {getCategoryLabel(user?.category)}
+          </p>
+
           {user?.type === 'business' && user?.website && (
             <p
-              className="px-3 py-2 bg-orange-500 text-white my-2 mt-5 rounded-full font-extrabold text-sm 
+              className="px-3 py-2 bg-primary text-white rounded-full font-extrabold text-sm 
                transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow"
             >
               {user?.website}
@@ -71,7 +71,7 @@ const ProfileHeader = () => {
         </div>
       </div>
 
-      <div className="w-full lg:hidden">
+      <div className="w-full">
         <Settings />
       </div>
     </div>

@@ -27,12 +27,8 @@ const ProfilePage = () => {
         <ProfileHeader />
       </div>
 
-      <div className="flex w-full lg:basis-2/4 px-3 lg:px-0">
+      <div className="flex w-full lg:basis-3/4 px-3 lg:px-0">
         {user != null && <ProfileBody posts={posts} collabs={collabs} user={user} />}
-      </div>
-
-      <div className="hidden lg:flex basis-1/4 w-full noselect">
-        <Settings />
       </div>
     </div>
   );

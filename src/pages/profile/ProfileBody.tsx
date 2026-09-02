@@ -5,9 +5,16 @@ import Instagram from '../integration/Instagram';
 import YouTube from '../integration/YouTube';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faImages, faBriefcase, faCircleCheck, faCircleXmark } from '@fortawesome/free-solid-svg-icons';
+import {
+  faImages,
+  faBriefcase,
+  faCircleCheck,
+  faCircleXmark,
+} from '@fortawesome/free-solid-svg-icons';
 import type { UserProfile } from '@/types/authTypes';
 import { Button } from 'actify';
+import CloutModal from '@/components/CloutModal';
+import FeedPost from '../feed/FeedPost';
 
 type ProfileTab = 'posts' | 'instagram' | 'youtube' | 'collabs';
 
@@ -66,7 +73,7 @@ const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
             <span className="flex items-center gap-1">
               <FontAwesomeIcon icon={tab.icon} />
 
-              <span className='hidden lg:flex'>{tab.label}</span>
+              <span className="hidden lg:flex">{tab.label}</span>
 
               {tab.id == 'instagram' &&
                 user.type == 'creator' &&
@@ -80,17 +87,13 @@ const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
                   <FontAwesomeIcon icon={faCircleXmark} className="text-gray-500" />
                 )}
 
-              {tab.id == 'youtube' &&
-                user.type == 'creator' &&
-                user.youtube_connected == true && (
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-secondary" />
-                )}
+              {tab.id == 'youtube' && user.type == 'creator' && user.youtube_connected == true && (
+                <FontAwesomeIcon icon={faCircleCheck} className="text-secondary" />
+              )}
 
-              {tab.id == 'youtube' &&
-                user.type == 'creator' &&
-                user.youtube_connected == false && (
-                  <FontAwesomeIcon icon={faCircleXmark} className="text-gray-500" />
-                )}
+              {tab.id == 'youtube' && user.type == 'creator' && user.youtube_connected == false && (
+                <FontAwesomeIcon icon={faCircleXmark} className="text-gray-500" />
+              )}
             </span>
           </Button>
         ))}
@@ -102,6 +105,10 @@ const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
       >
         {renderContent()}
       </div>
+
+      <CloutModal title='Post' isOpen={selectedPost != null} onClose={() => setSelectedPost(null)}>
+        {selectedPost && <FeedPost id={selectedPost?.id} />}
+      </CloutModal>
     </div>
   );
 };

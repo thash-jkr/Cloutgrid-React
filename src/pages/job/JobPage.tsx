@@ -16,7 +16,9 @@ const JobPage = () => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(fetchJobs());
+    if (jobs.length == 0) {
+      dispatch(fetchJobs());
+    }
   }, [dispatch]);
 
   useEffect(() => {
