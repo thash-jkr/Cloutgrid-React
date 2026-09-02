@@ -69,6 +69,7 @@ export default function CloutAlert({
   if (!isOpen) return null;
 
   const isSubmitDisabled = secondsLeft > 0;
+  const isTextEmpty = textField && text.length == 0;
 
   return createPortal(
     <div
@@ -116,11 +117,7 @@ export default function CloutAlert({
             <span>Cancel</span>
           </Button>
 
-          <Button
-            variant="filled"
-            isDisabled={isSubmitDisabled}
-            onPress={onSubmit}
-          >
+          <Button variant="filled" isDisabled={isSubmitDisabled || isTextEmpty} onPress={onSubmit}>
             {isSubmitDisabled ? `Confirm (${secondsLeft})` : 'Confirm'}
           </Button>
         </div>

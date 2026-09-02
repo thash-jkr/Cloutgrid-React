@@ -198,7 +198,7 @@ const feedSlice = createSlice({
 
       .addCase(addComment.fulfilled, (state, action) => {
         const { comment, postId } = action.payload;
-        state.comments.unshift(comment);
+        state.comments.push(comment);
         state.posts = state.posts.map((p) =>
           p.id === postId ? { ...p, comment_count: p.comment_count + 1 } : p,
         );

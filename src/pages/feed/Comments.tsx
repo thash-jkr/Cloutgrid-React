@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CloutEmpty from '@/components/CloutEmpty';
-import { fetchComments } from '@/slices/feedSlice';
+import { addComment, deleteComment, fetchComments } from '@/slices/feedSlice';
 import { timeAgo } from '@/utils/timeAgo';
 import { faTrash, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -8,6 +8,8 @@ import { useEffect, useState } from 'react';
 import comment from '@/assets/isometric/comment.png';
 import { IconButton, TextField } from 'actify';
 import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
+import CloutAlert from '@/components/CloutAlert';
+import toast, { Toaster } from 'react-hot-toast';
 
 interface CommentProps {
   id: number;
@@ -15,6 +17,9 @@ interface CommentProps {
 
 const Comments = ({ id }: CommentProps) => {
   const [text, setText] = useState('');
+  const [showReport, setShowReport] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [selectedComment, setSelectedComment] = useState<number | null>(null);
 
   const dispatch = useAppDispatch();
 
@@ -34,6 +39,7 @@ const Comments = ({ id }: CommentProps) => {
 
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
+      <Toaster />
       <div className="min-h-0 flex-1 overflow-y-scroll">
         {comments.length > 0 ? (
           <ul className="w-full divide-y">
@@ -58,7 +64,12 @@ const Comments = ({ id }: CommentProps) => {
                     icon={comment.user.username == user?.username ? faTrash : faWarning}
                     className="text-gray-200 opacity-0 transition-opacity duration-200
                 group-hover/item:opacity-100 hover:text-secondary"
-                    onClick={() => {}}
+                    onClick={() => {
+                      setSelectedComment(comment.id);
+                      comment.user.username == user?.username
+                        ? setConfirmDelete(true)
+                        : setShowReport(true);
+                    }}
                   />
                 </div>
               </li>
@@ -82,7 +93,13 @@ const Comments = ({ id }: CommentProps) => {
             />
           }
           trailingIcon={
-            <IconButton onPress={() => {}}>
+            <IconButton
+              onPress={() => {
+                dispatch(addComment({ postId: id, content: text }));
+                setText('');
+              }}
+              isDisabled={text.length == 0}
+            >
               <FontAwesomeIcon icon={faPaperPlane} className="rotate-45 cursor-pointer" />
             </IconButton>
           }
@@ -95,6 +112,35 @@ const Comments = ({ id }: CommentProps) => {
           }
         />
       </div>
+
+      <CloutAlert
+        isOpen={showReport}
+        onClose={() => setShowReport(false)}
+        onSubmit={() => setShowReport(false)}
+        title={'Report Comment'}
+        body={
+          'If you think this comment violated our terms of service, let us know and we wil take necessary actions'
+        }
+        textField={true}
+      />
+
+      <CloutAlert
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onSubmit={() => {
+          if (selectedComment) {
+            dispatch(deleteComment({ postId: id, commentId: selectedComment }))
+              .unwrap()
+              .then(() => {
+                toast.success('Comment deleted!');
+                setConfirmDelete(false);
+              })
+              .catch((e) => toast.error('Failed to delete comment: ' + e));
+          }
+        }}
+        title={'Delete Comment'}
+        body={'Do you want to delete this comment?'}
+      />
     </div>
   );
 };
