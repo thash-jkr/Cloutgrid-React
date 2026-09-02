@@ -1,6 +1,5 @@
 import NavBar from '@/components/NavBar';
 import ProfileHeader from './ProfileHeader';
-import Settings from './Settings';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import ProfileBody from './ProfileBody';
 import { useEffect } from 'react';

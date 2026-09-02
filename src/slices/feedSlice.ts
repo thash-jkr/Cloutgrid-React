@@ -128,8 +128,6 @@ export const deleteComment = createAsyncThunk<
   }
 });
 
-// --- slice ---
-
 const feedSlice = createSlice({
   name: 'feed',
   initialState,

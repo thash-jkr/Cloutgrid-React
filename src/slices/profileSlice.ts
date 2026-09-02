@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { apiClient } from '@/app/client';
 import { saveUser } from './authSlice';
-import { likePost as likeFeedPost } from './feedSlice';
+import { likePost } from './feedSlice';
 import { initialProfileState } from '@/types/profileTypes';
 import type { UserProfile } from '@/types/authTypes';
 import type { PostModel } from '@/types/feedTypes';
@@ -83,21 +83,6 @@ export const handleFollow = createAsyncThunk<
     return rejectWithValue((error as Error).message);
   }
 });
-
-export const likePost = createAsyncThunk<
-  { postId: number; liked: boolean; likeCount: number },
-  number,
-  ThunkConfig
->('profile/likePost', async (postId, { dispatch, rejectWithValue }) => {
-  try {
-    const result = await dispatch(likeFeedPost(postId)).unwrap();
-    return { postId, liked: result.liked, likeCount: result.like_count };
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
-
-// --- slice ---
 
 const profileSlice = createSlice({
   name: 'profile',
@@ -194,17 +179,14 @@ const profileSlice = createSlice({
       })
 
       .addCase(likePost.fulfilled, (state, action) => {
-        const { postId, liked, likeCount } = action.payload;
+        const { postId, liked, like_count } = action.payload;
         const updateIfMatch = (p: PostModel): PostModel =>
-          p.id === postId ? { ...p, is_liked: liked, like_count: likeCount } : p;
+          p.id === postId ? { ...p, is_liked: liked, like_count: like_count } : p;
         state.posts = state.posts.map(updateIfMatch);
         state.collabs = state.collabs.map(updateIfMatch);
         state.otherPosts = state.otherPosts.map(updateIfMatch);
         state.otherCollabs = state.otherCollabs.map(updateIfMatch);
       })
-      .addCase(likePost.rejected, (state, action) => {
-        state.profileError = action.payload ?? 'Something went wrong';
-      });
   },
 });
 

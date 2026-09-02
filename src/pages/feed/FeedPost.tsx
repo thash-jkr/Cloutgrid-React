@@ -15,10 +15,11 @@ interface FeedPostProps {
 }
 
 const FeedPost = ({ id }: FeedPostProps) => {
-  const { posts: feed } = useAppSelector((state) => state.feed);
-  const { posts, collabs } = useAppSelector((state) => state.profile);
   const [showComments, setShowComments] = useState(false);
   const [animatingId, setAnimatingId] = useState(-1);
+
+  const { posts: feed } = useAppSelector((state) => state.feed);
+  const { posts, collabs } = useAppSelector((state) => state.profile);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -61,9 +62,9 @@ const FeedPost = ({ id }: FeedPostProps) => {
   };
 
   return (
-    <div className='overflow-y-auto'>
+    <div className="flex h-full min-h-0 w-full flex-col overflow-y-auto">
       {post != null ? (
-        <div key={post.id} className="flex flex-col divide-y overflow-y-auto">
+        <div key={post.id} className="flex flex-col">
           <div className="p-3 flex w-full items-center justify-start font-semibold">
             <img
               src={post.posted_by.profile_photo}
@@ -76,23 +77,9 @@ const FeedPost = ({ id }: FeedPostProps) => {
             >
               {post.posted_by.name}
             </h3>
-            {post.collaboration && (
-              <>
-                <span className="mx-1 font-normal text-gray-500">with</span>
-                <h3
-                  onClick={() => navigate(`/profile/${post.collaboration!.username}`)}
-                  className="cursor-pointer hover:text-secondary"
-                >
-                  {post.collaboration.name}
-                </h3>
-              </>
-            )}
           </div>
 
           <div className="flex w-full flex-col items-center justify-center">
-            <div className="m-3 w-full px-3">
-              <p>{post.caption}</p>
-            </div>
             <img
               src={post.image}
               alt="Post"
@@ -127,6 +114,19 @@ const FeedPost = ({ id }: FeedPostProps) => {
               onClick={() => setShowComments(true)}
               className="text-3xl hover:scale-105"
             />
+          </div>
+
+          <div className="w-full p-3">
+            <h1 className="font-semibold">
+              @{post.posted_by.username}{' '}
+              {post.collaboration && (
+                <span className="text-gray-500">
+                  collaborating with{' '}
+                  <span className="text-black">@{post.collaboration.username}</span>
+                </span>
+              )}
+            </h1>
+            <p>{post.caption}</p>
           </div>
         </div>
       ) : (
