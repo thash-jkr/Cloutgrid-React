@@ -7,6 +7,7 @@ import {
   faGear,
   faHandshake,
   faLifeRing,
+  faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
@@ -26,7 +27,7 @@ const Settings = () => {
         className="flex w-full items-center justify-center"
         onClick={() => setSettingsDropdown(!settingsDropdown)}
       >
-        <div className="my-3 flex items-center justify-center text-xl font-bold transition-all duration-300 ease-in-out">
+        <div className="my-3 flex items-center justify-center text-lg font-semibold transition-all duration-300 ease-in-out">
           <h1 className="mr-1">Settings</h1>
           <span className={`transition-transform duration-500 ${settingsDropdown ? 'rotate-180' : ''}`}>
             <FontAwesomeIcon icon={faGear} />
@@ -47,7 +48,7 @@ const Settings = () => {
         }`}
       >
         <div className="overflow-hidden">
-          <div className="flex w-full flex-col divide-y text-lg font-semibold border-t">
+          <div className="flex w-full flex-col divide-y font-regular border-t">
             <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
               <FontAwesomeIcon icon={faLifeRing} />
               <h1 className="ml-1">Help</h1>
@@ -65,6 +66,13 @@ const Settings = () => {
             >
               <FontAwesomeIcon icon={faHandshake} />
               <h1 className="ml-1">EULA</h1>
+            </div>
+            <div
+              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              onClick={() => navigate('/deletionpolicy')}
+            >
+              <FontAwesomeIcon icon={faLock} />
+              <h1 className="ml-1">Data Deletion</h1>
             </div>
             <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
               <FontAwesomeIcon icon={faComments} />

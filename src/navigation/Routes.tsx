@@ -10,11 +10,17 @@ import PrivateRoute from '@/navigation/PrivateRoute';
 import HomePage from '@/pages/feed/HomePage';
 import ProfilePage from '@/pages/profile/ProfilePage';
 import JobPage from '@/pages/job/JobPage';
+import EULA from '@/legal/EULA';
+import PrivacyPolicy from '@/legal/PrivacyPolicy';
+import DataDeletion from '@/legal/DataDeletion';
 
 export function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/eula" element={<EULA />} />
+      <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+      <Route path="/deletionpolicy" element={<DataDeletion />} />
 
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />
