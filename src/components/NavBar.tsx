@@ -16,10 +16,15 @@ import defaultProfilePhoto from '@/assets/default_profile.png';
 import { useAppSelector } from '@/app/hooks';
 import CloutModal from './CloutModal';
 import Notifications from '@/pages/feed/Notifications';
+import Create from '@/pages/create/Create';
+import CreatePost from '@/pages/create/CreatePost';
 
 export default function NavBar() {
   const [menu, setMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showCreate, setShowCreate] = useState(false);
+  const [showConnect, setShowConnect] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const { user, isAuth } = useAppSelector((state) => state.auth);
 
@@ -75,24 +80,27 @@ export default function NavBar() {
               </Button>
             </Link>
 
-            <Link to="/" className="group">
-              <Button color="primary" variant="filled">
-                <div className="center flex items-center">
-                  <div
-                    className="lg:max-w-0 overflow-hidden group-hover:max-w-200 
-                      transition-all duration-1000 ease-in-out"
-                  >
-                    <h3 className="mr-2 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-                      Create
-                    </h3>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faAdd}
-                    className="transition-transform duration-1000 group-hover:rotate-360"
-                  />
+            <Button
+              color="primary"
+              variant="filled"
+              onPress={() => setShowCreate(true)}
+              className="group"
+            >
+              <div className="center flex items-center">
+                <div
+                  className="overflow-hidden transition-all duration-1000 ease-in-out
+        group-hover:max-w-200 lg:max-w-0"
+                >
+                  <h3 className="mr-2 opacity-100 transition-opacity duration-1000 group-hover:opacity-100 lg:opacity-0">
+                    Create
+                  </h3>
                 </div>
-              </Button>
-            </Link>
+                <FontAwesomeIcon
+                  icon={faAdd}
+                  className="transition-transform duration-1000 group-hover:rotate-360"
+                />
+              </div>
+            </Button>
 
             <Button
               color="primary"
@@ -173,7 +181,7 @@ export default function NavBar() {
                 className="flex items-center justify-between p-3 hover:text-secondary"
                 onClick={() => {
                   setMenu(false);
-                  navigate('/register');
+                  setShowCreate(true);
                 }}
               >
                 <h1 className="mr-1">Create</h1>
@@ -241,6 +249,26 @@ export default function NavBar() {
         title="Notifications"
       >
         <Notifications />
+      </CloutModal>
+
+      <CloutModal
+        isOpen={selectedFile != null}
+        onClose={() => setSelectedFile(null)}
+        title={'Create Post'}
+      >
+        {selectedFile && <CreatePost file={selectedFile} onClose={() => setSelectedFile(null)} />}
+      </CloutModal>
+
+      <CloutModal isOpen={showCreate} title={'Create'} onClose={() => setShowCreate(false)}>
+        <Create
+          onPostSelect={(file) => {
+            setSelectedFile(file);
+            setShowCreate(false);
+          }}
+          onCampaignSelect={() => {
+            setShowCreate(false);
+          }}
+        />
       </CloutModal>
     </div>
   );
