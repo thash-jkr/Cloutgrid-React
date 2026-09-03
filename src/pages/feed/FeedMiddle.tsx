@@ -32,7 +32,7 @@ export default function FeedMiddle() {
   }, [dispatch, postsHasMore]);
 
   return (
-    <div className="flex flex-col items-center justify-center select-none mx-3 w-full lg:mx-0 noscroll">
+    <div className="flex flex-col items-center justify-center select-none mx-3 w-full lg:mx-0">
       <div className="w-full flex flex-col gap-3">
         {posts.length > 0 ? (
           posts.map((post) => (

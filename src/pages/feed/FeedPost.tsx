@@ -126,7 +126,7 @@ const FeedPost = ({ id }: FeedPostProps) => {
                 </span>
               )}
             </h1>
-            <p>{post.caption}</p>
+            <p className='whitespace-pre-line'>{post.caption}</p>
           </div>
         </div>
       ) : (
