@@ -19,7 +19,7 @@ const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
   };
 
   return (
-    <div>
+    <div className='bg-background h-full p-3'>
       <input
         ref={fileInputRef}
         type="file"
@@ -29,8 +29,8 @@ const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
       />
 
       <div
-        className="m-3 flex cursor-pointer items-start justify-center gap-3 rounded-2xl
-          border bg-violet-200 p-3 shadow transition-transform duration-300 hover:scale-95"
+        className="flex cursor-pointer items-start justify-center gap-3 rounded-2xl
+          border bg-white p-3 transition-transform duration-300 hover:scale-95"
         onClick={() => fileInputRef.current?.click()}
       >
         <img src={postIcon} className="h-28 w-28" />
@@ -47,7 +47,7 @@ const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
       {type === 'business' && (
         <div
           className="m-3 flex items-start justify-center gap-3 rounded-2xl
-            border bg-violet-200 p-3 shadow transition-transform duration-300 hover:scale-95"
+            border bg-white p-3 shadow transition-transform duration-300 hover:scale-95"
             onClick={() => onCampaignSelect}
         >
           <div>

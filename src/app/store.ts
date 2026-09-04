@@ -4,6 +4,7 @@ import feedReducer from '@/slices/feedSlice';
 import profileReducer from '@/slices/profileSlice';
 import jobReducer from '@/slices/jobSlice';
 import createReducer from '@/slices/createSlice';
+import searchReducer from '@/slices/searchSlice';
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +12,8 @@ export const store = configureStore({
     feed: feedReducer,
     profile: profileReducer,
     job: jobReducer,
-    create: createReducer
+    create: createReducer,
+    search: searchReducer
   },
 });
 

@@ -7,10 +7,8 @@ export const fetchSuggestions = createAsyncThunk<UserProfile[], void, { rejectVa
   'search/fetchSuggestions',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get<AllUsersResponse>('/users/');
-      const allUsers = [...response.data.creators, ...response.data.businesses];
-      const shuffled = shuffle(allUsers);
-      return shuffled.slice(0, 6);
+      const response = await apiClient.get<UserProfile[]>('/suggestions');
+      return response.data;
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -43,17 +41,6 @@ export const handleSearchBusiness = createAsyncThunk<
     return rejectWithValue((error as Error).message);
   }
 });
-
-function shuffle<T>(items: T[]): T[] {
-  const array = [...items];
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-// --- slice ---
 
 const searchSlice = createSlice({
   name: 'search',

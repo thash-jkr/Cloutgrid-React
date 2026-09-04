@@ -18,6 +18,7 @@ import CloutModal from './CloutModal';
 import Notifications from '@/pages/feed/Notifications';
 import Create from '@/pages/create/Create';
 import CreatePost from '@/pages/create/CreatePost';
+import Search from '@/pages/create/Search';
 
 export default function NavBar() {
   const [menu, setMenu] = useState(false);
@@ -61,24 +62,27 @@ export default function NavBar() {
 
         {isAuth ? (
           <div className="hidden lg:flex items-center gap-3 pr-3">
-            <Link to="/" className="group">
-              <Button color="primary" variant="filled">
-                <div className="center flex items-center">
-                  <div
-                    className="lg:max-w-0 overflow-hidden group-hover:max-w-200 
-                      transition-all duration-1000 ease-in-out"
-                  >
-                    <h3 className="mr-2 lg:opacity-0 group-hover:opacity-100 transition-opacity duration-1000">
-                      Connect
-                    </h3>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faSearch}
-                    className="transition-transform duration-1000 group-hover:rotate-360"
-                  />
+            <Button
+              color="primary"
+              variant="filled"
+              onPress={() => setShowConnect(true)}
+              className="group"
+            >
+              <div className="center flex items-center">
+                <div
+                  className="overflow-hidden transition-all duration-1000 ease-in-out
+        group-hover:max-w-200 lg:max-w-0"
+                >
+                  <h3 className="mr-2 opacity-100 transition-opacity duration-1000 group-hover:opacity-100 lg:opacity-0">
+                    Connect
+                  </h3>
                 </div>
-              </Button>
-            </Link>
+                <FontAwesomeIcon
+                  icon={faSearch}
+                  className="transition-transform duration-1000 group-hover:rotate-360"
+                />
+              </div>
+            </Button>
 
             <Button
               color="primary"
@@ -249,6 +253,10 @@ export default function NavBar() {
         title="Notifications"
       >
         <Notifications />
+      </CloutModal>
+
+      <CloutModal isOpen={showConnect} onClose={() => setShowConnect(false)} title="Connect">
+        <Search />
       </CloutModal>
 
       <CloutModal
