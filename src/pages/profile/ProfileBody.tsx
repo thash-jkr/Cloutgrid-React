@@ -106,7 +106,7 @@ const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
         {renderContent()}
       </div>
 
-      <CloutModal title='Post' isOpen={selectedPost != null} onClose={() => setSelectedPost(null)}>
+      <CloutModal isOpen={selectedPost != null} onClose={() => setSelectedPost(null)}>
         {selectedPost && <FeedPost id={selectedPost?.id} />}
       </CloutModal>
     </div>

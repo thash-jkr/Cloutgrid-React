@@ -117,7 +117,14 @@ export default function CloutAlert({
             <span>Cancel</span>
           </Button>
 
-          <Button variant="filled" isDisabled={isSubmitDisabled || isTextEmpty} onPress={onSubmit}>
+          <Button
+            variant="filled"
+            isDisabled={isSubmitDisabled || isTextEmpty}
+            onPress={() => {
+              setText('');
+              onSubmit();
+            }}
+          >
             {isSubmitDisabled ? `Confirm (${secondsLeft})` : 'Confirm'}
           </Button>
         </div>

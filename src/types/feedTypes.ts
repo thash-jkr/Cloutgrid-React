@@ -15,6 +15,7 @@ export interface PostModel {
   like_count: number;
   comment_count: number;
   is_liked: boolean;
+  is_owner: boolean;
   image: string;
   aspect: string;
   caption: string;
