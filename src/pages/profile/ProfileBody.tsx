@@ -15,6 +15,8 @@ import type { UserProfile } from '@/types/authTypes';
 import { Button } from 'actify';
 import CloutModal from '@/components/CloutModal';
 import FeedPost from '../feed/FeedPost';
+import OtherInstagram from '../integration/OtherInstagram';
+import OtherYouTube from '../integration/OtherYouTube';
 
 type ProfileTab = 'posts' | 'instagram' | 'youtube' | 'collabs';
 
@@ -36,9 +38,10 @@ interface ProfileBodyProps {
   posts: PostModel[];
   collabs: PostModel[];
   user: UserProfile;
+  other?: boolean;
 }
 
-const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
+const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) => {
   const [selectedPost, setSelectedPost] = useState<PostModel | null>(null);
   const [activeTab, setActiveTab] = useState<ProfileTab>('posts');
 
@@ -49,9 +52,9 @@ const ProfileBody = ({ posts, collabs, user }: ProfileBodyProps) => {
       case 'posts':
         return <PostGrid posts={posts} onSelect={setSelectedPost} />;
       case 'instagram':
-        return <Instagram />;
+        return other ? <OtherInstagram username={user.username} /> : <Instagram />;
       case 'youtube':
-        return <YouTube />;
+        return other ? <OtherYouTube username={user.username} /> : <YouTube />;
       case 'collabs':
         return <PostGrid posts={collabs} onSelect={setSelectedPost} />;
     }

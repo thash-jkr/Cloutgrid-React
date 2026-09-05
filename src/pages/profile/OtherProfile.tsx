@@ -70,7 +70,7 @@ const OtherProfile = () => {
 
           <div className="flex w-full lg:basis-3/4 px-3 lg:px-0">
             {otherProfile && (
-              <ProfileBody posts={otherPosts} collabs={otherCollabs} user={otherProfile} />
+              <ProfileBody posts={otherPosts} collabs={otherCollabs} user={otherProfile} other={true} />
             )}
           </div>
         </div>
