@@ -6,9 +6,9 @@ import { getCroppedImageBlob } from '@/utils/cropImage';
 
 interface CropProps {
   imageSrc: string;
-  initialAspect: number;
   onCancel: () => void;
   onComplete: (blob: Blob, previewUrl: string, aspect: number) => void;
+  squareOnly?: boolean;
 }
 
 const ASPECT_OPTIONS = [
@@ -17,8 +17,8 @@ const ASPECT_OPTIONS = [
   { label: '3:4', value: 3 / 4 },
 ];
 
-export default function Crop({ imageSrc, initialAspect, onCancel, onComplete }: CropProps) {
-  const [aspect, setAspect] = useState(initialAspect);
+export default function Crop({ imageSrc, onCancel, onComplete, squareOnly = false }: CropProps) {
+  const [aspect, setAspect] = useState(1);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
@@ -55,18 +55,20 @@ export default function Crop({ imageSrc, initialAspect, onCancel, onComplete }: 
       </div>
 
       <div className="flex flex-col gap-4 bg-black/50 p-4">
-        <div className="flex justify-center gap-2">
-          {ASPECT_OPTIONS.map((option) => (
-            <Button
-              key={option.label}
-              variant={aspect === option.value ? 'filled' : 'outlined'}
-              color="primary"
-              onPress={() => setAspect(option.value)}
-            >
-              <span className='text-white'>{option.label}</span>
-            </Button>
-          ))}
-        </div>
+        {!squareOnly && (
+          <div className="flex justify-center gap-2">
+            {ASPECT_OPTIONS.map((option) => (
+              <Button
+                key={option.label}
+                variant={aspect === option.value ? 'filled' : 'outlined'}
+                color="primary"
+                onPress={() => setAspect(option.value)}
+              >
+                <span className="text-white">{option.label}</span>
+              </Button>
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-end gap-2">
           <Button variant="outlined" color="secondary" onPress={onCancel}>
@@ -78,6 +80,6 @@ export default function Crop({ imageSrc, initialAspect, onCancel, onComplete }: 
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

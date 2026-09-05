@@ -119,7 +119,7 @@ const ProfileHeader = ({ other = false }: Props) => {
         </div>
 
         <div className="p-3 w-full flex flex-col justify-start items-start font-normal text-base">
-          <span>{user?.bio}</span>
+          <span className="whitespace-pre-line">{user?.bio}</span>
         </div>
       </div>
 

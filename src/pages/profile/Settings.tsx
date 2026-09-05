@@ -1,4 +1,5 @@
 import CloutAlert from '@/components/CloutAlert';
+import CloutModal from '@/components/CloutModal';
 import {
   faArrowRightFromBracket,
   faChevronDown,
@@ -13,11 +14,13 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import EditProfile from './EditProfile';
 
 const Settings = () => {
   const [settingsDropdown, setSettingsDropdown] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
+  const [showEditProfile, setShowEditProfile] = useState(false);
 
   const navigate = useNavigate();
 
@@ -91,7 +94,7 @@ const Settings = () => {
             </div>
             <div
               className="flex items-center justify-start p-3 hover:bg-slate-50"
-              onClick={() => {}}
+              onClick={() => setShowEditProfile(true)}
             >
               <FontAwesomeIcon icon={faEdit} />
               <h1 className="ml-1">Edit Profile</h1>
@@ -124,6 +127,14 @@ const Settings = () => {
         body={'We would love to hear your feedback! Please share your thoughts with us.'}
         textField={true}
       />
+
+      <CloutModal
+        isOpen={showEditProfile}
+        onClose={() => setShowEditProfile(false)}
+        title="Edit Profile"
+      >
+        <EditProfile onClose={() => setShowEditProfile(false)} />
+      </CloutModal>
     </div>
   );
 };

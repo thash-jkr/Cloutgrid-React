@@ -53,7 +53,7 @@ const Comments = ({ id }: CommentProps) => {
                       alt="Profile"
                     />
                     <div className="flex w-full flex-col">
-                      <span className="text-sm font-semibold">{comment.content}</span>
+                      <span className="text-sm font-semibold whitespace-pre-line">{comment.content}</span>
                       <span className="text-xs text-slate-500">
                         {comment.user.name} • {timeAgo(comment.commented_at)}
                       </span>

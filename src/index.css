@@ -56,6 +56,12 @@ body {
 
 :root {
   --md-outlined-text-field-container-shape: 12px;
+  --md-outlined-select-text-field-container-shape: 12px;
+  --md-filled-select-text-field-container-shape: 12px;
+  --md-sys-color-on-secondary-container: #7c2d12;
+  --md-sys-color-secondary-container: #fed7aa;
+  --md-sys-color-surface-container: var(--color-background);
+  --md-menu-container-shape: 12px;
 }
 
 * {
@@ -100,4 +106,8 @@ textarea {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.selected {
+  background-color: var(--md-menu-item-selected-container-color, var(--md-sys-color-secondary-container));
 }

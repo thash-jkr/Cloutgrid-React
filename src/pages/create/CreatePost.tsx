@@ -70,7 +70,6 @@ export default function CreatePost({ file, onClose }: CreatePostProps) {
     return (
       <Crop
         imageSrc={imageSrc}
-        initialAspect={aspect}
         onCancel={handleCropCancel}
         onComplete={handleCropComplete}
       />
