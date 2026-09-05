@@ -1,3 +1,4 @@
+import CloutAlert from '@/components/CloutAlert';
 import {
   faArrowRightFromBracket,
   faChevronDown,
@@ -15,6 +16,8 @@ import { useNavigate } from 'react-router-dom';
 
 const Settings = () => {
   const [settingsDropdown, setSettingsDropdown] = useState(false);
+  const [showHelp, setShowHelp] = useState(false);
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const navigate = useNavigate();
 
@@ -29,7 +32,9 @@ const Settings = () => {
       >
         <div className="my-3 flex items-center justify-center text-lg font-semibold transition-all duration-300 ease-in-out">
           <h1 className="mr-1">Settings</h1>
-          <span className={`transition-transform duration-500 ${settingsDropdown ? 'rotate-180' : ''}`}>
+          <span
+            className={`transition-transform duration-500 ${settingsDropdown ? 'rotate-180' : ''}`}
+          >
             <FontAwesomeIcon icon={faGear} />
           </span>
           <span
@@ -49,7 +54,10 @@ const Settings = () => {
       >
         <div className="overflow-hidden">
           <div className="flex w-full flex-col divide-y font-regular border-t">
-            <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
+            <div
+              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              onClick={() => setShowHelp(true)}
+            >
               <FontAwesomeIcon icon={faLifeRing} />
               <h1 className="ml-1">Help</h1>
             </div>
@@ -74,11 +82,17 @@ const Settings = () => {
               <FontAwesomeIcon icon={faLock} />
               <h1 className="ml-1">Data Deletion</h1>
             </div>
-            <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
+            <div
+              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              onClick={() => setShowFeedback(true)}
+            >
               <FontAwesomeIcon icon={faComments} />
               <h1 className="ml-1">Feedback</h1>
             </div>
-            <div className="flex items-center justify-start p-3 hover:bg-slate-50" onClick={() => {}}>
+            <div
+              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              onClick={() => {}}
+            >
               <FontAwesomeIcon icon={faEdit} />
               <h1 className="ml-1">Edit Profile</h1>
             </div>
@@ -92,6 +106,24 @@ const Settings = () => {
           </div>
         </div>
       </div>
+
+      <CloutAlert
+        isOpen={showHelp}
+        onClose={() => setShowHelp(false)}
+        onSubmit={() => setShowHelp(false)}
+        title={'Need Help?'}
+        body={'If you face any issues using Cloutgrid, please reach out to us at'}
+        textField={true}
+      />
+
+      <CloutAlert
+        isOpen={showFeedback}
+        onClose={() => setShowFeedback(false)}
+        onSubmit={() => setShowFeedback(false)}
+        title={'Feedback'}
+        body={'We would love to hear your feedback! Please share your thoughts with us.'}
+        textField={true}
+      />
     </div>
   );
 };

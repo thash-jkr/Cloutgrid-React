@@ -75,11 +75,9 @@ export default function CloutAlert({
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
       onClick={() => {
-        () => {
           setText('');
           onClose();
-        };
-      }}
+        }}
     >
       <div
         className="w-full max-w-sm rounded-2xl bg-white p-5 shadow-xl"
