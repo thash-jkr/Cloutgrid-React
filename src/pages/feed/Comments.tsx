@@ -40,7 +40,7 @@ const Comments = ({ id }: CommentProps) => {
   return (
     <div className="flex h-full min-h-0 w-full flex-col">
       <Toaster />
-      <div className="min-h-0 flex-1 overflow-y-scroll">
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {comments.length > 0 ? (
           <ul className="w-full divide-y">
             {comments.map((comment) => (

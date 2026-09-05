@@ -13,6 +13,7 @@ import JobPage from '@/pages/job/JobPage';
 import EULA from '@/legal/EULA';
 import PrivacyPolicy from '@/legal/PrivacyPolicy';
 import DataDeletion from '@/legal/DataDeletion';
+import OtherProfile from '@/pages/profile/OtherProfile';
 
 export function AppRoutes() {
   return (
@@ -33,6 +34,7 @@ export function AppRoutes() {
 
       <Route element={<PrivateRoute />}>
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/:username" element={<OtherProfile />} />
         <Route path="/campaigns" element={<JobPage />} />
       </Route>
     </Routes>

@@ -1,10 +1,39 @@
-import { useAppSelector } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { getCategoryLabel } from '@/utils/categories';
 import Settings from './Settings';
+import CloutCapsule from '@/components/CloutCapsule';
+import { Button } from 'actify';
+import { handleBlock, handleFollow } from '@/slices/profileSlice';
+import { useState } from 'react';
+import CloutAlert from '@/components/CloutAlert';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBan, faBars, faWarning } from '@fortawesome/free-solid-svg-icons';
+import type { MenuAction } from '@/components/CloutMenu';
+import CloutMenu from '@/components/CloutMenu';
 
-const ProfileHeader = () => {
-  const { user } = useAppSelector((state) => state.auth);
-  const { posts, collabs } = useAppSelector((state) => state.profile);
+interface Props {
+  other?: boolean;
+}
+
+const ProfileHeader = ({ other = false }: Props) => {
+  const [unFollowConfirm, setUnFollowConfirm] = useState(false);
+  const [showMenu, setShowMenu] = useState(false);
+  const [showReportAlert, setShowReportAlert] = useState(false);
+  const [showBlockAlert, setShowBlockAlert] = useState(false);
+
+  const { user: authUser } = useAppSelector((state) => state.auth);
+  const { posts, collabs, otherProfile, otherPosts, otherCollabs } = useAppSelector(
+    (state) => state.profile,
+  );
+
+  const dispatch = useAppDispatch();
+
+  const user = other ? otherProfile : authUser;
+
+  const actions: MenuAction[] = [
+    { icon: faBan, label: `Block @${user?.username}`, action: () => setShowBlockAlert(true) },
+    { icon: faWarning, label: `Report @${user?.username}`, action: () => setShowReportAlert(true) },
+  ];
 
   return (
     <div className="flex flex-col justify-center items-center w-full gap-3">
@@ -37,32 +66,55 @@ const ProfileHeader = () => {
                 <h1>Following</h1>
               </div>
               <div className="flex justify-center items-center">
-                <h1 className="mr-2">{posts.length}</h1>
+                <h1 className="mr-2">{other ? otherPosts.length : posts.length}</h1>
                 <h1>Posts</h1>
               </div>
               {user?.type === 'business' && (
                 <div className="flex justify-center items-center">
-                  <h1 className="mr-2">{collabs.length}</h1>
+                  <h1 className="mr-2">{other ? otherCollabs.length : collabs.length}</h1>
                   <h1>Collabs</h1>
                 </div>
               )}
             </div>
           </div>
 
-          <p
-            className="px-5 py-2 bg-secondary text-white rounded-full font-extrabold text-sm 
-               transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow"
-          >
-            {getCategoryLabel(user?.category)}
-          </p>
+          <div className="flex justify-around w-full gap-1">
+            <CloutCapsule text={getCategoryLabel(user?.category)} />
 
-          {user?.type === 'business' && user?.website && (
-            <p
-              className="px-3 py-2 bg-primary text-white rounded-full font-extrabold text-sm 
-               transition-transform duration-300 ease-in-out transform hover:scale-105 hover:shadow"
-            >
-              {user?.website}
-            </p>
+            {user?.type === 'business' && user?.website && (
+              <CloutCapsule text={user.website} bg="bg-primary" />
+            )}
+          </div>
+
+          {other && otherProfile && (
+            <div className="flex justify-center items-center gap-3 w-full">
+              <Button
+                variant={otherProfile.is_following ? 'outlined' : 'filled'}
+                onPress={() => {
+                  if (otherProfile.is_following) {
+                    setUnFollowConfirm(true);
+                  } else {
+                    dispatch(
+                      handleFollow({
+                        username: otherProfile.username,
+                        follow: true,
+                      }),
+                    );
+                  }
+                }}
+              >
+                {otherProfile?.is_following ? 'Following' : 'Follow'}
+              </Button>
+
+              <div
+                className="w-10 h-10 border rounded-full flex justify-center 
+              items-center cursor-pointer transition-transform duration-300 
+              ease-in-out transform hover:scale-105 hover:shadow"
+                onClick={() => setShowMenu(true)}
+              >
+                <FontAwesomeIcon icon={faBars} />
+              </div>
+            </div>
           )}
         </div>
 
@@ -71,9 +123,52 @@ const ProfileHeader = () => {
         </div>
       </div>
 
-      <div className="w-full">
-        <Settings />
-      </div>
+      {!other && (
+        <div className="w-full">
+          <Settings />
+        </div>
+      )}
+
+      <CloutAlert
+        isOpen={unFollowConfirm}
+        onClose={() => setUnFollowConfirm(false)}
+        title={`Unfollow @${otherProfile?.username}?`}
+        body={`Are you sure you want to unfollow @${otherProfile?.username}?`}
+        onSubmit={() => {
+          otherProfile &&
+            dispatch(
+              handleFollow({
+                username: otherProfile.username,
+                follow: false,
+              }),
+            );
+          setUnFollowConfirm(false);
+        }}
+      />
+
+      <CloutMenu isOpen={showMenu} onClose={() => setShowMenu(false)} actions={actions} />
+
+      <CloutAlert
+        isOpen={showReportAlert}
+        onClose={() => setShowReportAlert(false)}
+        title={`Report @${user?.username}?`}
+        body={`Tell us why you are reporting @${user?.username}. This will be sent to our moderation team for review.`}
+        onSubmit={() => {
+          setShowReportAlert(false);
+        }}
+        textField={true}
+      />
+
+      <CloutAlert
+        isOpen={showBlockAlert}
+        onClose={() => setShowBlockAlert(false)}
+        title={`Block @${user?.username}?`}
+        body={`Are you sure you want to block @${user?.username}?`}
+        onSubmit={() => {
+          user && dispatch(handleBlock({ username: user.username, block: true }));
+          setShowBlockAlert(false);
+        }}
+      />
     </div>
   );
 };

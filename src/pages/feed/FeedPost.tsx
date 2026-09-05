@@ -26,7 +26,7 @@ const FeedPost = ({ id }: FeedPostProps) => {
   const [showReportAlert, setShowReportAlert] = useState(false);
 
   const { posts: feed } = useAppSelector((state) => state.feed);
-  const { posts, collabs } = useAppSelector((state) => state.profile);
+  const { posts, collabs, otherPosts, otherCollabs } = useAppSelector((state) => state.profile);
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -36,6 +36,8 @@ const FeedPost = ({ id }: FeedPostProps) => {
     feed.find((p) => p.id === id) ??
     posts.find((p) => p.id === id) ??
     collabs.find((p) => p.id === id) ??
+    otherPosts.find((p) => p.id === id) ??
+    otherCollabs.find((p) => p.id === id) ??
     null;
 
   const handleTap = (id: number, isLiked: boolean) => {
@@ -167,7 +169,7 @@ const FeedPost = ({ id }: FeedPostProps) => {
           </div>
         </div>
       ) : (
-        <CloutEmpty icon={feedIcon} message={'No new posts'} />
+        <CloutEmpty icon={feedIcon} message={'Nothing to see here'} />
       )}
 
       <CloutModal isOpen={showComments} onClose={() => setShowComments(false)} title="Comments">

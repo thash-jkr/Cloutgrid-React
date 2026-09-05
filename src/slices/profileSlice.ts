@@ -19,10 +19,14 @@ export const fetchProfile = createAsyncThunk<
   ThunkConfig
 >('profile/fetchProfile', async ({ username, other }, { dispatch, rejectWithValue }) => {
   try {
-    const response = await apiClient.get<UserProfile>(`/profiles/${username}/`);
+    const response = other
+      ? await apiClient.get<UserProfile>(`/profiles/${username}/`)
+      : await apiClient.get<UserProfile>(``);
+
     if (!other) {
       dispatch(saveUser(response.data));
     }
+    
     return { user: response.data, other };
   } catch (error) {
     return rejectWithValue((error as Error).message);
@@ -186,7 +190,7 @@ const profileSlice = createSlice({
         state.collabs = state.collabs.map(updateIfMatch);
         state.otherPosts = state.otherPosts.map(updateIfMatch);
         state.otherCollabs = state.otherCollabs.map(updateIfMatch);
-      })
+      });
   },
 });
 
