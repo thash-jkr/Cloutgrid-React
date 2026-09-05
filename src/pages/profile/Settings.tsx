@@ -1,28 +1,62 @@
 import CloutAlert from '@/components/CloutAlert';
 import CloutModal from '@/components/CloutModal';
 import {
-  faArrowRightFromBracket,
-  faChevronDown,
-  faComments,
-  faEdit,
-  faFileContract,
-  faGear,
-  faHandshake,
-  faLifeRing,
-  faLock,
-} from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+  LogOut,
+  ChevronDown,
+  MessageCircle,
+  Pencil,
+  FileText,
+  Settings as SettingsIcon,
+  HeartHandshake,
+  LifeBuoy,
+  Lock,
+  Trash,
+} from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EditProfile from './EditProfile';
+import type { MenuAction } from '@/components/CloutMenu';
+import CloutMenu from '@/components/CloutMenu';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { deleteAccount, logout } from '@/slices/authSlice';
 
 const Settings = () => {
   const [settingsDropdown, setSettingsDropdown] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [showFeedback, setShowFeedback] = useState(false);
   const [showEditProfile, setShowEditProfile] = useState(false);
+  const [showPrivacyMenu, setShowPrivacyMenu] = useState(false);
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
 
   const navigate = useNavigate();
+
+  const { type } = useAppSelector((state) => state.auth);
+
+  const dispatch = useAppDispatch();
+
+  const actions: MenuAction[] = [
+    {
+      icon: FileText,
+      label: 'Privacy Policy',
+      action: () => navigate('/privacypolicy'),
+    },
+    {
+      icon: HeartHandshake,
+      label: 'EULA',
+      action: () => navigate('/eula'),
+    },
+    {
+      icon: Lock,
+      label: 'Data Deletion',
+      action: () => navigate('/deletionpolicy'),
+    },
+    {
+      icon: Trash,
+      label: 'Delete Account',
+      action: () => setShowDeleteAlert(true),
+    },
+  ];
 
   return (
     <div
@@ -33,19 +67,19 @@ const Settings = () => {
         className="flex w-full items-center justify-center"
         onClick={() => setSettingsDropdown(!settingsDropdown)}
       >
-        <div className="my-3 flex items-center justify-center text-lg font-semibold transition-all duration-300 ease-in-out">
-          <h1 className="mr-1">Settings</h1>
+        <div className="my-3 flex items-center justify-center gap-1 text-lg font-semibold transition-all duration-300 ease-in-out">
+          <h1>Settings</h1>
           <span
             className={`transition-transform duration-500 ${settingsDropdown ? 'rotate-180' : ''}`}
           >
-            <FontAwesomeIcon icon={faGear} />
+            <SettingsIcon className="h-5 w-5" />
           </span>
           <span
             className={`absolute right-3 transition-transform duration-500 ${
               settingsDropdown ? 'rotate-180' : ''
             }`}
           >
-            <FontAwesomeIcon icon={faChevronDown} />
+            <ChevronDown className="h-5 w-5" />
           </span>
         </div>
       </div>
@@ -56,55 +90,41 @@ const Settings = () => {
         }`}
       >
         <div className="overflow-hidden">
-          <div className="flex w-full flex-col divide-y font-regular border-t">
+          <div className="font-regular flex w-full flex-col divide-y border-t">
             <div
-              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              className="flex items-center justify-start gap-2 p-3 hover:bg-slate-50"
               onClick={() => setShowHelp(true)}
             >
-              <FontAwesomeIcon icon={faLifeRing} />
-              <h1 className="ml-1">Help</h1>
+              <LifeBuoy className="h-5 w-5" />
+              <h1>Help</h1>
             </div>
             <div
-              className="flex items-center justify-start p-3 hover:bg-slate-50"
-              onClick={() => navigate('/privacypolicy')}
-            >
-              <FontAwesomeIcon icon={faFileContract} />
-              <h1 className="ml-1">Privacy Policy</h1>
-            </div>
-            <div
-              className="flex items-center justify-start p-3 hover:bg-slate-50"
-              onClick={() => navigate('/eula')}
-            >
-              <FontAwesomeIcon icon={faHandshake} />
-              <h1 className="ml-1">EULA</h1>
-            </div>
-            <div
-              className="flex items-center justify-start p-3 hover:bg-slate-50"
-              onClick={() => navigate('/deletionpolicy')}
-            >
-              <FontAwesomeIcon icon={faLock} />
-              <h1 className="ml-1">Data Deletion</h1>
-            </div>
-            <div
-              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              className="flex items-center justify-start gap-2 p-3 hover:bg-slate-50"
               onClick={() => setShowFeedback(true)}
             >
-              <FontAwesomeIcon icon={faComments} />
-              <h1 className="ml-1">Feedback</h1>
+              <MessageCircle className="h-5 w-5" />
+              <h1>Feedback</h1>
             </div>
             <div
-              className="flex items-center justify-start p-3 hover:bg-slate-50"
+              className="flex items-center justify-start gap-2 p-3 hover:bg-slate-50"
               onClick={() => setShowEditProfile(true)}
             >
-              <FontAwesomeIcon icon={faEdit} />
-              <h1 className="ml-1">Edit Profile</h1>
+              <Pencil className="h-5 w-5" />
+              <h1>Edit Profile</h1>
             </div>
             <div
-              className="flex items-center justify-start rounded-b-2xl p-3 hover:bg-slate-50"
-              onClick={() => navigate('/logout')}
+              className="flex items-center justify-start gap-2 p-3 hover:bg-slate-50"
+              onClick={() => setShowPrivacyMenu(true)}
             >
-              <FontAwesomeIcon icon={faArrowRightFromBracket} />
-              <h1 className="ml-1">Logout</h1>
+              <Lock className="h-5 w-5" />
+              <h1>Privacy</h1>
+            </div>
+            <div
+              className="flex items-center justify-start gap-2 rounded-b-2xl p-3 hover:bg-slate-50"
+              onClick={() => setShowLogoutAlert(true)}
+            >
+              <LogOut className="h-5 w-5" />
+              <h1>Logout</h1>
             </div>
           </div>
         </div>
@@ -114,8 +134,8 @@ const Settings = () => {
         isOpen={showHelp}
         onClose={() => setShowHelp(false)}
         onSubmit={() => setShowHelp(false)}
-        title={'Need Help?'}
-        body={'If you face any issues using Cloutgrid, please reach out to us at'}
+        title="Need Help?"
+        body="If you face any issues using Cloutgrid, please reach out to us at"
         textField={true}
       />
 
@@ -123,8 +143,8 @@ const Settings = () => {
         isOpen={showFeedback}
         onClose={() => setShowFeedback(false)}
         onSubmit={() => setShowFeedback(false)}
-        title={'Feedback'}
-        body={'We would love to hear your feedback! Please share your thoughts with us.'}
+        title="Feedback"
+        body="We would love to hear your feedback! Please share your thoughts with us."
         textField={true}
       />
 
@@ -135,6 +155,36 @@ const Settings = () => {
       >
         <EditProfile onClose={() => setShowEditProfile(false)} />
       </CloutModal>
+
+      <CloutMenu
+        isOpen={showPrivacyMenu}
+        onClose={() => setShowPrivacyMenu(false)}
+        actions={actions}
+      />
+
+      <CloutAlert
+        isOpen={showDeleteAlert}
+        onClose={() => setShowDeleteAlert(false)}
+        onSubmit={() => {
+          type && dispatch(deleteAccount(type));
+          setShowDeleteAlert(false);
+        }}
+        title="Delete Account"
+        body="Are you sure you want to delete your account? This action is 
+        irreversible and will permanently remove all your data from our servers."
+        timed={true}
+      />
+
+      <CloutAlert
+        isOpen={showLogoutAlert}
+        onClose={() => setShowLogoutAlert(false)}
+        onSubmit={() => {
+          dispatch(logout());
+          setShowLogoutAlert(false);
+        }}
+        title="Logout"
+        body="Are you sure you want to logout?"
+      />
     </div>
   );
 };

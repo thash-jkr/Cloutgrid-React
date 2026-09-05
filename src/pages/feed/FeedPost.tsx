@@ -13,6 +13,7 @@ import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
 import CloutAlert from '@/components/CloutAlert';
 import toast, { Toaster } from 'react-hot-toast';
+import { AlertTriangle, Flag, Trash } from 'lucide-react';
 
 interface FeedPostProps {
   id: number;
@@ -71,11 +72,11 @@ const FeedPost = ({ id }: FeedPostProps) => {
   };
 
   const actions: MenuAction[] = post?.is_owner
-    ? [{ icon: faTrash, label: 'Delete Post', action: () => setShowDeleteAlert(true) }]
+    ? [{ icon: Trash, label: 'Delete Post', action: () => setShowDeleteAlert(true) }]
     : [
-        { icon: faFlag, label: 'Report Post', action: () => setShowReportAlert(true) },
+        { icon: Flag, label: 'Report Post', action: () => setShowReportAlert(true) },
         {
-          icon: faWarning,
+          icon: AlertTriangle,
           label: `Report @${post?.posted_by.username}`,
           action: () => setShowReportAlert(true),
         },

@@ -3,13 +3,12 @@ import CategoryModal from '@/components/CategoryModal';
 import CloutModal from '@/components/CloutModal';
 import { updateProfile } from '@/slices/authSlice';
 import { checkLabel, getCategoryIcon, getCategoryLabel } from '@/utils/categories';
-import { faPencil } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, TextField } from 'actify';
 import { useEffect, useRef, useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import Crop from '../create/Crop';
 import imageCompression from 'browser-image-compression';
+import { Pencil } from 'lucide-react';
 
 interface Props {
   onClose: () => void;
@@ -116,10 +115,10 @@ const EditProfile = ({ onClose }: Props) => {
 
         <div
           className="absolute bg-white shadow border 
-        rounded-full h-6 w-6 flex items-center justify-center bottom-8 left-18
+        rounded-full h-7 w-7 flex items-center justify-center bottom-8 left-17
         transition-transform duration-300 group-hover:scale-110"
         >
-          <FontAwesomeIcon icon={faPencil} className="text-xs" />
+          <Pencil className='h-4 w-4' />
         </div>
       </div>
 
