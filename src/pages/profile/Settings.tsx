@@ -43,12 +43,12 @@ const Settings = () => {
     },
     {
       icon: HeartHandshake,
-      label: 'EULA',
+      label: 'License Agreement',
       action: () => navigate('/eula'),
     },
     {
       icon: Lock,
-      label: 'Data Deletion',
+      label: 'Data Deletion Policy',
       action: () => navigate('/deletionpolicy'),
     },
     {

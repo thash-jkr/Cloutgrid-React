@@ -1,12 +1,11 @@
 import NavBar from '@/components/NavBar';
 import kidImage from '@/assets/kid.png';
-import { faBriefcase, faVideo } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, SegmentedButton, SegmentedButtonSet } from 'actify';
+import { Button, SegmentedButtonSet } from 'actify';
 import { useState } from 'react';
 import iOSLogo from '@/assets/app_store_logo.png';
 import androidLogo from '@/assets/play_store_logo.png';
 import { Link } from 'react-router-dom';
+import { Briefcase, Palette } from 'lucide-react';
 
 interface EmojiIcon {
   codepoint: string;
@@ -39,10 +38,10 @@ function FeatureTile({ label, icon }: FeatureTileProps) {
 }
 
 export default function LandingPage() {
-  const [type, setType] = useState('creator');
+  const [isCreator, setIsCreator] = useState(true);
 
   return (
-    <div className="container min-h-dvh  mx-auto">
+    <div className="container min-h-dvh mx-auto noselect">
       <NavBar />
 
       <main className="mx-auto flex min-h-dvh px-4">
@@ -59,49 +58,52 @@ export default function LandingPage() {
           <div className="flex items-center w-full lg:w-1/2 gap-4">
             <SegmentedButtonSet role="presentation" className="w-full" aria-label="Color mode">
               <div role="group" className="h-10 grid w-full grid-flow-col auto-rows-auto">
-                <SegmentedButton
-                  title="Creator"
-                  label="Creator"
-                  data-value="creator"
-                  className="rounded-l-full"
-                  selected={type == 'creator'}
-                  icon={<FontAwesomeIcon icon={faVideo} />}
-                  onPress={() => setType('creator')}
-                />
-
-                <SegmentedButton
-                  title="Brand"
-                  label="Brand"
-                  data-value="brand"
-                  className="rounded-r-full"
-                  selected={type == 'brand'}
-                  icon={<FontAwesomeIcon icon={faBriefcase} />}
-                  onPress={() => setType('brand')}
-                />
+                <div className="flex h-10 w-full overflow-hidden rounded-full border border-gray-300">
+                  <button
+                    type="button"
+                    onClick={() => setIsCreator(true)}
+                    className={`flex flex-1 items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                      isCreator ? 'bg-primary text-white' : 'bg-white text-gray-700'
+                    }`}
+                  >
+                    <Palette className="h-4 w-4" />
+                    Creator
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setIsCreator(false)}
+                    className={`flex flex-1 items-center justify-center gap-2 text-sm font-medium transition-colors ${
+                      !isCreator ? 'bg-secondary text-white' : 'bg-white text-gray-700'
+                    }`}
+                  >
+                    <Briefcase className="h-4 w-4" />
+                    Brand
+                  </button>
+                </div>
               </div>
             </SegmentedButtonSet>
           </div>
 
           <div className="flex flex-col items-start gap-5 w-full">
             <FeatureTile
-              label={type == 'creator' ? 'Unlimited campaigns' : 'Post campaigns'}
+              label={isCreator ? 'Unlimited campaigns' : 'Post campaigns'}
               icon={{ codepoint: '1f680', alt: '🚀' }}
             />
             <FeatureTile
               label={
-                type == 'creator' ? 'Instagram & YouTube analytics' : 'Verified creator analytics'
+                isCreator ? 'Instagram & YouTube analytics' : 'Verified creator analytics'
               }
               icon={{ codepoint: '1f4ca', alt: '📊' }}
             />
             <FeatureTile label="Safe escrow payments" icon={{ codepoint: '1f4b8', alt: '💸' }} />
             <FeatureTile
-              label={type == 'creator' ? 'AI-powered brand matching' : 'AI-powered creator search'}
+              label={isCreator ? 'AI-powered brand matching' : 'AI-powered creator search'}
               icon={{ codepoint: '1fa84', alt: '🪄' }}
             />
           </div>
 
-          <div className="flex h-14 w-full items-center justify-center mb-5 lg:w-1/2">
-            {type == 'creator' ? (
+          <div className="flex h-14 w-full items-center justify-center md:w-2/3 lg:w-1/2">
+            {isCreator ? (
               <div className="flex w-3/4 lg:w-full mb-5 justify-center">
                 <a
                   className="w-1/2 h-auto hover:scale-105 transition-all duration-500 cursor-pointer"
@@ -134,18 +136,6 @@ export default function LandingPage() {
 
         <div className="hidden lg:flex flex-col flex-1 items-center justify-center">
           <img src={kidImage} alt="Cloutgrid illustration" className="w-full object-cover" />
-
-          {/* <span className="flex items-center gap-3">
-            Connect{" "}
-            <span className="text-[7px]">
-              <FontAwesomeIcon icon={faCircle} />
-            </span>
-            Create{" "}
-            <span className="text-[7px]">
-              <FontAwesomeIcon icon={faCircle} />
-            </span>
-            Collaborate
-          </span> */}
         </div>
       </main>
     </div>

@@ -29,7 +29,7 @@ export interface Category {
 }
 
 export const categories: Category[] = [
-  { value: '', label: 'Select Area' },
+  { value: '', label: '' },
   { value: 'art', label: 'Art and Photography', icon: Palette },
   { value: 'automotive', label: 'Automotive', icon: Car },
   { value: 'beauty', label: 'Beauty and Makeup', icon: Gem },

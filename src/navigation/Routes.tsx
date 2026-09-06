@@ -1,8 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import LoginPage from '@/pages/auth/LoginPage';
 import RegisterPage from '@/pages/auth/RegisterPage';
-import RegisterCreator from '@/pages/auth/RegisterCreator';
-import RegisterBrand from '@/pages/auth/RegisterBrand';
 import ResetPassword from '@/pages/auth/ResetPassword';
 import ForgotPassword from '@/pages/auth/ForgotPassword';
 import PublicRoute from '@/navigation/PublicRoute';
@@ -14,6 +12,7 @@ import EULA from '@/legal/EULA';
 import PrivacyPolicy from '@/legal/PrivacyPolicy';
 import DataDeletion from '@/legal/DataDeletion';
 import OtherProfile from '@/pages/profile/OtherProfile';
+import RegistrationFlow from '@/pages/auth/RegistrationFlow';
 
 export function AppRoutes() {
   return (
@@ -26,8 +25,7 @@ export function AppRoutes() {
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/register/creator" element={<RegisterCreator />} />
-        <Route path="/register/brand" element={<RegisterBrand />} />
+        <Route path="/register/:type" element={<RegistrationFlow />} />
         <Route path="/password/forgot" element={<ForgotPassword />} />
         <Route path="/password/reset/:uid/:token" element={<ResetPassword />} />
       </Route>

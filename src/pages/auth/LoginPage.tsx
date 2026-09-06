@@ -1,17 +1,16 @@
 import login_bg from '@/assets/carol-magalhaes-dSsXm15D9hg-unsplash.jpg';
 import { Button, IconButton, TextField } from 'actify';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faEye, faEyeSlash, faLock } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '@/assets/cloutgrid_logo_icon.png';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { login } from '@/slices/authSlice';
 import toast, { Toaster } from 'react-hot-toast';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [type, setType] = useState('creator');
+  const [isCreator, setIsCreator] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -28,7 +27,7 @@ const LoginPage = () => {
       return;
     }
 
-    await dispatch(login({ email, password, type }))
+    await dispatch(login({ email, password, type: isCreator ? 'creator' : 'business' }))
       .unwrap()
       .then(() => {
         toast.success('Login successful!', { id: loadingToast });
@@ -40,7 +39,7 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-dvh mx-auto">
+    <div className="min-h-dvh mx-auto noselect">
       <Toaster position="top-left" />
       <Link to="/" className="p-0 absolute top-1 left-1">
         <img src={logo} alt="Cloutgrid logo" className="h-14 w-14 object-center" />
@@ -49,7 +48,7 @@ const LoginPage = () => {
       <div className="flex">
         <div className="flex flex-col flex-1 justify-center items-center gap-7 h-dvh">
           <div></div>
-          <h1 className="text-3xl font-bold">{type == 'creator' ? 'Creator' : 'Brand'} Login</h1>
+          <h1 className="text-3xl font-bold">{isCreator ? 'Creator' : 'Brand'} Login</h1>
 
           <div className="flex flex-col gap-5 w-full px-5">
             <TextField
@@ -57,7 +56,7 @@ const LoginPage = () => {
               variant="outlined"
               value={email}
               onChange={setEmail}
-              leadingIcon={<FontAwesomeIcon icon={faEnvelope} />}
+              leadingIcon={<Mail className="h-5 w-5" />}
             />
 
             <TextField
@@ -66,10 +65,10 @@ const LoginPage = () => {
               type={showPassword ? 'text' : 'password'}
               value={password}
               onChange={setPassword}
-              leadingIcon={<FontAwesomeIcon icon={faLock} />}
+              leadingIcon={<Lock className="h-5 w-5" />}
               trailingIcon={
                 <IconButton onPress={() => setShowPassword(!showPassword)}>
-                  <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                  {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
                 </IconButton>
               }
             />
@@ -79,26 +78,33 @@ const LoginPage = () => {
             {authLoading ? 'Logging in…' : 'Login'}
           </Button>
 
-          <div className="flex flex-col justify-center items-center font-semibold gap-2">
+          <div className="flex flex-col justify-center items-center gap-2">
             <div className=" hover:text-secondary font-bold">
               <Link to={'/password/forgot'}>Forgot password?</Link>
             </div>
-            <div>
+
+            <div
+              className="group cursor-pointer"
+              onClick={() => setIsCreator(!isCreator)}
+            >
               <span className="flex justify-center items-center gap-2">
-                Not a {type}?{' '}
-                <span
-                  className=" hover:text-secondary font-bold cursor-pointer"
-                  onClick={() => setType(type == 'creator' ? 'brand' : 'creator')}
-                >
-                  {type == 'creator' ? 'Brand' : 'Creator'} Login
+                Not a {isCreator ? 'brand' : 'creator'}?{' '}
+                <span className="group-hover:text-secondary font-bold">
+                  {isCreator ? 'Brand' : 'Creator'} Login
                 </span>
               </span>
             </div>
-            <div className="flex justify-center items-center gap-2">
-              <span>Don't have an account?</span>
-              <Link className=" hover:text-secondary font-bold" to={'/register'}>
-                Register
-              </Link>
+
+            <div
+              className="group cursor-pointer"
+              onClick={() => navigate("/register")}
+            >
+              <span className="flex justify-center items-center gap-2">
+                Don't have an account?
+                <span className="group-hover:text-secondary font-bold">
+                  Register
+                </span>
+              </span>
             </div>
           </div>
         </div>

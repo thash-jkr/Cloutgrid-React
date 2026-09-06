@@ -10,7 +10,7 @@ const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="min-h-dvh mx-auto">
+    <div className="min-h-dvh mx-auto noselect">
       <Link to="/" className="p-0 absolute top-1 left-1">
         <img src={logo} alt="Cloutgrid logo" className="h-14 w-14 object-center" />
       </Link>
