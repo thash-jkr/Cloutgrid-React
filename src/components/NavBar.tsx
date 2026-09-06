@@ -30,6 +30,7 @@ export default function NavBar() {
   const { user, isAuth } = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
+  const location = window.location.pathname;
 
   return (
     <div
@@ -42,7 +43,7 @@ export default function NavBar() {
           <img src={logo} alt="Cloutgrid logo" className="h-full w-auto object-contain" />
         </Link>
 
-        {!isAuth && (
+        {!isAuth && location == '/' && (
           <div className="hidden lg:flex justify-center items-center text-xl font-bold">
             <Link to={'/register/creator/'}>
               <h6 className="mr-5 hover:scale-105 hover:text-secondary transition-all duration-500">
