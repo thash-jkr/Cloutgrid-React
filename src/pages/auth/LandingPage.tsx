@@ -6,6 +6,8 @@ import iOSLogo from '@/assets/app_store_logo.png';
 import androidLogo from '@/assets/play_store_logo.png';
 import { Link } from 'react-router-dom';
 import { Briefcase, Palette } from 'lucide-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFacebook, faInstagram, faXTwitter, faYoutube } from '@fortawesome/free-brands-svg-icons';
 
 interface EmojiIcon {
   codepoint: string;
@@ -90,9 +92,7 @@ export default function LandingPage() {
               icon={{ codepoint: '1f680', alt: '🚀' }}
             />
             <FeatureTile
-              label={
-                isCreator ? 'Instagram & YouTube analytics' : 'Verified creator analytics'
-              }
+              label={isCreator ? 'Instagram & YouTube analytics' : 'Verified creator analytics'}
               icon={{ codepoint: '1f4ca', alt: '📊' }}
             />
             <FeatureTile label="Safe escrow payments" icon={{ codepoint: '1f4b8', alt: '💸' }} />
@@ -138,6 +138,70 @@ export default function LandingPage() {
           <img src={kidImage} alt="Cloutgrid illustration" className="w-full object-cover" />
         </div>
       </main>
+
+      <footer className="container mx-auto flex flex-wrap justify-center content-center mb-8 w-full">
+        <div className="px-2 py-3 flex flex-col justify-center content-center items-center w-full">
+          <div className="flex justify-between content-center py-5 w-2/3 md:w-3/5 lg:w-1/5 text-3xl">
+            <a
+              href="https://facebook.com/cloutgrid"
+              className="transition-all duration-500 hover:scale-110 hover:text-orange-500"
+            >
+              <FontAwesomeIcon icon={faFacebook} />
+            </a>
+            <a
+              href="https://instagram.com/cloutgrid"
+              className="transition-all duration-500 hover:scale-110 hover:text-orange-500"
+            >
+              <FontAwesomeIcon icon={faInstagram} />
+            </a>
+            <a
+              href="https://youtube.com/cloutgrid"
+              className="transition-all duration-500 hover:scale-110 hover:text-orange-500"
+            >
+              <FontAwesomeIcon icon={faYoutube} />
+            </a>
+            <a
+              href="https://x.com/cloutgrid"
+              className="transition-all duration-500 hover:scale-110 hover:text-orange-500"
+            >
+              <FontAwesomeIcon icon={faXTwitter} />
+            </a>
+          </div>
+
+          <div className="flex justify-center content-center font-bold text-lg md:w-3/4 py-5">
+            <ul className="flex flex-col lg:flex-row justify-between content-center text-center w-full">
+              <li className="transition-all duration-500 hover:scale-110 hover:text-orange-500">
+                <a href="mailto:info@cloutgrid.com">Contact us</a>
+              </li>
+              {/* <li>
+              <a href="/">Our Services</a>
+            </li> */}
+              <li className="transition-all duration-500 hover:scale-110 hover:text-orange-500">
+                <Link to={'/privacypolicy'}>Privacy Policy</Link>
+              </li>
+
+              <li className="transition-all duration-500 hover:scale-110 hover:text-orange-500">
+                <Link to={'/eula'}>Terms of Service</Link>
+              </li>
+
+              <li className="transition-all duration-500 hover:scale-110 hover:text-orange-500">
+                <Link to={'/deletionpolicy'}>Data Deletion</Link>
+              </li>
+
+              {/* <li>
+              <a href="/">Careers</a>
+            </li> */}
+            </ul>
+          </div>
+
+          <div className="flex flex-col justify-center content-center text-center py-5">
+            <p>Cloutgrid Copyright © 2026 Cloutgrid - All rights reserved</p>
+            {/* <p className="font-bold transition-all duration-500 hover:scale-110 hover:text-orange-500">
+              Designed By: <a href="https://thash.me">@thash</a>
+            </p> */}
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
