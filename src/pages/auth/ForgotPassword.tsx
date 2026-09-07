@@ -1,11 +1,22 @@
 import reg_bg from '@/assets/gradient_bg.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '@/assets/cloutgrid_logo_icon.png';
 import { Button, TextField } from 'actify';
+import { useAppDispatch } from '@/app/hooks';
+import { forgotPassword } from '@/slices/authSlice';
+import { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
 
 const ForgotPassword = () => {
+  const [email, setEmail] = useState('');
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-dvh mx-auto noselect">
+      <Toaster position="top-left" />
+
       <Link to="/" className="p-0 absolute top-1 left-1">
         <img src={logo} alt="Cloutgrid logo" className="h-14 w-14 object-center" />
       </Link>
@@ -18,10 +29,24 @@ const ForgotPassword = () => {
             <p>
               Enter your email here. We will send you a mail with the link to reset your password
             </p>
-            <TextField label="Email" variant="outlined" />
+            <TextField label="Email" variant="outlined" value={email} onChange={setEmail} />
           </div>
 
-          <Button color="primary" variant="filled">
+          <Button
+            color="primary"
+            variant="filled"
+            onPress={() => {
+              const id = toast.loading('Sending mail...');
+
+              dispatch(forgotPassword(email))
+                .unwrap()
+                .then(() => {
+                  toast.success('Password reset link sent to your mail', { id });
+                  navigate('/login', { replace: true });
+                })
+                .catch((error) => toast.error('Error: ' + error, { id }));
+            }}
+          >
             Submit
           </Button>
         </div>
@@ -35,5 +60,3 @@ const ForgotPassword = () => {
 };
 
 export default ForgotPassword;
-
-//

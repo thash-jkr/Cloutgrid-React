@@ -124,16 +124,28 @@ export const handleOTP = createAsyncThunk<
   }
 });
 
-export const resetPassword = createAsyncThunk<void, string, { rejectValue: string }>(
-  'auth/resetPassword',
+export const forgotPassword = createAsyncThunk<void, string, { rejectValue: string }>(
+  'auth/forgotPassword',
   async (email, { rejectWithValue }) => {
     try {
-      await apiClient.post('/password-reset/', { email }, { requireAuth: false });
+      await apiClient.post('/password/forgot/', { email }, { requireAuth: false });
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   },
 );
+
+export const confirmPassword = createAsyncThunk<
+  void,
+  { password: string; uid: string; token: string },
+  { rejectValue: string }
+>('auth/confirmPassword', async ({ password, uid, token }, { rejectWithValue }) => {
+  try {
+    await apiClient.post(`/password/confirm/${uid}/${token}/`, { password }, { requireAuth: false });
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
+  }
+});
 
 export const deleteAccount = createAsyncThunk<void, string, { rejectValue: string }>(
   'auth/deleteAccount',
@@ -228,9 +240,12 @@ const authSlice = createSlice({
 
       .addMatcher(
         (action) =>
-          [register.pending.type, handleOTP.pending.type, resetPassword.pending.type].includes(
-            action.type,
-          ),
+          [
+            register.pending.type,
+            handleOTP.pending.type,
+            forgotPassword.pending.type,
+            confirmPassword.pending.type,
+          ].includes(action.type),
         (state) => {
           state.authLoading = true;
           state.authError = null;
@@ -241,7 +256,8 @@ const authSlice = createSlice({
           [
             register.fulfilled.type,
             handleOTP.fulfilled.type,
-            resetPassword.fulfilled.type,
+            forgotPassword.fulfilled.type,
+            confirmPassword.fulfilled.type,
           ].includes(action.type),
         (state) => {
           state.authLoading = false;
@@ -249,9 +265,12 @@ const authSlice = createSlice({
       )
       .addMatcher(
         (action) =>
-          [register.rejected.type, handleOTP.rejected.type, resetPassword.rejected.type].includes(
-            action.type,
-          ),
+          [
+            register.rejected.type,
+            handleOTP.rejected.type,
+            forgotPassword.rejected.type,
+            confirmPassword.rejected.type,
+          ].includes(action.type),
         (state, action: PayloadAction<string | undefined>) => {
           state.authLoading = false;
           state.authError = action.payload ?? 'Something went wrong';
