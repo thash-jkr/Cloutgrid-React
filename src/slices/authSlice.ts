@@ -147,6 +147,17 @@ export const confirmPassword = createAsyncThunk<
   }
 });
 
+export const changePassword = createAsyncThunk<void, { oldPassword: string; newPassword: string }, { rejectValue: string }>(
+  'auth/changePassword',
+  async ({ oldPassword, newPassword }, { rejectWithValue }) => {
+    try {
+      await apiClient.post('/password/change/', { "old_password": oldPassword, "new_password": newPassword }, { requireAuth: false });
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
+
 export const deleteAccount = createAsyncThunk<void, string, { rejectValue: string }>(
   'auth/deleteAccount',
   async (type, { rejectWithValue }) => {
@@ -245,6 +256,7 @@ const authSlice = createSlice({
             handleOTP.pending.type,
             forgotPassword.pending.type,
             confirmPassword.pending.type,
+            changePassword.pending.type
           ].includes(action.type),
         (state) => {
           state.authLoading = true;
@@ -258,6 +270,7 @@ const authSlice = createSlice({
             handleOTP.fulfilled.type,
             forgotPassword.fulfilled.type,
             confirmPassword.fulfilled.type,
+            changePassword.fulfilled.type
           ].includes(action.type),
         (state) => {
           state.authLoading = false;
@@ -270,6 +283,7 @@ const authSlice = createSlice({
             handleOTP.rejected.type,
             forgotPassword.rejected.type,
             confirmPassword.rejected.type,
+            changePassword.rejected.type
           ].includes(action.type),
         (state, action: PayloadAction<string | undefined>) => {
           state.authLoading = false;

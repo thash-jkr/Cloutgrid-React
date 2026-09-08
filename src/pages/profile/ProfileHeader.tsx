@@ -7,9 +7,10 @@ import { handleBlock, handleFollow } from '@/slices/profileSlice';
 import { useState } from 'react';
 import CloutAlert from '@/components/CloutAlert';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBan, faBars, faWarning } from '@fortawesome/free-solid-svg-icons';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
+import { AlertTriangle, Ban } from 'lucide-react';
 
 interface Props {
   other?: boolean;
@@ -31,8 +32,12 @@ const ProfileHeader = ({ other = false }: Props) => {
   const user = other ? otherProfile : authUser;
 
   const actions: MenuAction[] = [
-    { icon: faBan, label: `Block @${user?.username}`, action: () => setShowBlockAlert(true) },
-    { icon: faWarning, label: `Report @${user?.username}`, action: () => setShowReportAlert(true) },
+    { icon: Ban, label: `Block @${user?.username}`, action: () => setShowBlockAlert(true) },
+    {
+      icon: AlertTriangle,
+      label: `Report @${user?.username}`,
+      action: () => setShowReportAlert(true),
+    },
   ];
 
   return (

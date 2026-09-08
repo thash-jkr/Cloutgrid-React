@@ -11,6 +11,7 @@ import {
   LifeBuoy,
   Lock,
   Trash,
+  UserX,
 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +20,7 @@ import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { deleteAccount, logout } from '@/slices/authSlice';
+import ChangePassword from './ChangePassword';
 
 const Settings = () => {
   const [settingsDropdown, setSettingsDropdown] = useState(false);
@@ -28,6 +30,7 @@ const Settings = () => {
   const [showPrivacyMenu, setShowPrivacyMenu] = useState(false);
   const [showDeleteAlert, setShowDeleteAlert] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+  const [showChangePassword, setShowChangePassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -47,10 +50,11 @@ const Settings = () => {
       action: () => navigate('/eula'),
     },
     {
-      icon: Lock,
+      icon: UserX,
       label: 'Data Deletion Policy',
       action: () => navigate('/deletionpolicy'),
     },
+    { icon: Lock, label: 'Change Password', action: () => setShowChangePassword(true) },
     {
       icon: Trash,
       label: 'Delete Account',
@@ -185,6 +189,14 @@ const Settings = () => {
         title="Logout"
         body="Are you sure you want to logout?"
       />
+
+      <CloutModal
+        isOpen={showChangePassword}
+        onClose={() => setShowChangePassword(false)}
+        title="Change Password"
+      >
+        <ChangePassword onSuccess={() => setShowChangePassword(false)} />
+      </CloutModal>
     </div>
   );
 };
