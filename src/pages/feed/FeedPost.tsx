@@ -6,7 +6,7 @@ import { useRef, useState } from 'react';
 import { deletePost, likePost } from '@/slices/feedSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSquare, faHeart as unlike } from '@fortawesome/free-regular-svg-icons';
-import { faEllipsis, faFlag, faHeart, faTrash, faWarning } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsis, faHeart } from '@fortawesome/free-solid-svg-icons';
 import CloutModal from '@/components/CloutModal';
 import Comments from './Comments';
 import type { MenuAction } from '@/components/CloutMenu';

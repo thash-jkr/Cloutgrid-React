@@ -8,10 +8,15 @@ const development: ApiEnvironment = {
   socketUrl: 'ws://192.168.0.232:8000/ws',
 };
 
+const local: ApiEnvironment = {
+  baseUrl: 'http://localhost:8000',
+  socketUrl: 'ws://localhost:8000/ws',
+};
+
 const production: ApiEnvironment = {
   baseUrl: 'https://api.cloutgrid.com',
   socketUrl: 'wss://api.cloutgrid.com/ws',
 };
 
-export const ApiConfig: ApiEnvironment = development;
+export const ApiConfig: ApiEnvironment = local;
 // export const ApiConfig: ApiEnvironment = import.meta.env.DEV ? development : production;

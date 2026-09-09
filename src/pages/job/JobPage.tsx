@@ -3,22 +3,24 @@ import JobList from './JobList';
 import JobDetail from './JobDetail';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect, useState } from 'react';
-import { fetchJobs } from '@/slices/jobSlice';
-import type { JobModel } from '@/types/jobTypes';
+import { fetchCampaigns, fetchJobs } from '@/slices/jobSlice';
+import type { CampaignModel, JobModel } from '@/types/jobTypes';
 import CloutModal from '@/components/CloutModal';
+import { Toaster } from 'react-hot-toast';
+import Applications from './Applications';
 
 const JobPage = () => {
-  const [selectedJob, setSelectedJob] = useState<JobModel | null>(null);
+  const [selectedJob, setSelectedJob] = useState<JobModel | CampaignModel | null>(null);
   const [isDesktop, setIsDesktop] = useState(false);
 
-  const { jobs } = useAppSelector((state) => state.job);
+  const { jobs, campaigns } = useAppSelector((state) => state.job);
+  const { type } = useAppSelector((state) => state.auth);
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (jobs.length == 0) {
-      dispatch(fetchJobs());
-    }
+    type === 'creator' && jobs.length == 0 && dispatch(fetchJobs());
+    type === 'business' && campaigns.length == 0 && dispatch(fetchCampaigns());
   }, [dispatch]);
 
   useEffect(() => {
@@ -32,23 +34,32 @@ const JobPage = () => {
 
   return (
     <div className="container h-dvh mx-auto flex items-start pt-18 pb-7 lg:pb-3 lg:pt-22 gap-3">
+      <Toaster />
       <NavBar />
 
       <div className="flex lg:basis-1/3 w-full h-full noselect px-3 lg:px-0">
-        <JobList jobs={jobs} onSelect={setSelectedJob} />
+        <JobList jobs={type === 'creator' ? jobs : campaigns} onSelect={setSelectedJob} />
       </div>
 
       <div className="hidden lg:flex w-full h-full lg:basis-2/3 px-3 lg:px-0">
-        <JobDetail id={selectedJob?.id ?? null} />
+        {type == 'creator' ? (
+          <JobDetail id={selectedJob?.id ?? null} />
+        ) : (
+          <Applications id={selectedJob?.id ?? null} />
+        )}
       </div>
 
       <CloutModal
-          isOpen={selectedJob !== null && !isDesktop}
-          onClose={() => setSelectedJob(null)}
-          title="Campaign"
-        >
+        isOpen={selectedJob !== null && !isDesktop}
+        onClose={() => setSelectedJob(null)}
+        title="Campaign"
+      >
+        {type == 'creator' ? (
           <JobDetail id={selectedJob?.id ?? null} />
-        </CloutModal>
+        ) : (
+          <Applications id={selectedJob?.id ?? null} />
+        )}
+      </CloutModal>
     </div>
   );
 };

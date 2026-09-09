@@ -1,16 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from 'actify';
 import logo from '@/assets/cloutgrid_logo_icon.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faAdd,
-  faBars,
-  faBell,
-  faCircle,
-  faClose,
-  faHandshake,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import defaultProfilePhoto from '@/assets/default_profile.png';
 import { useAppSelector } from '@/app/hooks';
@@ -19,6 +9,9 @@ import Notifications from '@/pages/feed/Notifications';
 import Create from '@/pages/create/Create';
 import CreatePost from '@/pages/create/CreatePost';
 import Search from '@/pages/create/Search';
+import type { MenuAction } from './CloutMenu';
+import { Bell, Dot, Handshake, Search as Magnifier, Menu, Plus, User } from 'lucide-react';
+import CloutMenu from './CloutMenu';
 
 export default function NavBar() {
   const [menu, setMenu] = useState(false);
@@ -31,6 +24,14 @@ export default function NavBar() {
 
   const navigate = useNavigate();
   const location = window.location.pathname;
+
+  const actions: MenuAction[] = [
+    { icon: Magnifier, label: 'Connect', action: () => setShowConnect(true) },
+    { icon: Plus, label: 'Create', action: () => setShowCreate(true) },
+    { icon: Handshake, label: 'Collaborate', action: () => navigate('/campaigns') },
+    { icon: Bell, label: 'Notifications', action: () => setShowNotifications(true) },
+    { icon: User, label: 'Profile', action: () => navigate('/profile') },
+  ];
 
   return (
     <div
@@ -50,9 +51,9 @@ export default function NavBar() {
                 Creator
               </h6>
             </Link>
-            <span className="text-[7px]">
-              <FontAwesomeIcon icon={faCircle} />
-            </span>
+
+            <Dot className="h-1 w-1 text-gray-400" />
+
             <Link to={'/register/brand/'}>
               <h6 className="ml-5 hover:scale-105 hover:text-secondary transition-all duration-500">
                 Brand
@@ -78,10 +79,8 @@ export default function NavBar() {
                     Connect
                   </h3>
                 </div>
-                <FontAwesomeIcon
-                  icon={faSearch}
-                  className="transition-transform duration-1000 group-hover:rotate-360"
-                />
+
+                <Magnifier className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
               </div>
             </Button>
 
@@ -100,10 +99,8 @@ export default function NavBar() {
                     Create
                   </h3>
                 </div>
-                <FontAwesomeIcon
-                  icon={faAdd}
-                  className="transition-transform duration-1000 group-hover:rotate-360"
-                />
+
+                <Plus className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
               </div>
             </Button>
 
@@ -122,10 +119,8 @@ export default function NavBar() {
                     Collaborate
                   </h3>
                 </div>
-                <FontAwesomeIcon
-                  icon={faHandshake}
-                  className="transition-transform duration-1000 group-hover:rotate-360"
-                />
+
+                <Handshake className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
               </div>
             </Button>
 
@@ -159,93 +154,10 @@ export default function NavBar() {
           className={`lg:hidden text-black text-lg focus:outline-none transition-transform duration-300 pr-3`}
           onClick={() => setMenu(!menu)}
         >
-          <FontAwesomeIcon icon={menu ? faClose : faBars} />
+          <Menu
+            className={`h-5 w-5 ${menu ? 'rotate-180' : ''} transition-transform duration-300`}
+          />
         </button>
-
-        <div
-          className={`absolute right-3 top-12 my-3 w-1/2 flex-col rounded-xl bg-white p-0 text-lg font-semibold
-    shadow transition-all duration-300 ease-in-out lg:hidden ${
-      menu
-        ? 'flex translate-x-0 opacity-100'
-        : 'pointer-events-none flex translate-x-full opacity-0'
-    }`}
-        >
-          {isAuth ? (
-            <div className="flex flex-col divide-y">
-              <div
-                className="flex items-center justify-between p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  navigate('/login');
-                }}
-              >
-                <h1 className="mr-1">Connect</h1>
-                <FontAwesomeIcon icon={faSearch} />
-              </div>
-              <div
-                className="flex items-center justify-between p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  setShowCreate(true);
-                }}
-              >
-                <h1 className="mr-1">Create</h1>
-                <FontAwesomeIcon icon={faAdd} />
-              </div>
-              <div
-                className="flex items-center justify-between p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  navigate('/campaigns');
-                }}
-              >
-                <h1 className="mr-1">Collaborate</h1>
-                <FontAwesomeIcon icon={faHandshake} />
-              </div>
-              <div
-                className="flex items-center justify-between p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  setShowNotifications(true);
-                }}
-              >
-                <h1 className="mr-1">Notifications</h1>
-                <FontAwesomeIcon icon={faBell} />
-              </div>
-              <div
-                className="flex items-center justify-between p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  navigate('/profile');
-                }}
-              >
-                <h1 className="mr-1">Profile</h1>
-                <img src={user?.profile_photo} className="w-6 h-auto object-cover rounded-full" />
-              </div>
-            </div>
-          ) : (
-            <div className="flex flex-col divide-y">
-              <div
-                className="flex items-center justify-start p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  navigate('/login');
-                }}
-              >
-                <h1 className="mr-1">Login</h1>
-              </div>
-              <div
-                className="flex items-center justify-start p-3 hover:text-secondary"
-                onClick={() => {
-                  setMenu(false);
-                  navigate('/register');
-                }}
-              >
-                <h1 className="mr-1">Register</h1>
-              </div>
-            </div>
-          )}
-        </div>
       </nav>
 
       <CloutModal
@@ -279,6 +191,8 @@ export default function NavBar() {
           }}
         />
       </CloutModal>
+
+      <CloutMenu isOpen={menu} onClose={() => setMenu(false)} actions={actions} />
     </div>
   );
 }

@@ -43,10 +43,10 @@ export default function LandingPage() {
   const [isCreator, setIsCreator] = useState(true);
 
   return (
-    <div className="container min-h-dvh mx-auto noselect">
+    <div className="container min-h-lvh mx-auto noselect">
       <NavBar />
 
-      <main className="mx-auto flex min-h-dvh px-4">
+      <main className="mx-auto flex min-h-lvh px-4">
         <div className="flex flex-col flex-1 justify-center items-center lg:items-start gap-5">
           <h1 className="text-3xl font-bold leading-tight w-full">
             <span className="text-primary">Clout</span>

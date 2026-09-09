@@ -1,9 +1,16 @@
 import defaultProfilePhoto from '@/assets/default_profile.png';
 import { useAppSelector } from '@/app/hooks';
 import { getCategoryLabel } from '@/utils/categories';
+import { useEffect } from 'react';
 
 export default function FeedLeft() {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user, access } = useAppSelector((state) => state.auth);
+
+  useEffect(() => {
+    if (access) {
+      // console.log('Access token:', access);
+    }
+  }, [access]);
 
   return (
     <div className="flex flex-col justify-center items-center w-full gap-3">

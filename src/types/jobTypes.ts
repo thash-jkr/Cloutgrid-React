@@ -30,6 +30,17 @@ export interface JobModel {
   created_at: string;
 }
 
+export interface CampaignModel {
+  id: number;
+  title: string;
+  description: string;
+  target_creator: string;
+  created_at: string;
+  questions: QuestionModel[];
+  applications: ApplicationModel[];
+  requirements: RequirementModel[];
+}
+
 export interface ApplicationModel {
   id: number;
   creator: UserProfile;
@@ -39,16 +50,14 @@ export interface ApplicationModel {
 
 export interface JobState {
   jobs: JobModel[];
-  applications: ApplicationModel[];
+  campaigns: CampaignModel[];
   jobLoading: boolean;
   jobError: string | null;
-  jobSuccessMessage: string | null;
 }
 
 export const initialJobState: JobState = {
   jobs: [],
-  applications: [],
+  campaigns: [],
   jobLoading: false,
   jobError: null,
-  jobSuccessMessage: null,
 };

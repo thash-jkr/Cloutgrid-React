@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { apiClient } from '@/app/client';
-import { initialJobState, type ApplicationModel, type JobModel } from '@/types/jobTypes';
+import { initialJobState, type CampaignModel, type JobModel } from '@/types/jobTypes';
 
 export const fetchJobs = createAsyncThunk<JobModel[], void, { rejectValue: string }>(
   'job/fetchJobs',
@@ -14,30 +14,17 @@ export const fetchJobs = createAsyncThunk<JobModel[], void, { rejectValue: strin
   },
 );
 
-export const fetchBusinessJobs = createAsyncThunk<JobModel[], void, { rejectValue: string }>(
-  'job/fetchBusinessJobs',
+export const fetchCampaigns = createAsyncThunk<CampaignModel[], void, { rejectValue: string }>(
+  'job/fetchCampaigns',
   async (_, { rejectWithValue }) => {
     try {
-      const response = await apiClient.get<JobModel[]>('/jobs/my-jobs/');
+      const response = await apiClient.get<CampaignModel[]>('/jobs/');
       return response.data;
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
   },
 );
-
-export const fetchApplications = createAsyncThunk<
-  ApplicationModel[],
-  JobModel,
-  { rejectValue: string }
->('job/fetchApplications', async (job, { rejectWithValue }) => {
-  try {
-    const response = await apiClient.get<ApplicationModel[]>(`/jobs/my-jobs/${job.id}/`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue((error as Error).message);
-  }
-});
 
 export const createJob = createAsyncThunk<
   void,
@@ -105,7 +92,6 @@ const jobSlice = createSlice({
   reducers: {
     clearJobMessages(state) {
       state.jobError = null;
-      state.jobSuccessMessage = null;
     },
   },
   extraReducers: (builder) => {
@@ -123,29 +109,15 @@ const jobSlice = createSlice({
         state.jobError = action.payload ?? 'Something went wrong';
       })
 
-      .addCase(fetchBusinessJobs.pending, (state) => {
+      .addCase(fetchCampaigns.pending, (state) => {
         state.jobLoading = true;
         state.jobError = null;
       })
-      .addCase(fetchBusinessJobs.fulfilled, (state, action) => {
+      .addCase(fetchCampaigns.fulfilled, (state, action) => {
         state.jobLoading = false;
-        state.jobs = action.payload;
+        state.campaigns = action.payload;
       })
-      .addCase(fetchBusinessJobs.rejected, (state, action) => {
-        state.jobLoading = false;
-        state.jobError = action.payload ?? 'Something went wrong';
-      })
-
-      .addCase(fetchApplications.pending, (state) => {
-        state.applications = [];
-        state.jobLoading = true;
-        state.jobError = null;
-      })
-      .addCase(fetchApplications.fulfilled, (state, action) => {
-        state.jobLoading = false;
-        state.applications = action.payload;
-      })
-      .addCase(fetchApplications.rejected, (state, action) => {
+      .addCase(fetchCampaigns.rejected, (state, action) => {
         state.jobLoading = false;
         state.jobError = action.payload ?? 'Something went wrong';
       })
@@ -153,11 +125,9 @@ const jobSlice = createSlice({
       .addCase(createJob.pending, (state) => {
         state.jobLoading = true;
         state.jobError = null;
-        state.jobSuccessMessage = null;
       })
       .addCase(createJob.fulfilled, (state) => {
         state.jobLoading = false;
-        state.jobSuccessMessage = 'Collaboration Created';
       })
       .addCase(createJob.rejected, (state, action) => {
         state.jobLoading = false;
@@ -166,12 +136,9 @@ const jobSlice = createSlice({
 
       .addCase(deleteJob.pending, (state) => {
         state.jobError = null;
-        state.jobSuccessMessage = null;
       })
       .addCase(deleteJob.fulfilled, (state, action) => {
-        state.jobs = state.jobs.filter((j) => j.id !== action.payload);
-        state.applications = [];
-        state.jobSuccessMessage = 'Collaboration Deleted';
+        state.campaigns = state.campaigns.filter((j) => j.id !== action.payload);
       })
       .addCase(deleteJob.rejected, (state, action) => {
         state.jobError = action.payload ?? 'Something went wrong';
@@ -183,7 +150,6 @@ const jobSlice = createSlice({
       })
       .addCase(submitApplication.fulfilled, (state, action) => {
         state.jobLoading = false;
-        state.jobSuccessMessage = 'Application submitted';
         state.jobs = state.jobs.map((j) =>
           j.id === action.payload ? { ...j, is_applied: true } : j,
         );
