@@ -1,11 +1,10 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import CloutEmpty from '@/components/CloutEmpty';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import ApplicationIcon from '@/assets/isometric/deal.png';
 import { getCategoryLabel } from '@/utils/categories';
-import { ClipboardList, Menu, Trash2, User } from 'lucide-react';
-import { Button } from 'actify';
+import { ClipboardList, Download, Menu, Trash2, User } from 'lucide-react';
 import { useState } from 'react';
 import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
@@ -13,6 +12,8 @@ import EmptyIcon from '@/assets/isometric/box.png';
 import CloutModal from '@/components/CloutModal';
 import Answers from './Answers';
 import type { ApplicationModel } from '@/types/jobTypes';
+import CloutAlert from '@/components/CloutAlert';
+import { deleteJob } from '@/slices/jobSlice';
 
 interface ApplicationsProps {
   id: number | null;
@@ -22,6 +23,7 @@ const Applications = ({ id }: ApplicationsProps) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showAnswers, setShowAnswers] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState<ApplicationModel | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
   const { campaigns } = useAppSelector((state) => state.job);
 
@@ -30,7 +32,84 @@ const Applications = ({ id }: ApplicationsProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const actions: MenuAction[] = [{ icon: Trash2, label: 'Delete Campaign', action: () => {} }];
+  const actions: MenuAction[] = [
+    {
+      icon: Download,
+      label: 'Download Applications',
+      action: () => {
+        job && job.applications.length > 0
+          ? handleDownload()
+          : toast.error('No applications to download.');
+        setShowMenu(false);
+      },
+    },
+    {
+      icon: Trash2,
+      label: 'Delete Campaign',
+      action: () => {
+        setShowDeleteConfirm(true);
+      },
+    },
+  ];
+
+  const escapeCsvValue = (value: string | number): string => {
+    const stringValue = String(value ?? '');
+
+    if (/[",\n]/.test(stringValue)) {
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+    return stringValue;
+  };
+
+  const handleDownload = () => {
+    const id = toast.loading('Preparing download...');
+
+    const rows: Record<string, string | number>[] = [];
+
+    job &&
+      job.applications.forEach((application, index) => {
+        const row: Record<string, string | number> = {
+          id: index + 1,
+          application_id: application.id,
+          creator_name: application.creator.name,
+          creator_username: application.creator.username,
+          creator_email: application.creator.email,
+          creator_category: application.creator.category ?? '',
+        };
+
+        job.questions.forEach((question: { id: number; content: string }) => {
+          const answer = application.answers.find((a) => a.question === question.id);
+          row[`Question: ${question.content}`] = answer?.content ?? '';
+        });
+
+        rows.push(row);
+      });
+
+    if (rows.length === 0) {
+      toast.error('No applications to download.', { id });
+      return;
+    }
+
+    const headers = Object.keys(rows[0]);
+    const csvLines = [
+      headers.map(escapeCsvValue).join(','),
+      ...rows.map((row) => headers.map((header) => escapeCsvValue(row[header])).join(',')),
+    ];
+
+    const csvContent = csvLines.join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'applications.csv';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+
+    toast.success('Applications downloaded successfully.', { id });
+  };
 
   return (
     <div
@@ -49,12 +128,6 @@ const Applications = ({ id }: ApplicationsProps) => {
           </div>
 
           <div className="flex justify-start items-center gap-3 w-full">
-            <Button variant="filled" onPress={() => {}} isDisabled={job.applications.length === 0}>
-              <span>
-                {job.applications.length > 0 ? `Download Applications` : 'No Applications'}
-              </span>
-            </Button>
-
             <div
               className="w-10 h-10 border rounded-full flex justify-center 
               items-center cursor-pointer transition-transform duration-300 
@@ -154,6 +227,18 @@ const Applications = ({ id }: ApplicationsProps) => {
           <Answers questions={job.questions} answers={selectedApplication.answers} />
         )}
       </CloutModal>
+
+      <CloutAlert
+        isOpen={showDeleteConfirm}
+        onClose={() => setShowDeleteConfirm(false)}
+        title="Delete Campaign"
+        body="Are you sure you want to delete this campaign? This will permanently delete all application data."
+        onSubmit={() => {
+          job && dispatch(deleteJob(job.id));
+          setShowDeleteConfirm(false);
+        }}
+        timed={true}
+      />
     </div>
   );
 };
