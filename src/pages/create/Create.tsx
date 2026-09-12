@@ -5,7 +5,7 @@ import collabIcon from '@/assets/isometric/deal.png';
 
 interface CreateProps {
   onPostSelect: (file: File) => void;
-  onCampaignSelect: () => void
+  onCampaignSelect: () => void;
 }
 
 const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
@@ -19,7 +19,7 @@ const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
   };
 
   return (
-    <div className='bg-background h-full p-3'>
+    <div className="p-3 flex flex-col gap-3">
       <input
         ref={fileInputRef}
         type="file"
@@ -34,7 +34,7 @@ const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
         onClick={() => fileInputRef.current?.click()}
       >
         <img src={postIcon} className="h-28 w-28" />
-        <div>
+        <div className="w-full">
           <h1 className="font-semibold">Post</h1>
           <p>
             {type === 'creator'
@@ -46,11 +46,11 @@ const Create = ({ onPostSelect, onCampaignSelect }: CreateProps) => {
 
       {type === 'business' && (
         <div
-          className="m-3 flex items-start justify-center gap-3 rounded-2xl
-            border bg-white p-3 shadow transition-transform duration-300 hover:scale-95"
-            onClick={() => onCampaignSelect}
+          className="flex items-start justify-center gap-3 rounded-2xl
+            border bg-white p-3 transition-transform duration-300 hover:scale-95"
+          onClick={onCampaignSelect}
         >
-          <div>
+          <div className="w-full">
             <h1 className="font-semibold">Campaign</h1>
             <p>Post a campaign to connect with creators who match your brand.</p>
           </div>

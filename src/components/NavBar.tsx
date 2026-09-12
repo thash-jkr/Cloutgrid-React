@@ -12,6 +12,8 @@ import Search from '@/pages/create/Search';
 import type { MenuAction } from './CloutMenu';
 import { Bell, Dot, Handshake, Search as Magnifier, Menu, Plus, User } from 'lucide-react';
 import CloutMenu from './CloutMenu';
+import CloutModalAlt from './CloutModalAlt';
+import CreateCampaign from '@/pages/create/CreateCampaign';
 
 export default function NavBar() {
   const [menu, setMenu] = useState(false);
@@ -19,6 +21,7 @@ export default function NavBar() {
   const [showCreate, setShowCreate] = useState(false);
   const [showConnect, setShowConnect] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [showCreateCampaign, setShowCreateCampaign] = useState(false);
 
   const { user, isAuth } = useAppSelector((state) => state.auth);
 
@@ -180,7 +183,15 @@ export default function NavBar() {
         {selectedFile && <CreatePost file={selectedFile} onClose={() => setSelectedFile(null)} />}
       </CloutModal>
 
-      <CloutModal isOpen={showCreate} title={'Create'} onClose={() => setShowCreate(false)}>
+      <CloutModal
+        isOpen={showCreateCampaign}
+        onClose={() => setShowCreateCampaign(false)}
+        title="Create Campaign"
+      >
+        <CreateCampaign onClose={() => setShowCreateCampaign(false)} />
+      </CloutModal>
+
+      <CloutModalAlt isOpen={showCreate} onClose={() => setShowCreate(false)}>
         <Create
           onPostSelect={(file) => {
             setSelectedFile(file);
@@ -188,9 +199,10 @@ export default function NavBar() {
           }}
           onCampaignSelect={() => {
             setShowCreate(false);
+            setShowCreateCampaign(true);
           }}
         />
-      </CloutModal>
+      </CloutModalAlt>
 
       <CloutMenu isOpen={menu} onClose={() => setMenu(false)} actions={actions} />
     </div>

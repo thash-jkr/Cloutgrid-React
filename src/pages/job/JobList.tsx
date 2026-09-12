@@ -24,7 +24,7 @@ const JobList = ({ jobs, onSelect }: JobListScope) => {
         {jobs.length > 0 ? (
           <ul className="w-full divide-y">
             {jobs.map((job) => (
-              <li key={job.id} className="group/item w-full border-b" onClick={() => onSelect(job)}>
+              <li key={job.id} className="group/item w-full" onClick={() => onSelect(job)}>
                 <div className="flex w-full items-center justify-between gap-1 p-2 hover:bg-slate-50">
                   <div className="flex w-full items-start justify-center gap-3">
                     <img

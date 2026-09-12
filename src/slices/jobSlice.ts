@@ -27,11 +27,11 @@ export const fetchCampaigns = createAsyncThunk<CampaignModel[], void, { rejectVa
 );
 
 export const createJob = createAsyncThunk<
-  void,
+  CampaignModel,
   {
     title: string;
     description: string;
-    requirements: string;
+    requirements: string[];
     targetCreator: string;
     questions: string[];
   },
@@ -47,11 +47,12 @@ export const createJob = createAsyncThunk<
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
-      formData.append('requirements', requirements);
+      formData.append('requirements', JSON.stringify(requirements));
       formData.append('target_creator', targetCreator);
       formData.append('questions', JSON.stringify(questions));
 
-      await apiClient.post('/jobs/', formData);
+      const response = await apiClient.post('/jobs/', formData);
+      return response.data;
     } catch (error) {
       return rejectWithValue((error as Error).message);
     }
@@ -126,8 +127,9 @@ const jobSlice = createSlice({
         state.jobLoading = true;
         state.jobError = null;
       })
-      .addCase(createJob.fulfilled, (state) => {
+      .addCase(createJob.fulfilled, (state, action) => {
         state.jobLoading = false;
+        state.campaigns = [action.payload, ...state.campaigns];
       })
       .addCase(createJob.rejected, (state, action) => {
         state.jobLoading = false;
