@@ -3,6 +3,7 @@ import { YoutubeConstants } from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect } from 'react';
 import {
+  connectYouTube,
   fetchYoutubeChannel,
   fetchYoutubeMedia,
   loadOwnYoutubeChannel,
@@ -14,12 +15,21 @@ import { GlobeOff, RefreshCcw } from 'lucide-react';
 import CloutButton from '@/components/CloutButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { ApiConfig } from '@/app/apiConfig';
+import { useNavigate } from 'react-router-dom';
 
 const NotConnected = () => {
+  const { access } = useAppSelector((state) => state.auth);
+
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <Button variant="filled">
+        <Button
+          variant="filled"
+          onPress={() =>
+            window.open(`${ApiConfig.baseUrl}/auth/google/start?token=${access}&medium=web`)
+          }
+        >
           <span>Connect YouTube</span>
         </Button>
         <span className="text-xs text-gray-500">This feature is in development</span>
@@ -30,7 +40,7 @@ const NotConnected = () => {
   );
 };
 
-const Connected = () => {
+const Connected = ({ onSync }: { onSync: () => void }) => {
   const dispatch = useAppDispatch();
 
   const { user } = useAppSelector((state) => state.auth);
@@ -45,34 +55,9 @@ const Connected = () => {
     }
   }, [user, dispatch]);
 
-  const syncInstagram = () => {
-    const page_id = toast.loading('Syncing Instagram Page...');
-    const media_id = toast.loading('Syncing Instagram Media...');
-
-    dispatch(fetchYoutubeChannel())
-      .unwrap()
-      .then(() => {
-        user && dispatch(loadOwnYoutubeChannel(user.username));
-        toast.success('Instagram Page Synced', { id: page_id });
-      })
-      .catch((error) => {
-        toast.error('Failed to sync Instagram Page: ' + error, { id: page_id });
-      });
-
-    dispatch(fetchYoutubeMedia())
-      .unwrap()
-      .then(() => {
-        user && dispatch(loadOwnYoutubeMedia(user.username));
-        toast.success('Instagram Media Synced', { id: media_id });
-      })
-      .catch((error) => {
-        toast.error('Failed to sync Instagram Media: ' + error, { id: media_id });
-      });
-  };
-
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
-      {youtubeChannel && <YTChannel channel={youtubeChannel} onSync={syncInstagram} />}
+      {youtubeChannel && <YTChannel channel={youtubeChannel} onSync={onSync} />}
       {youtubeChannel && <YTMedia mediaList={youtubeMedia} />}
     </div>
   );
@@ -183,11 +168,67 @@ const MediaStats = ({ name, value }: { name: string; value: number }) => {
 const YouTube = () => {
   const { user } = useAppSelector((state) => state.auth);
 
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const connected = params.get('youtube') === 'connected';
+    if ((user?.type === 'creator' && user?.youtube_connected) || !connected) {
+      return;
+    }
+
+    const id = toast.loading('Connecting to YouTube...');
+
+    params.delete('youtube');
+
+    navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+
+    dispatch(connectYouTube())
+      .unwrap()
+      .then(() => {
+        toast.success('YouTube Connected', { id: id });
+        syncYoutube();
+      })
+      .catch((error) => {
+        toast.error('Failed to connect YouTube: ' + error, { id: id });
+      });
+  }, []);
+
+  const syncYoutube = () => {
+    const page_id = toast.loading('Syncing YouTube Channel...');
+    const media_id = toast.loading('Syncing YouTube Media...');
+
+    dispatch(fetchYoutubeChannel())
+      .unwrap()
+      .then(() => {
+        user && dispatch(loadOwnYoutubeChannel(user.username));
+        toast.success('YouTube Channel Synced', { id: page_id });
+
+        dispatch(fetchYoutubeMedia())
+          .unwrap()
+          .then(() => {
+            user && dispatch(loadOwnYoutubeMedia(user.username));
+            toast.success('YouTube Media Synced', { id: media_id });
+          })
+          .catch((error) => {
+            toast.error('Failed to sync YouTube Media: ' + error, { id: media_id });
+          });
+      })
+      .catch((error) => {
+        toast.error('Failed to sync YouTube Channel: ' + error, { id: page_id });
+      });
+  };
+
   return (
     <div className="flex flex-col justify-start items-center gap-5 py-5">
       <h1 className="font-bold text-xl">YouTube Analytics 📈</h1>
 
-      {user ? <Connected /> : <NotConnected />}
+      {user?.type == 'creator' && user.youtube_connected ? (
+        <Connected onSync={syncYoutube} />
+      ) : (
+        <NotConnected />
+      )}
     </div>
   );
 };

@@ -8,8 +8,6 @@ import { faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import {
   faImages,
   faBriefcase,
-  faCircleCheck,
-  faCircleXmark,
 } from '@fortawesome/free-solid-svg-icons';
 import type { UserProfile } from '@/types/authTypes';
 import { Button } from 'actify';
@@ -17,6 +15,7 @@ import CloutModal from '@/components/CloutModal';
 import FeedPost from '../feed/FeedPost';
 import OtherInstagram from '../integration/OtherInstagram';
 import OtherYouTube from '../integration/OtherYouTube';
+import { CircleCheck, CircleX } from 'lucide-react';
 
 type ProfileTab = 'posts' | 'instagram' | 'youtube' | 'collabs';
 
@@ -81,21 +80,19 @@ const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) 
               {tab.id == 'instagram' &&
                 user.type == 'creator' &&
                 user.instagram_connected == true && (
-                  <FontAwesomeIcon icon={faCircleCheck} className="text-secondary" />
+                  <CircleCheck className="text-secondary w-4 h-4" />
                 )}
 
               {tab.id == 'instagram' &&
                 user.type == 'creator' &&
-                user.instagram_connected == false && (
-                  <FontAwesomeIcon icon={faCircleXmark} className="text-gray-500" />
-                )}
+                user.instagram_connected == false && <CircleX className="text-gray-500 w-4 h-4" />}
 
               {tab.id == 'youtube' && user.type == 'creator' && user.youtube_connected == true && (
-                <FontAwesomeIcon icon={faCircleCheck} className="text-secondary" />
+                <CircleCheck className="text-secondary w-4 h-4" />
               )}
 
               {tab.id == 'youtube' && user.type == 'creator' && user.youtube_connected == false && (
-                <FontAwesomeIcon icon={faCircleXmark} className="text-gray-500" />
+                <CircleX className="text-gray-500 w-4 h-4" />
               )}
             </span>
           </Button>

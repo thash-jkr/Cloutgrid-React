@@ -141,6 +141,16 @@ export const readOtherInstagramMedia = createAsyncThunk<InstagramMediaModel[], s
 );
 
 // --- YouTube ---
+export const connectYouTube = createAsyncThunk<void, void, ThunkConfig>(
+  'integration/connectYouTube',
+  async (_, { dispatch, rejectWithValue }) => {
+    try {
+      dispatch(setYoutubeConnected(true));
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  },
+);
 
 export const disconnectYoutube = createAsyncThunk<void, void, ThunkConfig>(
   'integration/disconnectYoutube',
@@ -365,6 +375,18 @@ const integrationSlice = createSlice({
         state.otherInstagramMedia = action.payload;
       })
       .addCase(readOtherInstagramMedia.rejected, (state, action) => {
+        state.integrationLoading = false;
+        state.integrationError = action.payload ?? 'Something went wrong';
+      })
+
+      .addCase(connectYouTube.pending, (state) => {
+        state.integrationLoading = true;
+        state.integrationError = null;
+      })
+      .addCase(connectYouTube.fulfilled, (state) => {
+        state.integrationLoading = false;
+      })
+      .addCase(connectYouTube.rejected, (state, action) => {
         state.integrationLoading = false;
         state.integrationError = action.payload ?? 'Something went wrong';
       })

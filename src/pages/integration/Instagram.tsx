@@ -3,6 +3,7 @@ import { InstagramConstants } from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect, useState } from 'react';
 import {
+  connectInstagram,
   fetchInstagramMedia,
   fetchInstagramProfile,
   loadOwnInstagramMedia,
@@ -16,12 +17,21 @@ import { GlobeOff, RefreshCcw } from 'lucide-react';
 import { timeAgo } from '@/utils/timeAgo';
 import CloutAlert from '@/components/CloutAlert';
 import toast, { Toaster } from 'react-hot-toast';
+import { ApiConfig } from '@/app/apiConfig';
+import { useNavigate } from 'react-router-dom';
 
 const NotConnected = () => {
+  const { access } = useAppSelector((state) => state.auth);
+
   return (
     <>
       <div className="flex flex-col justify-center items-center">
-        <Button variant="filled">
+        <Button
+          variant="filled"
+          onPress={() =>
+            window.open(`${ApiConfig.baseUrl}/auth/instagram/start?token=${access}&medium=web`)
+          }
+        >
           <span>Connect Instagram</span>
         </Button>
         <span className="text-xs text-gray-500">This feature is in development</span>
@@ -32,7 +42,7 @@ const NotConnected = () => {
   );
 };
 
-const Connected = () => {
+const Connected = ({ onSync }: { onSync: () => void }) => {
   const dispatch = useAppDispatch();
 
   const { user } = useAppSelector((state) => state.auth);
@@ -47,34 +57,9 @@ const Connected = () => {
     }
   }, [user, dispatch]);
 
-  const syncInstagram = () => {
-    const page_id = toast.loading('Syncing Instagram Page...');
-    const media_id = toast.loading('Syncing Instagram Media...');
-
-    dispatch(fetchInstagramProfile())
-      .unwrap()
-      .then(() => {
-        user && dispatch(loadOwnInstagramProfile(user.username));
-        toast.success('Instagram Page Synced', { id: page_id });
-      })
-      .catch((error) => {
-        toast.error('Failed to sync Instagram Page: ' + error, { id: page_id });
-      });
-
-    dispatch(fetchInstagramMedia())
-      .unwrap()
-      .then(() => {
-        user && dispatch(loadOwnInstagramMedia(user.username));
-        toast.success('Instagram Media Synced', { id: media_id });
-      })
-      .catch((error) => {
-        toast.error('Failed to sync Instagram Media: ' + error, { id: media_id });
-      });
-  };
-
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
-      {instagramPage && <IGProfileInsights page={instagramPage} onSync={syncInstagram} />}
+      {instagramPage && <IGProfileInsights page={instagramPage} onSync={onSync} />}
       {instagramMedia && <IGMediaInsights mediaList={instagramMedia} />}
     </div>
   );
@@ -237,12 +222,68 @@ const MediaStats = ({ name, value }: { name: string; value: number }) => {
 const Instagram = () => {
   const { user } = useAppSelector((state) => state.auth);
 
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const connected = params.get('instagram') === 'connected';
+    if ((user?.type === 'creator' && user?.instagram_connected) || !connected) {
+      return;
+    }
+
+    const id = toast.loading('Connecting Instagram...');
+
+    params.delete('instagram');
+
+    navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+
+    dispatch(connectInstagram())
+      .unwrap()
+      .then(() => {
+        toast.success('Instagram connected successfully!', { id });
+        syncInstagram();
+      })
+      .catch((error) => {
+        toast.error(`Failed to connect Instagram: ${error}`, { id });
+      });
+  }, [location.pathname, location.search, navigate]);
+
+  const syncInstagram = () => {
+    const page_id = toast.loading('Syncing Instagram Page...');
+    const media_id = toast.loading('Syncing Instagram Media...');
+
+    dispatch(fetchInstagramProfile())
+      .unwrap()
+      .then(() => {
+        user && dispatch(loadOwnInstagramProfile(user.username));
+        toast.success('Instagram Page Synced', { id: page_id });
+
+        dispatch(fetchInstagramMedia())
+          .unwrap()
+          .then(() => {
+            user && dispatch(loadOwnInstagramMedia(user.username));
+            toast.success('Instagram Media Synced', { id: media_id });
+          })
+          .catch((error) => {
+            toast.error('Failed to sync Instagram Media: ' + error, { id: media_id });
+          });
+      })
+      .catch((error) => {
+        toast.error('Failed to sync Instagram Page: ' + error, { id: page_id });
+      });
+  };
+
   return (
     <div className="flex flex-col justify-start items-center gap-5 py-5">
       <Toaster />
       <h1 className="font-bold text-xl">Instagram Insights 📊</h1>
 
-      {user?.type === 'creator' && user?.instagram_connected ? <Connected /> : <NotConnected />}
+      {user?.type === 'creator' && user?.instagram_connected ? (
+        <Connected onSync={syncInstagram} />
+      ) : (
+        <NotConnected />
+      )}
     </div>
   );
 };
