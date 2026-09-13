@@ -4,6 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect, useState } from 'react';
 import {
   connectInstagram,
+  disconnectInstagram,
   fetchInstagramMedia,
   fetchInstagramProfile,
   loadOwnInstagramMedia,
@@ -77,6 +78,8 @@ export const IGProfileInsights = ({
   const [confirmSync, setConfirmSync] = useState(false);
   const [confirmDisconnect, setConfirmDisconnect] = useState(false);
 
+  const dispatch = useAppDispatch();
+
   return (
     <div className="flex flex-col justify-start items-center gap-3">
       <img src={page.profile_picture_url} alt="Profile" className="w-52 h-52 rounded-full" />
@@ -145,14 +148,22 @@ export const IGProfileInsights = ({
           setConfirmSync(false);
         }}
         title="Sync Instagram"
-        body="Are you sure you want to sync your Instagram account?"
+        body="Do you want to sync Instagram account?"
       />
 
       <CloutAlert
         isOpen={confirmDisconnect}
         onClose={() => setConfirmDisconnect(false)}
         onSubmit={() => {
-          setConfirmDisconnect(false);
+          dispatch(disconnectInstagram())
+            .unwrap()
+            .then(() => {
+              toast.success('Instagram disconnected');
+              setConfirmDisconnect(false);
+            })
+            .catch((error) => {
+              toast.error('Failed to disconnect Instagram: ' + error);
+            });
         }}
         title="Disconnect Instagram"
         body="Are you sure you want to disconnect your Instagram account? 

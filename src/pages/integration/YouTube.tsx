@@ -1,15 +1,16 @@
 import { Button } from 'actify';
 import { YoutubeConstants } from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   connectYouTube,
+  disconnectYoutube,
   fetchYoutubeChannel,
   fetchYoutubeMedia,
   loadOwnYoutubeChannel,
   loadOwnYoutubeMedia,
 } from '@/slices/integrationSlice';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import type { YoutubeChannelModel, YoutubeMediaModel } from '@/types/integrationTypes';
 import { GlobeOff, RefreshCcw } from 'lucide-react';
 import CloutButton from '@/components/CloutButton';
@@ -17,6 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faYoutube } from '@fortawesome/free-brands-svg-icons';
 import { ApiConfig } from '@/app/apiConfig';
 import { useNavigate } from 'react-router-dom';
+import CloutAlert from '@/components/CloutAlert';
 
 const NotConnected = () => {
   const { access } = useAppSelector((state) => state.auth);
@@ -72,6 +74,11 @@ export const YTChannel = ({
   onSync: () => void;
   other?: boolean;
 }) => {
+  const [confirmSync, setConfirmSync] = useState(false);
+  const [confirmDisconnect, setConfirmDisconnect] = useState(false);
+
+  const dispatch = useAppDispatch();
+
   return (
     <div className="flex flex-col justify-center items-center gap-3">
       <img src={channel.profile_picture_url} alt="Profile" className="w-32 h-32 rounded-full" />
@@ -91,8 +98,8 @@ export const YTChannel = ({
           <span className="font-bold">{channel.title}</span>
         </Button>
 
-        {!other && <CloutButton icon={RefreshCcw} onClick={() => onSync()} />}
-        {!other && <CloutButton icon={GlobeOff} onClick={() => {}} />}
+        {!other && <CloutButton icon={RefreshCcw} onClick={() => setConfirmSync(true)} />}
+        {!other && <CloutButton icon={GlobeOff} onClick={() => setConfirmDisconnect(true)} />}
       </div>
 
       <div className="flex justify-center items-center gap-10">
@@ -111,6 +118,37 @@ export const YTChannel = ({
           <span className="text-sm text-gray-500">Views</span>
         </div>
       </div>
+
+      <CloutAlert
+        isOpen={confirmSync}
+        onClose={() => setConfirmSync(false)}
+        onSubmit={() => {
+          onSync();
+          setConfirmSync(false);
+        }}
+        title="Sync YouTube"
+        body="Do you want to sync YouTube channel?"
+      />
+
+      <CloutAlert
+        isOpen={confirmDisconnect}
+        onClose={() => setConfirmDisconnect(false)}
+        onSubmit={() => {
+          dispatch(disconnectYoutube())
+            .unwrap()
+            .then(() => {
+              toast.success('YouTube disconnected');
+              setConfirmDisconnect(false);
+            })
+            .catch((error) => {
+              toast.error('Failed to disconnect YouTube: ' + error);
+            });
+        }}
+        title="Disconnect YouTube"
+        body="Are you sure you want to disconnect your YouTube channel? 
+        This will remove all your YouTube data from Cloutgrid."
+        timed={true}
+      />
     </div>
   );
 };
@@ -222,6 +260,7 @@ const YouTube = () => {
 
   return (
     <div className="flex flex-col justify-start items-center gap-5 py-5">
+      <Toaster />
       <h1 className="font-bold text-xl">YouTube Analytics 📈</h1>
 
       {user?.type == 'creator' && user.youtube_connected ? (
