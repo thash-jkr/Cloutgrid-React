@@ -32,7 +32,7 @@ export default function CloutModal({ isOpen, onClose, children, title }: ModalPr
   return createPortal(
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      // onClick={onClose}
+      onClick={onClose}
     >
       <div
         className="container flex h-[75vh] w-full flex-col overflow-hidden rounded-2xl bg-white shadow-xl mx-3

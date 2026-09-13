@@ -10,7 +10,17 @@ import Create from '@/pages/create/Create';
 import CreatePost from '@/pages/create/CreatePost';
 import Search from '@/pages/create/Search';
 import type { MenuAction } from './CloutMenu';
-import { Bell, Dot, Handshake, Search as Magnifier, Menu, Plus, User } from 'lucide-react';
+import {
+  Bell,
+  Dot,
+  Handshake,
+  Search as Magnifier,
+  Menu,
+  Plus,
+  User,
+  UserKey,
+  UserPlus,
+} from 'lucide-react';
 import CloutMenu from './CloutMenu';
 import CloutModalAlt from './CloutModalAlt';
 import CreateCampaign from '@/pages/create/CreateCampaign';
@@ -29,11 +39,18 @@ export default function NavBar() {
   const location = window.location.pathname;
 
   const actions: MenuAction[] = [
-    { icon: Magnifier, label: 'Connect', action: () => setShowConnect(true) },
-    { icon: Plus, label: 'Create', action: () => setShowCreate(true) },
-    { icon: Handshake, label: 'Collaborate', action: () => navigate('/campaigns') },
-    { icon: Bell, label: 'Notifications', action: () => setShowNotifications(true) },
-    { icon: User, label: 'Profile', action: () => navigate('/profile') },
+    ...(isAuth
+      ? [
+          { icon: Magnifier, label: 'Connect', action: () => setShowConnect(true) },
+          { icon: Plus, label: 'Create', action: () => setShowCreate(true) },
+          { icon: Handshake, label: 'Collaborate', action: () => navigate('/campaigns') },
+          { icon: Bell, label: 'Notifications', action: () => setShowNotifications(true) },
+          { icon: User, label: 'Profile', action: () => navigate('/profile') },
+        ]
+      : [
+          { icon: UserKey, label: 'Login', action: () => navigate('/login') },
+          { icon: UserPlus, label: 'Sign Up', action: () => navigate('/register') },
+        ]),
   ];
 
   return (

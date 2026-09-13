@@ -5,6 +5,7 @@ import profileReducer from '@/slices/profileSlice';
 import jobReducer from '@/slices/jobSlice';
 import createReducer from '@/slices/createSlice';
 import searchReducer from '@/slices/searchSlice';
+import integrationReducer from '@/slices/integrationSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     profile: profileReducer,
     job: jobReducer,
     create: createReducer,
+    integration: integrationReducer,
     search: searchReducer
   },
 });

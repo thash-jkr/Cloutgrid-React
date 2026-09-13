@@ -18,5 +18,5 @@ const production: ApiEnvironment = {
   socketUrl: 'wss://api.cloutgrid.com/ws',
 };
 
-export const ApiConfig: ApiEnvironment = local;
+export const ApiConfig: ApiEnvironment = development;
 // export const ApiConfig: ApiEnvironment = import.meta.env.DEV ? development : production;
