@@ -97,9 +97,18 @@ export const IGProfileInsights = ({
       <img src={page.profile_picture_url} alt="Profile" className="w-52 h-52 rounded-full" />
 
       <div className="flex justify-center items-center gap-3">
-        <Button variant="outlined">
+        <Button
+          variant="outlined"
+          onPress={() =>
+            window.open(
+              'https://www.instagram.com/' + page.username,
+              '_blank',
+              'noopener,noreferrer',
+            )
+          }
+        >
           <FontAwesomeIcon icon={faInstagram} />
-          <span className="font-bold">{page.username}</span>
+          <span className="font-bold">@{page.username}</span>
         </Button>
 
         {!other && <CloutButton icon={RefreshCcw} onClick={() => setConfirmSync(true)} />}
@@ -169,7 +178,7 @@ export const IGProfileInsights = ({
   );
 };
 
-const IGMediaInsights = ({ mediaList }: { mediaList: InstagramMediaModel[] }) => {
+export const IGMediaInsights = ({ mediaList }: { mediaList: InstagramMediaModel[] }) => {
   return (
     <div className="flex flex-col justify-center items-center gap-3 w-full p-3">
       <h2 className="font-semibold text-lg">Media Insights</h2>

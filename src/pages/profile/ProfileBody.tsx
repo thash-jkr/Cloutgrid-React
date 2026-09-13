@@ -52,9 +52,9 @@ const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) 
       case 'posts':
         return <PostGrid posts={posts} onSelect={setSelectedPost} />;
       case 'instagram':
-        return other ? <OtherInstagram username={user.username} /> : <Instagram />;
+        return other ? <OtherInstagram user={user} /> : <Instagram />;
       case 'youtube':
-        return other ? <OtherYouTube username={user.username} /> : <YouTube />;
+        return other ? <OtherYouTube user={user} /> : <YouTube />;
       case 'collabs':
         return <PostGrid posts={collabs} onSelect={setSelectedPost} />;
     }
