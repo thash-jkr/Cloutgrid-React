@@ -1,7 +1,7 @@
 import { Button } from 'actify';
 import { InstagramConstants } from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   fetchInstagramMedia,
   fetchInstagramProfile,
@@ -13,6 +13,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import CloutButton from '@/components/CloutButton';
 import { GlobeOff, RefreshCcw } from 'lucide-react';
+import { timeAgo } from '@/utils/timeAgo';
+import CloutAlert from '@/components/CloutAlert';
+import toast, { Toaster } from 'react-hot-toast';
 
 const NotConnected = () => {
   return (
@@ -36,19 +39,42 @@ const Connected = () => {
   const { instagramPage, instagramMedia } = useAppSelector((state) => state.integration);
 
   useEffect(() => {
-    console.log(instagramMedia);
+    // console.log(instagramMedia);
 
     if (user && !instagramPage) {
-      dispatch(fetchInstagramProfile());
-      dispatch(fetchInstagramMedia());
       dispatch(loadOwnInstagramProfile(user.username));
       dispatch(loadOwnInstagramMedia(user.username));
     }
   }, [user, dispatch]);
 
+  const syncInstagram = () => {
+    const page_id = toast.loading('Syncing Instagram Page...');
+    const media_id = toast.loading('Syncing Instagram Media...');
+
+    dispatch(fetchInstagramProfile())
+      .unwrap()
+      .then(() => {
+        user && dispatch(loadOwnInstagramProfile(user.username));
+        toast.success('Instagram Page Synced', { id: page_id });
+      })
+      .catch((error) => {
+        toast.error('Failed to sync Instagram Page: ' + error, { id: page_id });
+      });
+
+    dispatch(fetchInstagramMedia())
+      .unwrap()
+      .then(() => {
+        user && dispatch(loadOwnInstagramMedia(user.username));
+        toast.success('Instagram Media Synced', { id: media_id });
+      })
+      .catch((error) => {
+        toast.error('Failed to sync Instagram Media: ' + error, { id: media_id });
+      });
+  };
+
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
-      {instagramPage && <IGProfileInsights page={instagramPage} />}
+      {instagramPage && <IGProfileInsights page={instagramPage} onSync={syncInstagram} />}
       {instagramMedia && <IGMediaInsights mediaList={instagramMedia} />}
     </div>
   );
@@ -57,10 +83,15 @@ const Connected = () => {
 export const IGProfileInsights = ({
   page,
   other = false,
+  onSync,
 }: {
   page: InstagramPageModel;
   other?: boolean;
+  onSync: () => void;
 }) => {
+  const [confirmSync, setConfirmSync] = useState(false);
+  const [confirmDisconnect, setConfirmDisconnect] = useState(false);
+
   return (
     <div className="flex flex-col justify-start items-center gap-3">
       <img src={page.profile_picture_url} alt="Profile" className="w-52 h-52 rounded-full" />
@@ -71,10 +102,12 @@ export const IGProfileInsights = ({
           <span className="font-bold">{page.username}</span>
         </Button>
 
-        {!other && <CloutButton icon={RefreshCcw} onClick={() => {}} />}
+        {!other && <CloutButton icon={RefreshCcw} onClick={() => setConfirmSync(true)} />}
 
-        {!other && <CloutButton icon={GlobeOff} onClick={() => {}} />}
+        {!other && <CloutButton icon={GlobeOff} onClick={() => setConfirmDisconnect(true)} />}
       </div>
+
+      <span className="text-xs text-gray-500">Last synced {timeAgo(page.last_synced_at)}</span>
 
       <div className="flex justify-center items-center gap-10">
         <div className="flex flex-col justify-center items-center">
@@ -109,6 +142,29 @@ export const IGProfileInsights = ({
           ))}
         </div>
       </div>
+
+      <CloutAlert
+        isOpen={confirmSync}
+        onClose={() => setConfirmSync(false)}
+        onSubmit={() => {
+          onSync();
+          setConfirmSync(false);
+        }}
+        title="Sync Instagram"
+        body="Are you sure you want to sync your Instagram account?"
+      />
+
+      <CloutAlert
+        isOpen={confirmDisconnect}
+        onClose={() => setConfirmDisconnect(false)}
+        onSubmit={() => {
+          setConfirmDisconnect(false);
+        }}
+        title="Disconnect Instagram"
+        body="Are you sure you want to disconnect your Instagram account? 
+        This will remove all your Instagram data from Cloutgrid."
+        timed={true}
+      />
     </div>
   );
 };
@@ -174,6 +230,7 @@ const Instagram = () => {
 
   return (
     <div className="flex flex-col justify-start items-center gap-5 py-5">
+      <Toaster />
       <h1 className="font-bold text-xl">Instagram Insights 📊</h1>
 
       {user?.type === 'creator' && user?.instagram_connected ? <Connected /> : <NotConnected />}
