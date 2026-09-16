@@ -105,7 +105,7 @@ export default function LandingPage() {
 
           <div className="flex h-14 w-full items-center justify-center md:w-2/3 lg:w-1/2">
             {isCreator ? (
-              <div className="flex w-3/4 lg:w-full mb-5 justify-center">
+              <div className="flex w-3/4 lg:w-full mt-5 justify-center">
                 <a
                   className="w-1/2 h-auto hover:scale-105 transition-all duration-500 cursor-pointer"
                   href="https://apps.apple.com/in/app/cloutgrid/id6745302913"
@@ -136,7 +136,6 @@ export default function LandingPage() {
         </div>
 
         <div className="hidden lg:flex flex-col flex-1 items-center justify-center">
-          {/* <img src={kidImage} alt="Cloutgrid illustration" className="w-full object-cover" /> */}
           <Lottie src={hero} autoplay loop />
         </div>
       </main>

@@ -72,7 +72,7 @@ export default function NavBar() {
               </h6>
             </Link>
 
-            <Dot className="h-1 w-1 text-gray-400" />
+            <Dot className="h-8 w-8" />
 
             <Link to={'/register/brand/'}>
               <h6 className="ml-5 hover:scale-105 hover:text-secondary transition-all duration-500">
