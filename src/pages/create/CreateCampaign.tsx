@@ -5,7 +5,6 @@ import { createJob } from '@/slices/jobSlice';
 import { getCategoryIcon, getCategoryLabel } from '@/utils/categories';
 import CloutModal from '@/components/CloutModal';
 import CategoryModal from '@/components/CategoryModal';
-import { Toast } from 'actify/dist/components/Snackbar/Toast';
 import toast, { Toaster } from 'react-hot-toast';
 
 const MIN_ROWS = 3;
@@ -155,7 +154,7 @@ export default function CreateCampaign({ onClose }: CreateCampaignProps) {
     const cleanedRequirements = requirementItems.map((item) => item.text.trim()).filter(Boolean);
     const cleanedQuestions = questionItems.map((item) => item.text.trim()).filter(Boolean);
 
-    const result = await dispatch(
+    await dispatch(
       createJob({
         title,
         description,
