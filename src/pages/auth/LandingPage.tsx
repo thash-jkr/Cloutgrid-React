@@ -1,5 +1,6 @@
 import NavBar from '@/components/NavBar';
-import kidImage from '@/assets/kid.png';
+import hero from '@/assets/animations/hero.json'
+import { Lottie } from "lottie-react";
 import { Button, SegmentedButtonSet } from 'actify';
 import { useState } from 'react';
 import iOSLogo from '@/assets/app_store_logo.png';
@@ -135,7 +136,8 @@ export default function LandingPage() {
         </div>
 
         <div className="hidden lg:flex flex-col flex-1 items-center justify-center">
-          <img src={kidImage} alt="Cloutgrid illustration" className="w-full object-cover" />
+          {/* <img src={kidImage} alt="Cloutgrid illustration" className="w-full object-cover" /> */}
+          <Lottie src={hero} autoplay loop />
         </div>
       </main>
 

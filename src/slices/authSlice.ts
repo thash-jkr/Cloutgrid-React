@@ -141,22 +141,31 @@ export const confirmPassword = createAsyncThunk<
   { rejectValue: string }
 >('auth/confirmPassword', async ({ password, uid, token }, { rejectWithValue }) => {
   try {
-    await apiClient.post(`/password/confirm/${uid}/${token}/`, { password }, { requireAuth: false });
+    await apiClient.post(
+      `/password/confirm/${uid}/${token}/`,
+      { password },
+      { requireAuth: false },
+    );
   } catch (error) {
     return rejectWithValue((error as Error).message);
   }
 });
 
-export const changePassword = createAsyncThunk<void, { oldPassword: string; newPassword: string }, { rejectValue: string }>(
-  'auth/changePassword',
-  async ({ oldPassword, newPassword }, { rejectWithValue }) => {
-    try {
-      await apiClient.post('/password/change/', { "old_password": oldPassword, "new_password": newPassword }, { requireAuth: false });
-    } catch (error) {
-      return rejectWithValue((error as Error).message);
-    }
-  },
-);
+export const changePassword = createAsyncThunk<
+  void,
+  { oldPassword: string; newPassword: string },
+  { rejectValue: string }
+>('auth/changePassword', async ({ oldPassword, newPassword }, { rejectWithValue }) => {
+  try {
+    await apiClient.post(
+      '/password/change/',
+      { old_password: oldPassword, new_password: newPassword },
+      { requireAuth: false },
+    );
+  } catch (error) {
+    return rejectWithValue((error as Error).message);
+  }
+});
 
 export const deleteAccount = createAsyncThunk<void, string, { rejectValue: string }>(
   'auth/deleteAccount',
@@ -256,7 +265,7 @@ const authSlice = createSlice({
             handleOTP.pending.type,
             forgotPassword.pending.type,
             confirmPassword.pending.type,
-            changePassword.pending.type
+            changePassword.pending.type,
           ].includes(action.type),
         (state) => {
           state.authLoading = true;
@@ -270,7 +279,7 @@ const authSlice = createSlice({
             handleOTP.fulfilled.type,
             forgotPassword.fulfilled.type,
             confirmPassword.fulfilled.type,
-            changePassword.fulfilled.type
+            changePassword.fulfilled.type,
           ].includes(action.type),
         (state) => {
           state.authLoading = false;
@@ -283,7 +292,7 @@ const authSlice = createSlice({
             handleOTP.rejected.type,
             forgotPassword.rejected.type,
             confirmPassword.rejected.type,
-            changePassword.rejected.type
+            changePassword.rejected.type,
           ].includes(action.type),
         (state, action: PayloadAction<string | undefined>) => {
           state.authLoading = false;
