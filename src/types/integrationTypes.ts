@@ -3,12 +3,22 @@ export interface InsightValue {
 }
 
 export interface ProfileInsightModel {
-  id: string;
   name: string;
   title: string;
-  period: string;
   description: string;
-  total_value: InsightValue;
+  value: number;
+  change: number;
+}
+
+export interface ReachModel {
+  value: number;
+  date: string;
+}
+
+export interface MediaInsightModel {
+  name: string;
+  change: number;
+  average: number;
 }
 
 export interface InstagramPageModel {
@@ -19,17 +29,10 @@ export interface InstagramPageModel {
   followers: number;
   followings: number;
   media_count: number;
-  insights_raw: ProfileInsightModel[];
+  insights: ProfileInsightModel[];
+  reach: ReachModel[];
+  media_insights: MediaInsightModel[];
   last_synced_at: string;
-}
-
-export interface MediaInsightModel {
-  id: string;
-  name: string;
-  title: string;
-  period: string;
-  description: string;
-  values: InsightValue[];
 }
 
 export interface InstagramMediaModel {
@@ -43,7 +46,7 @@ export interface InstagramMediaModel {
   caption: string;
   like_count: number;
   comments_count: number;
-  insights_raw: MediaInsightModel[];
+  views: number;
 }
 
 export interface YoutubeChannelModel {

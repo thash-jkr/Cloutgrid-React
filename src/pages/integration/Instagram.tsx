@@ -14,12 +14,27 @@ import type { InstagramMediaModel, InstagramPageModel } from '@/types/integratio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import CloutButton from '@/components/CloutButton';
-import { GlobeOff, RefreshCcw } from 'lucide-react';
+import { GlobeOff, RefreshCcw, Share } from 'lucide-react';
 import { timeAgo } from '@/utils/timeAgo';
 import CloutAlert from '@/components/CloutAlert';
 import toast, { Toaster } from 'react-hot-toast';
 import { ApiConfig } from '@/app/apiConfig';
 import { useNavigate } from 'react-router-dom';
+import { compactCount } from '@/utils/compactCount';
+import {
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  AreaChart,
+  Area,
+} from 'recharts';
+
+function formatDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
 
 const NotConnected = () => {
   const { access } = useAppSelector((state) => state.auth);
@@ -80,8 +95,13 @@ export const IGProfileInsights = ({
 
   const dispatch = useAppDispatch();
 
+  const chartData = page.reach.map((point) => ({
+    ...point,
+    label: formatDate(point.date),
+  }));
+
   return (
-    <div className="flex flex-col justify-start items-center gap-3">
+    <div className="flex flex-col justify-start items-center gap-3 w-full">
       <img src={page.profile_picture_url} alt="Profile" className="w-52 h-52 rounded-full" />
 
       <div className="flex justify-center items-center gap-3">
@@ -102,6 +122,8 @@ export const IGProfileInsights = ({
         {!other && <CloutButton icon={RefreshCcw} onClick={() => setConfirmSync(true)} />}
 
         {!other && <CloutButton icon={GlobeOff} onClick={() => setConfirmDisconnect(true)} />}
+
+          {!other && <CloutButton icon={Share} onClick={() => {}} />}
       </div>
 
       <span className="text-xs text-gray-500">Last synced {timeAgo(page.last_synced_at)}</span>
@@ -123,18 +145,111 @@ export const IGProfileInsights = ({
         </div>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-3 w-full text-xs lg:text-base">
+      <div className="flex flex-col justify-center items-center gap-3 w-full lg:w-1/2 p-3 text-xs lg:text-base">
         <h2 className="font-semibold text-lg">Profile Insights</h2>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 w-full">
-          {page.insights_raw.map((insight) => (
+        <div className="grid grid-cols-2 gap-3 w-full">
+          {page.insights.map((insight) => (
             <div
-              key={insight.id}
+              key={insight.name}
               className="flex flex-col justify-center items-center gap-1 
-              w-full border shadow rounded-2xl p-3 aspect-video font-semibold"
+              w-full border shadow rounded-2xl p-5 aspect-video font-semibold"
             >
-              <span className="">{insight.title}</span>
-              <span className="">{insight.total_value?.value ?? 0}</span>
+              <span className="text-xl">
+                {compactCount(insight.value)}{' '}
+                <span
+                  className={`text-sm font-thin ${insight.change > 0 ? 'text-green-500' : 'text-red-500'}`}
+                >
+                  {insight.change > 0 && '+'}
+                  {insight.change}%
+                </span>
+              </span>
+              <span className="w-full truncate text-center text-sm font-normal text-gray-500">
+                {insight.title}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex w-full lg:p-10 flex-col items-center justify-center gap-1 text-xs lg:text-base select-none">
+        <h2 className="font-semibold text-lg">Reach over Time</h2>
+
+        <div className="h-64 w-full">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+              <defs>
+                <linearGradient id="reachGradient" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="var(--color-secondary)" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="var(--color-secondary)" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e5e7eb" />
+
+              <XAxis
+                dataKey="label"
+                tick={{ fontSize: 11 }}
+                interval={Math.ceil(chartData.length / 7) - 1}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11 }}
+                width={40}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(value) => compactCount(value)}
+              />
+
+              <Tooltip
+                labelFormatter={(label) => String(label)}
+                formatter={(value) => [
+                  typeof value === 'number' ? value.toLocaleString() : String(value ?? ''),
+                  'Reach',
+                ]}
+                contentStyle={{ borderRadius: 12, border: '1px solid #e5e7eb', fontSize: 12 }}
+              />
+
+              <Area
+                type="monotone"
+                dataKey="value"
+                stroke="var(--color-secondary)"
+                strokeWidth={2}
+                fill="url(#reachGradient)"
+                dot={false}
+                activeDot={{ r: 5 }}
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+
+      <div className="flex flex-col justify-center items-center gap-3 w-full lg:w-1/2 p-3 text-xs lg:text-base">
+        <h2 className="font-semibold text-lg">Media Insights</h2>
+
+        <div className="grid grid-cols-2 gap-3 w-full">
+          {page.media_insights.map((insight) => (
+            <div
+              key={insight.name}
+              className="flex flex-col justify-center items-center gap-1 
+              w-full border shadow rounded-2xl p-5 aspect-video font-semibold"
+            >
+              <span className="text-xl">
+                {insight.name == 'Avg. Watch Time'
+                  ? Math.round(insight.average / 60) + 's'
+                  : compactCount(insight.average)}
+                {insight.name == 'Skip Rate' ? '% ' : ' '}
+                <span
+                  className={`text-sm font-thin ${insight.change > 0 ? (insight.name == 'Skip Rate' ? 'text-red-500' : 'text-green-500') : insight.name == 'Skip Rate' ? 'text-green-500' : 'text-red-500'}`}
+                >
+                  {insight.change > 0 && '+'}
+                  {insight.change}%
+                </span>
+              </span>
+              <span className="w-full truncate text-center text-sm font-normal text-gray-500">
+                {insight.name}
+              </span>
             </div>
           ))}
         </div>
@@ -176,27 +291,29 @@ export const IGProfileInsights = ({
 
 export const IGMediaInsights = ({ mediaList }: { mediaList: InstagramMediaModel[] }) => {
   return (
-    <div className="flex flex-col justify-center items-center gap-3 w-full p-3">
-      <h2 className="font-semibold text-lg">Media Insights</h2>
+    <div className="flex flex-col justify-center items-center gap-3 w-full p-3 lg:px-10">
+      <h2 className="font-semibold text-lg">Recent Posts</h2>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 w-full">
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-10 w-full">
         {mediaList.map((media) => (
           <div
             key={media.id}
             className="flex flex-col justify-start items-center
-              w-full shadow rounded-xl font-semibold aspect-3/4 overflow-hidden 
+              w-full shadow rounded-xl font-semibold aspect-9/16 overflow-hidden 
               transition-transform duration-300 ease-in-out 
               transform hover:scale-95 hover:shadow-none relative"
           >
-            <img src={media.media_url} alt="Media" className="h-full object-cover" />
+            <img
+              src={media.thumbnail_url || media.media_url}
+              alt="Media"
+              className="object-contain"
+            />
 
             <div className="bg-white flex absolute bottom-1 left-1 p-1 rounded-lg gap-2">
               <MediaStats name="likes" value={media.like_count} />
 
-              {media.insights_raw.length > 0 ? (
-                media.insights_raw.map((insight) => (
-                  <MediaStats name={insight.name} value={insight.values[0]?.value ?? 0} />
-                ))
+              {media.media_type == 'VIDEO' ? (
+                <MediaStats name="views" value={media.views} />
               ) : (
                 <MediaStats name="comments" value={media.comments_count} />
               )}
@@ -225,7 +342,7 @@ const MediaStats = ({ name, value }: { name: string; value: number }) => {
   return (
     <div className="flex justify-center items-center gap-1">
       <span className="text-xs">{StatIcon(name)}</span>
-      <span className="text-xs">{value}</span>
+      <span className="text-xs">{compactCount(value)}</span>
     </div>
   );
 };

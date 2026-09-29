@@ -17,6 +17,8 @@ export interface CreatorProfile extends BaseUserProfile {
   type: 'creator';
   instagram_connected: boolean;
   youtube_connected: boolean;
+  instagram_followers?: number;
+  youtube_subscribers?: number;
 }
 
 export interface BusinessProfile extends BaseUserProfile {
