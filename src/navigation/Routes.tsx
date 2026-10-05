@@ -14,6 +14,7 @@ import DataDeletion from '@/legal/DataDeletion';
 import OtherProfile from '@/pages/profile/OtherProfile';
 import RegistrationFlow from '@/pages/auth/RegistrationFlow';
 import NotFound from '@/pages/auth/NotFound';
+import Vitae from '@/pages/integration/Vitae';
 
 export function AppRoutes() {
   return (
@@ -23,6 +24,7 @@ export function AppRoutes() {
       <Route path="/privacypolicy" element={<PrivacyPolicy />} />
       <Route path="/deletionpolicy" element={<DataDeletion />} />
       <Route path="*" element={<NotFound />} />
+      <Route path="/vitae/:username" element={<Vitae />} />
 
       <Route element={<PublicRoute />}>
         <Route path="/login" element={<LoginPage />} />

@@ -1,5 +1,6 @@
 interface BaseUserProfile {
   id: number;
+  uuid: string,
   name: string;
   email: string;
   username: string;
