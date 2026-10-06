@@ -30,6 +30,12 @@ import {
   AreaChart,
   Area,
 } from 'recharts';
+import { copyToClipboard } from '@/utils/copyToClipboard';
+import noProfile from '@/assets/default_profile.png';
+import noImage from '@/assets/noMedia.jpg';
+import CloutImage from '@/components/CloutImage';
+import CloutEmpty from '@/components/CloutEmpty';
+import instagramIcon from '@/assets/isometric/instagram_insight.png';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -65,8 +71,6 @@ const Connected = ({ onSync }: { onSync: () => void }) => {
   const { instagramPage, instagramMedia } = useAppSelector((state) => state.integration);
 
   useEffect(() => {
-    // console.log(instagramMedia);
-
     if (user && !instagramPage) {
       dispatch(loadOwnInstagramProfile(user.username));
       dispatch(loadOwnInstagramMedia(user.username));
@@ -75,7 +79,9 @@ const Connected = ({ onSync }: { onSync: () => void }) => {
 
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
-      {instagramPage && <IGProfileInsights page={instagramPage} onSync={onSync} />}
+      {instagramPage && (
+        <IGProfileInsights page={instagramPage} onSync={onSync} username={user?.username} />
+      )}
       {instagramMedia && <IGMediaInsights mediaList={instagramMedia} />}
     </div>
   );
@@ -85,24 +91,42 @@ export const IGProfileInsights = ({
   page,
   other = false,
   onSync,
+  username,
 }: {
   page: InstagramPageModel;
   other?: boolean;
   onSync: () => void;
+  username?: string;
 }) => {
   const [confirmSync, setConfirmSync] = useState(false);
   const [confirmDisconnect, setConfirmDisconnect] = useState(false);
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const chartData = page.reach.map((point) => ({
     ...point,
     label: formatDate(point.date),
   }));
 
+  const handleCopy = async () => {
+    try {
+      await copyToClipboard(`https://cloutgrid.com/vitae/${username}/`);
+      toast.success('Clout Vitae link copied to clipboard');
+      setTimeout(() => navigate(`/vitae/${username}/`), 2000);
+    } catch (err) {
+      console.error('Failed to copy text: ', err);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-start items-center gap-3 w-full">
-      <img src={page.profile_picture_url} alt="Profile" className="w-52 h-52 rounded-full" />
+      <CloutImage
+        src={page.profile_picture_url}
+        fallback={noProfile}
+        alt="Profile"
+        className="w-52 h-52 rounded-full object-cover"
+      />
 
       <div className="flex justify-center items-center gap-3">
         <Button
@@ -123,7 +147,7 @@ export const IGProfileInsights = ({
 
         {!other && <CloutButton icon={GlobeOff} onClick={() => setConfirmDisconnect(true)} />}
 
-          {!other && <CloutButton icon={Share} onClick={() => {}} />}
+        {username && <CloutButton icon={Share} onClick={() => handleCopy()} />}
       </div>
 
       <span className="text-xs text-gray-500">Last synced {timeAgo(page.last_synced_at)}</span>
@@ -228,6 +252,13 @@ export const IGProfileInsights = ({
       <div className="flex flex-col justify-center items-center gap-3 w-full lg:w-1/2 p-3 text-xs lg:text-base">
         <h2 className="font-semibold text-lg">Media Insights</h2>
 
+        {page.media_insights.length == 0 && (
+          <CloutEmpty
+            message={`Creator has not posted any reels recently!`}
+            icon={instagramIcon}
+          />
+        )}
+
         <div className="grid grid-cols-2 gap-3 w-full">
           {page.media_insights.map((insight) => (
             <div
@@ -303,11 +334,18 @@ export const IGMediaInsights = ({ mediaList }: { mediaList: InstagramMediaModel[
               transition-transform duration-300 ease-in-out 
               transform hover:scale-95 hover:shadow-none relative"
           >
-            <img
+            <CloutImage
+              src={media.thumbnail_url || media.media_url}
+              fallback={noImage}
+              alt="Media"
+              className="h-full w-full object-cover"
+            />
+
+            {/* <img
               src={media.thumbnail_url || media.media_url}
               alt="Media"
               className="object-contain"
-            />
+            /> */}
 
             <div className="bg-white flex absolute bottom-1 left-1 p-1 rounded-lg gap-2">
               <MediaStats name="likes" value={media.like_count} />

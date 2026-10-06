@@ -5,6 +5,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect } from 'react';
 import { readOtherInstagramMedia, readOtherInstagramProfile } from '@/slices/integrationSlice';
 import { IGMediaInsights, IGProfileInsights } from './Instagram';
+import { Toaster } from 'react-hot-toast';
 
 const NotConnected = ({ username }: { username: string }) => {
   return (
@@ -30,7 +31,12 @@ const Connected = ({ username }: { username: string }) => {
   return (
     <div className="w-full flex flex-col justify-start items-center gap-5">
       {otherInstagramPage && (
-        <IGProfileInsights page={otherInstagramPage} other={true} onSync={() => {}} />
+        <IGProfileInsights
+          page={otherInstagramPage}
+          other={true}
+          onSync={() => {}}
+          username={username}
+        />
       )}
       {otherInstagramPage && <IGMediaInsights mediaList={otherInstagramMedia} />}
     </div>
@@ -40,6 +46,7 @@ const Connected = ({ username }: { username: string }) => {
 const OtherInstagram = ({ user }: { user: UserProfile }) => {
   return (
     <div className="flex flex-col justify-start items-center gap-5 py-5">
+      <Toaster />
       <h1 className="font-bold text-xl">Instagram Insights 📊</h1>
 
       {user?.type === 'creator' && user?.instagram_connected ? (
