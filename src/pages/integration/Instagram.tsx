@@ -1,5 +1,5 @@
 import { Button } from 'actify';
-import { InstagramConstants } from './IntegrationConstants';
+import ProfileInsightsInfo, { InstagramConstants, MediaInsightsInfo, ReachInfo } from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect, useState } from 'react';
 import {
@@ -14,7 +14,7 @@ import type { InstagramMediaModel, InstagramPageModel } from '@/types/integratio
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram } from '@fortawesome/free-brands-svg-icons';
 import CloutButton from '@/components/CloutButton';
-import { GlobeOff, RefreshCcw, Share } from 'lucide-react';
+import { GlobeOff, Info, RefreshCcw, Share } from 'lucide-react';
 import { timeAgo } from '@/utils/timeAgo';
 import CloutAlert from '@/components/CloutAlert';
 import toast, { Toaster } from 'react-hot-toast';
@@ -36,6 +36,7 @@ import noImage from '@/assets/noMedia.jpg';
 import CloutImage from '@/components/CloutImage';
 import CloutEmpty from '@/components/CloutEmpty';
 import instagramIcon from '@/assets/isometric/instagram_insight.png';
+import CloutModal from '@/components/CloutModal';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -100,6 +101,9 @@ export const IGProfileInsights = ({
 }) => {
   const [confirmSync, setConfirmSync] = useState(false);
   const [confirmDisconnect, setConfirmDisconnect] = useState(false);
+  const [showProfileInfo, setShowProfileInfo] = useState(false);
+  const [showReachInfo, setShowReachInfo] = useState(false);
+  const [showMediaInfo, setShowMediaInfo] = useState(false);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -170,7 +174,13 @@ export const IGProfileInsights = ({
       </div>
 
       <div className="flex flex-col justify-center items-center gap-3 w-full lg:w-1/2 p-3 text-xs lg:text-base">
-        <h2 className="font-semibold text-lg">Profile Insights</h2>
+        <h2 className="font-semibold text-lg flex justify-center items-center gap-1">
+          Profile Insights{' '}
+          <Info
+            className="w-4 h-4 hover:text-orange-500 cursor-pointer duration-300"
+            onClick={() => setShowProfileInfo(true)}
+          />{' '}
+        </h2>
 
         <div className="grid grid-cols-2 gap-3 w-full">
           {page.insights.map((insight) => (
@@ -197,7 +207,13 @@ export const IGProfileInsights = ({
       </div>
 
       <div className="flex w-full lg:p-10 flex-col items-center justify-center gap-1 text-xs lg:text-base select-none">
-        <h2 className="font-semibold text-lg">Reach over Time</h2>
+        <h2 className="font-semibold text-lg flex justify-center items-center gap-1">
+          Reach over Time{' '}
+          <Info
+            className="w-4 h-4 hover:text-orange-500 cursor-pointer duration-300"
+            onClick={() => setShowReachInfo(true)}
+          />{' '}
+        </h2>
 
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
@@ -250,13 +266,16 @@ export const IGProfileInsights = ({
       </div>
 
       <div className="flex flex-col justify-center items-center gap-3 w-full lg:w-1/2 p-3 text-xs lg:text-base">
-        <h2 className="font-semibold text-lg">Media Insights</h2>
+        <h2 className="font-semibold text-lg flex justify-center items-center gap-1">
+          Media Insights
+          <Info
+            className="w-4 h-4 hover:text-orange-500 cursor-pointer duration-300"
+            onClick={() => setShowMediaInfo(true)}
+          />{' '}
+        </h2>
 
         {page.media_insights.length == 0 && (
-          <CloutEmpty
-            message={`Creator has not posted any reels recently!`}
-            icon={instagramIcon}
-          />
+          <CloutEmpty message={`Creator has not posted any reels recently!`} icon={instagramIcon} />
         )}
 
         <div className="grid grid-cols-2 gap-3 w-full">
@@ -285,6 +304,27 @@ export const IGProfileInsights = ({
           ))}
         </div>
       </div>
+
+      <CloutModal
+        isOpen={showProfileInfo}
+        onClose={() => setShowProfileInfo(false)}
+        title="Profile Insights"
+        children={<ProfileInsightsInfo />}
+      />
+
+      <CloutModal
+        isOpen={showReachInfo}
+        onClose={() => setShowReachInfo(false)}
+        title="Reach over Time"
+        children={<ReachInfo />}
+      />
+
+      <CloutModal
+        isOpen={showMediaInfo}
+        onClose={() => setShowMediaInfo(false)}
+        title="Media Insights"
+        children={<MediaInsightsInfo />}
+      />
 
       <CloutAlert
         isOpen={confirmSync}
@@ -332,7 +372,8 @@ export const IGMediaInsights = ({ mediaList }: { mediaList: InstagramMediaModel[
             className="flex flex-col justify-start items-center
               w-full shadow rounded-xl font-semibold aspect-9/16 overflow-hidden 
               transition-transform duration-300 ease-in-out 
-              transform hover:scale-95 hover:shadow-none relative"
+              transform hover:scale-95 hover:shadow-none relative cursor-pointer"
+            onClick={() => window.open(media.link, '_blank', 'noopener,noreferrer')}
           >
             <CloutImage
               src={media.thumbnail_url || media.media_url}
