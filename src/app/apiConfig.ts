@@ -20,4 +20,4 @@ const production: ApiEnvironment = {
 
 const environments = { development, local, production };
 
-export const ApiConfig: ApiEnvironment = environments.development;
+export const ApiConfig: ApiEnvironment = environments.production;
