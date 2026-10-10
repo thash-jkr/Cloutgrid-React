@@ -1,5 +1,9 @@
 import { Button } from 'actify';
-import ProfileInsightsInfo, { InstagramConstants, MediaInsightsInfo, ReachInfo } from './IntegrationConstants';
+import ProfileInsightsInfo, {
+  InstagramConstants,
+  MediaInsightsInfo,
+  ReachInfo,
+} from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { useEffect, useState } from 'react';
 import {
@@ -37,6 +41,7 @@ import CloutImage from '@/components/CloutImage';
 import CloutEmpty from '@/components/CloutEmpty';
 import instagramIcon from '@/assets/isometric/instagram_insight.png';
 import CloutModal from '@/components/CloutModal';
+import ProfileHero, { MediaHero } from './InsightsHero';
 
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
@@ -182,12 +187,14 @@ export const IGProfileInsights = ({
           />{' '}
         </h2>
 
+        <ProfileHero insights={page.insights} />
+
         <div className="grid grid-cols-2 gap-3 w-full">
           {page.insights.map((insight) => (
             <div
               key={insight.name}
               className="flex flex-col justify-center items-center gap-1 
-              w-full border shadow rounded-2xl p-5 aspect-video font-semibold"
+              w-full border shadow rounded-2xl p-5 bg-white aspect-video font-semibold"
             >
               <span className="text-xl">
                 {compactCount(insight.value)}{' '}
@@ -274,8 +281,10 @@ export const IGProfileInsights = ({
           />{' '}
         </h2>
 
-        {page.media_insights.length == 0 && (
+        {page.media_insights.length == 0 ? (
           <CloutEmpty message={`Creator has not posted any reels recently!`} icon={instagramIcon} />
+        ) : (
+          <MediaHero insights={page.media_insights} />
         )}
 
         <div className="grid grid-cols-2 gap-3 w-full">
@@ -283,7 +292,7 @@ export const IGProfileInsights = ({
             <div
               key={insight.name}
               className="flex flex-col justify-center items-center gap-1 
-              w-full border shadow rounded-2xl p-5 aspect-video font-semibold"
+              w-full border shadow rounded-2xl p-5 bg-white aspect-video font-semibold"
             >
               <span className="text-xl">
                 {insight.name == 'Avg. Watch Time'
