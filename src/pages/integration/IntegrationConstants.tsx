@@ -169,7 +169,7 @@ const INSIGHTS: InsightInfo[] = [
 
 const ProfileInsightsInfo = () => {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full flex-col gap-5 h-full overflow-y-auto">
       <p className="text-sm text-gray-600 p-3">
         Each number is the total for the last 28 days. The percentage beside it compares that total
         with the 28 days before it. For example, +12% means 12% more than the previous 28-day
@@ -232,7 +232,7 @@ const REACH_INFO: InsightInfo[] = [
 
 export const ReachInfo = () => {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full flex-col gap-5 h-full overflow-y-auto">
       <p className="p-3 text-sm text-gray-600">
         The chart shows your daily reach for the last 28 days. Because the same person can be
         reached on several days, adding up the daily values gives a higher number than your reach
@@ -272,7 +272,7 @@ const MEDIA_INSIGHTS_INFO: InsightInfo[] = [
 
 export const MediaInsightsInfo = () => {
   return (
-    <div className="flex w-full flex-col gap-5">
+    <div className="flex w-full flex-col gap-5 h-full overflow-y-auto">
       <p className="p-3 text-sm text-gray-600">
         Each number is the average across your 6 most recent posts. The percentage beside it
         compares that average with the 6 posts before them. For example, +12% means 12% higher than
