@@ -13,6 +13,8 @@ import { Flag, Menu, SquareArrowOutUpRight, User } from 'lucide-react';
 import { useNavigate } from 'react-router';
 import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
+import type { UserProfile } from '@/types/authTypes';
+import BrandProfile from './BrandProfile';
 
 interface JobDetailScope {
   id: number | null;
@@ -24,6 +26,7 @@ const JobDetail = ({ id }: JobDetailScope) => {
   const [showMenu, setShowMenu] = useState(false);
   const [showReportBrand, setShowReportBrand] = useState(false);
   const [showReportCampaign, setShowReportCampaign] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState<UserProfile | null>(null);
 
   const { jobs } = useAppSelector((state) => state.job);
 
@@ -83,7 +86,7 @@ const JobDetail = ({ id }: JobDetailScope) => {
               Posted by:{' '}
               <span
                 className="flex items-center gap-1 text-secondary cursor-pointer font-semibold transition-transform duration-300 ease-in-out transform hover:scale-105"
-                onClick={() => navigate(`/profile/${job.posted_by.username}`)}
+                onClick={() => setSelectedBrand(job.posted_by)}
               >
                 <span>{job.posted_by.name}</span>
                 <SquareArrowOutUpRight className="h-4 w-4" />
@@ -138,6 +141,14 @@ const JobDetail = ({ id }: JobDetailScope) => {
         title="Campaign Questions"
       >
         <Questions questions={job?.questions ?? []} onSubmit={handleApply} />
+      </CloutModal>
+
+      <CloutModal
+        isOpen={selectedBrand != null}
+        onClose={() => setSelectedBrand(null)}
+        title={selectedBrand?.name}
+      >
+        {job && <BrandProfile brand={job.posted_by} />}
       </CloutModal>
 
       <CloutAlert
