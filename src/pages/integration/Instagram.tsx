@@ -1,7 +1,8 @@
 import { Button } from 'actify';
-import ProfileInsightsInfo, {
+import {
   InstagramConstants,
   MediaInsightsInfo,
+  ProfileInsightsInfo,
   ReachInfo,
 } from './IntegrationConstants';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';

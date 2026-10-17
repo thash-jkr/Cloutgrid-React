@@ -1,137 +1,173 @@
+import { useState, type ReactNode } from 'react';
 import {
+  BadgeCheck,
+  ChartColumn,
+  ChevronDown,
   Clock,
   Eye,
   Heart,
+  Info,
   Megaphone,
   MousePointerClick,
+  Play,
   SkipForward,
   TrendingUp,
   Users,
   type LucideIcon,
 } from 'lucide-react';
 
-interface InfoSectionProps {
-  title: string;
-  bullets: string[];
+function SectionTitle({ children }: { children: ReactNode }) {
+  return <h3 className="text-sm font-semibold text-gray-900">{children}</h3>;
 }
 
-function InfoSection({ title, bullets }: InfoSectionProps) {
+function IconLine({ icon: Icon, text }: { icon: LucideIcon; text: string }) {
   return (
-    <div className="flex flex-col items-start">
-      <h3 className="text-base font-semibold text-gray-900">{title}</h3>
-      <div className="mt-2.5 flex flex-col items-start pl-1">
-        {bullets.map((text, i) => (
-          <BulletPoint key={i} text={text} />
-        ))}
+    <div className="mb-2.5 flex items-center gap-3">
+      <Icon className="h-5 w-5 shrink-0 text-secondary" strokeWidth={2} />
+      <span className="flex-1 text-sm text-gray-900">{text}</span>
+    </div>
+  );
+}
+
+function StepLine({ number, text }: { number: number; text: string }) {
+  return (
+    <div className="mb-2.5 flex items-center gap-3">
+      <span className="flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-white">
+        {number}
+      </span>
+      <span className="flex-1 text-sm text-gray-900">{text}</span>
+    </div>
+  );
+}
+
+function Callout({ text }: { text: string }) {
+  return (
+    <div className="flex w-full items-center gap-2 rounded-xl bg-white border p-3">
+      <Info className="h-4.5 w-4.5 shrink-0 text-gray-500" />
+      <span className="flex-1 text-xs text-gray-700">{text}</span>
+    </div>
+  );
+}
+
+function SmallPrint({ text }: { text: string }) {
+  return <p className="mb-2 text-xs text-gray-500">{text}</p>;
+}
+
+// Equivalent of Flutter's ExpansionTile with no padding or divider
+function Details({ title, items }: { title: string; items: string[] }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="mt-2">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-expanded={open}
+        className="flex w-full cursor-pointer items-center justify-between py-2 text-sm text-primary"
+      >
+        <span>{title}</span>
+        <ChevronDown
+          className={`h-4 w-4 transition-transform duration-300 ${open ? 'rotate-180' : ''}`}
+        />
+      </button>
+
+      <div
+        className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+          open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+        }`}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="pb-2">
+            {items.map((text, i) => (
+              <SmallPrint key={i} text={text} />
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-interface BulletPointProps {
-  text: string;
+interface ConnectInfoProps {
+  benefits: { icon: LucideIcon; text: string }[];
+  steps: string[];
+  requirement: string;
+  details: string[];
 }
 
-function BulletPoint({ text }: BulletPointProps) {
+function ConnectInfo({ benefits, steps, requirement, details }: ConnectInfoProps) {
   return (
-    <div className="mb-3 flex items-start gap-2.5">
-      <span className="text-sm font-bold text-gray-900">•</span>
-      <span className="flex-1 text-sm text-gray-600">{text}</span>
+    <div className="flex flex-col items-start px-4">
+      <SectionTitle>Show brands your real numbers</SectionTitle>
+      <div className="mt-3 w-full">
+        {benefits.map((b) => (
+          <IconLine key={b.text} icon={b.icon} text={b.text} />
+        ))}
+      </div>
+
+      <div className="mt-5 w-full">
+        <SectionTitle>How it works</SectionTitle>
+        <div className="mt-3">
+          {steps.map((text, i) => (
+            <StepLine key={i} number={i + 1} text={text} />
+          ))}
+        </div>
+      </div>
+
+      <div className="mt-4 w-full">
+        <Callout text={requirement} />
+      </div>
+
+      <div className="w-full">
+        <Details title="Details and privacy" items={details} />
+      </div>
     </div>
   );
 }
 
 export function InstagramConstants() {
   return (
-    <div className="px-4">
-      <p className="mb-2 text-[13px] text-gray-900">
-        Connecting your Instagram unlocks analytics that help you stand out to businesses 🙋🏻‍♂️. This
-        transparency builds trust, boosts your credibility, and increases your chances of securing
-        collaborations 🤝.
-      </p>
-
-      <div className="mt-5">
-        <InfoSection
-          title="What you'll get once connected:"
-          bullets={[
-            'Verified display of your follower count, followings, and media count.',
-            'Insights into your reach, profile views, and audience engagement shown on your Cloutgrid profile.',
-            'Access to detailed media insights (likes, comments, impressions, video views) that brands care about.',
-            'A stronger, more credible profile that businesses can evaluate at a glance.',
-          ]}
-        />
-      </div>
-
-      <div className="mt-5">
-        <InfoSection
-          title="What you need before connecting:"
-          bullets={[
-            'Your Instagram must be a Creator or Business account (personal accounts cannot connect).',
-            'Your Instagram account must be linked to a Facebook Page (Meta requires this link for insights).',
-            "You'll log in with your Facebook credentials to complete the connection.",
-          ]}
-        />
-      </div>
-
-      <div className="mt-5">
-        <InfoSection
-          title="How to connect:"
-          bullets={[
-            'Make sure your Instagram is switched to a Creator or Business account (you can change this in Instagram Settings → Account).',
-            'Ensure your Instagram is linked to a Facebook Page you manage.',
-            'Click "Connect Instagram" above and log in with Facebook.',
-            'Grant the requested permissions (needed to pull your analytics securely).',
-          ]}
-        />
-      </div>
-    </div>
+    <ConnectInfo
+      benefits={[
+        { icon: BadgeCheck, text: 'Verified followers and post counts' },
+        { icon: ChartColumn, text: 'Reach and engagement on your profile' },
+        { icon: Play, text: 'Reel performance brands care about' },
+      ]}
+      steps={[
+        'Tap Connect Instagram',
+        'Log in with Instagram and tap Allow',
+        "You're done. Your insights appear here",
+      ]}
+      requirement="Requires a Creator or Business Instagram account."
+      details={[
+        'Cloutgrid can view your profile, posts and insights. It cannot post, message or comment on your behalf.',
+        'Have a personal account? Switch to Creator or Business in Instagram under Settings → Account type and tools. It is free.',
+        'You can disconnect at any time.',
+      ]}
+    />
   );
 }
 
 export function YoutubeConstants() {
   return (
-    <div className="px-4">
-      <p className="mb-2 text-[13px] text-gray-900">
-        Connecting your YouTube channel unlocks verified metrics that demonstrate your influence 🚀.
-        Providing real-time data builds professional credibility and makes it easier for brands to
-        partner with you 🤝.
-      </p>
-
-      <div className="mt-5">
-        <InfoSection
-          title="What you'll get once connected:"
-          bullets={[
-            'Verified subscriber count and lifetime video views displayed on your profile.',
-            'Real-time data on your average view duration, watch time, and click-through rates.',
-            'Audience demographics including age, gender, and top geographic locations.',
-            'Performance trends for your latest uploads and most popular content.',
-          ]}
-        />
-      </div>
-
-      <div className="mt-5">
-        <InfoSection
-          title="What you need before connecting:"
-          bullets={[
-            'A YouTube channel with active content (public or unlisted videos).',
-            'The Google Account credentials associated with your YouTube channel.',
-            "Approval for Cloutgrid to view your YouTube Analytics reports via Google's secure login.",
-          ]}
-        />
-      </div>
-
-      <div className="mt-5">
-        <InfoSection
-          title="How to connect:"
-          bullets={[
-            'Ensure you are logged into the Google Account that manages your YouTube channel.',
-            'Click "Connect YouTube" above to open the secure Google Sign-In prompt.',
-            'Select the specific channel you wish to link to Cloutgrid.',
-            'Grant the requested permissions so we can securely display your analytics to potential partners.',
-          ]}
-        />
-      </div>
-    </div>
+    <ConnectInfo
+      benefits={[
+        { icon: BadgeCheck, text: 'Verified subscribers and total views' },
+        { icon: Clock, text: 'Watch time and average view duration' },
+        { icon: Users, text: 'Audience age, gender and top locations' },
+      ]}
+      steps={[
+        'Tap Connect YouTube',
+        'Sign in with Google and pick your channel',
+        "Tap Allow. You're done",
+      ]}
+      requirement="Your channel needs at least one public or unlisted video."
+      details={[
+        'Cloutgrid can view your channel and its analytics. It cannot upload, edit or delete anything on your channel.',
+        'Manage more than one channel? Choose the one you want brands to see when Google asks.',
+        'You can disconnect at any time from your profile.',
+      ]}
+    />
   );
 }
 
@@ -167,7 +203,7 @@ const INSIGHTS: InsightInfo[] = [
   },
 ];
 
-const ProfileInsightsInfo = () => {
+export const ProfileInsightsInfo = () => {
   return (
     <div className="flex w-full flex-col gap-5 h-full overflow-y-auto">
       <p className="text-sm text-gray-600 p-3">
@@ -193,8 +229,6 @@ const ProfileInsightsInfo = () => {
     </div>
   );
 };
-
-export default ProfileInsightsInfo;
 
 function InsightList({ items }: { items: InsightInfo[] }) {
   return (

@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/app/hooks';
+import CloutLoading from '@/components/CloutLoading';
 import LandingPage from '@/pages/auth/LandingPage';
 import FeedPage from '@/pages/feed/FeedPage';
 
@@ -6,7 +7,11 @@ export default function HomePage() {
   const { isAuth, isInitializing } = useAppSelector((state) => state.auth);
 
   if (isInitializing) {
-    return <p className="p-4 text-sm text-gray-500">Loading…</p>;
+    return (
+      <div className="w-full flex justify-center items-center min-h-lvh">
+        <CloutLoading />
+      </div>
+    );
   }
 
   return isAuth ? <FeedPage /> : <LandingPage />;
