@@ -12,6 +12,7 @@ import Search from '@/pages/create/Search';
 import type { MenuAction } from './CloutMenu';
 import {
   Bell,
+  BriefcaseBusiness,
   Dot,
   Handshake,
   Search as Magnifier,
@@ -86,61 +87,14 @@ export default function NavBar() {
           <div className="hidden lg:flex items-center gap-3 pr-3">
             <Button
               color="primary"
-              variant="filled"
-              onPress={() => setShowConnect(true)}
-              className="group"
-            >
-              <div className="center flex items-center">
-                <div
-                  className="overflow-hidden transition-all duration-1000 ease-in-out
-        group-hover:max-w-200 lg:max-w-0"
-                >
-                  <h3 className="mr-2 opacity-100 transition-opacity duration-1000 group-hover:opacity-100 lg:opacity-0">
-                    Connect
-                  </h3>
-                </div>
-
-                <Magnifier className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
-              </div>
-            </Button>
-
-            <Button
-              color="primary"
-              variant="filled"
-              onPress={() => setShowCreate(true)}
-              className="group"
-            >
-              <div className="center flex items-center">
-                <div
-                  className="overflow-hidden transition-all duration-1000 ease-in-out
-        group-hover:max-w-200 lg:max-w-0"
-                >
-                  <h3 className="mr-2 opacity-100 transition-opacity duration-1000 group-hover:opacity-100 lg:opacity-0">
-                    Create
-                  </h3>
-                </div>
-
-                <Plus className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
-              </div>
-            </Button>
-
-            <Button
-              color="primary"
-              variant="filled"
+              variant="outlined"
               onPress={() => navigate('/campaigns')}
               className="group"
             >
-              <div className="center flex items-center">
-                <div
-                  className="overflow-hidden transition-all duration-1000 ease-in-out
-        group-hover:max-w-200 lg:max-w-0"
-                >
-                  <h3 className="mr-2 opacity-100 transition-opacity duration-1000 group-hover:opacity-100 lg:opacity-0">
-                    Collaborate
-                  </h3>
-                </div>
+              <div className="center flex gap-3 items-center">
+                <h3 className="">Campaigns</h3>
 
-                <Handshake className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
+                <BriefcaseBusiness className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
               </div>
             </Button>
 

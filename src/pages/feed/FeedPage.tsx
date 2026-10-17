@@ -39,7 +39,7 @@ export default function FeedPage() {
                   type="button"
                   onClick={() => setSocial('Instagram')}
                   className={`flex flex-1 items-center justify-center gap-2 text-sm font-medium transition-colors ${
-                    social == 'Instagram' ? 'bg-pink-700 text-white' : 'bg-white text-gray-700'
+                    social == 'Instagram' ? 'bg-[#E1306C] text-white' : 'bg-white text-gray-700'
                   }`}
                 >
                   <FontAwesomeIcon icon={faInstagram} />
