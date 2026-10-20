@@ -5,10 +5,7 @@ import Instagram from '../integration/Instagram';
 import YouTube from '../integration/YouTube';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import {
-  faImages,
-  faBriefcase,
-} from '@fortawesome/free-solid-svg-icons';
+import { faImages, faBriefcase, faDollar } from '@fortawesome/free-solid-svg-icons';
 import type { UserProfile } from '@/types/authTypes';
 import { Button } from 'actify';
 import CloutModal from '@/components/CloutModal';
@@ -16,8 +13,9 @@ import FeedPost from '../feed/FeedPost';
 import OtherInstagram from '../integration/OtherInstagram';
 import OtherYouTube from '../integration/OtherYouTube';
 import { CircleCheck, CircleX } from 'lucide-react';
+import RateCard from './RateCard';
 
-type ProfileTab = 'posts' | 'instagram' | 'youtube' | 'collabs';
+type ProfileTab = 'rates' | 'instagram' | 'youtube';
 
 interface TabConfig {
   id: ProfileTab;
@@ -27,10 +25,9 @@ interface TabConfig {
 }
 
 const TABS: TabConfig[] = [
-  { id: 'posts', label: 'Posts', icon: faImages, visibleFor: ['creator', 'business'] },
+  { id: 'rates', label: 'Rates', icon: faDollar, visibleFor: ['creator', 'business'] },
   { id: 'instagram', label: 'Instagram', icon: faInstagram, visibleFor: ['creator'] },
   { id: 'youtube', label: 'Youtube', icon: faYoutube, visibleFor: ['creator'] },
-  { id: 'collabs', label: 'Collabs', icon: faBriefcase, visibleFor: ['business'] },
 ];
 
 interface ProfileBodyProps {
@@ -42,20 +39,18 @@ interface ProfileBodyProps {
 
 const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) => {
   const [selectedPost, setSelectedPost] = useState<PostModel | null>(null);
-  const [activeTab, setActiveTab] = useState<ProfileTab>('posts');
+  const [activeTab, setActiveTab] = useState<ProfileTab>('rates');
 
   const visibleTabs = TABS.filter((tab) => tab.visibleFor.includes(user.type));
 
   const renderContent = () => {
     switch (activeTab) {
-      case 'posts':
-        return <PostGrid posts={posts} onSelect={setSelectedPost} />;
+      case 'rates':
+        return <RateCard />;
       case 'instagram':
         return other ? <OtherInstagram user={user} /> : <Instagram />;
       case 'youtube':
         return other ? <OtherYouTube user={user} /> : <YouTube />;
-      case 'collabs':
-        return <PostGrid posts={collabs} onSelect={setSelectedPost} />;
     }
   };
 
@@ -99,12 +94,7 @@ const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) 
         ))}
       </div>
 
-      <div
-        className="mb-5 flex min-h-[20vh] w-full flex-col items-center
-       justify-start overflow-auto rounded-lg bg-white shadow"
-      >
-        {renderContent()}
-      </div>
+      {renderContent()}
 
       <CloutModal isOpen={selectedPost != null} onClose={() => setSelectedPost(null)}>
         {selectedPost && <FeedPost id={selectedPost?.id} />}

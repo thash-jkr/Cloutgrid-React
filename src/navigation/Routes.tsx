@@ -15,8 +15,12 @@ import OtherProfile from '@/pages/profile/OtherProfile';
 import RegistrationFlow from '@/pages/auth/RegistrationFlow';
 import NotFound from '@/pages/auth/NotFound';
 import Vitae from '@/pages/integration/Vitae';
+import { useAppSelector } from '@/app/hooks';
+import ProfileAlt from '@/pages/profile/ProfileAlt';
 
 export function AppRoutes() {
+  const { type } = useAppSelector((state) => state.auth);
+
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
@@ -35,7 +39,7 @@ export function AppRoutes() {
       </Route>
 
       <Route element={<PrivateRoute />}>
-        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile" element={type == "creator" ? <ProfilePage /> : <ProfileAlt />} />
         <Route path="/profile/:username" element={<OtherProfile />} />
         <Route path="/campaigns" element={<JobPage />} />
       </Route>

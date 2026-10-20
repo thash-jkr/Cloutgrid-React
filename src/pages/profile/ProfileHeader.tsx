@@ -61,26 +61,6 @@ const ProfileHeader = ({ other = false }: Props) => {
                 alt="Profile"
               />
             </div>
-            <div className="w-1/2 h-full flex flex-col justify-around items-end">
-              <div className="flex justify-center items-center">
-                <h1 className="mr-2">{user?.followers_count}</h1>
-                <h1>Followers</h1>
-              </div>
-              <div className="flex justify-center items-center">
-                <h1 className="mr-2">{user?.following_count}</h1>
-                <h1>Following</h1>
-              </div>
-              <div className="flex justify-center items-center">
-                <h1 className="mr-2">{other ? otherPosts.length : posts.length}</h1>
-                <h1>Posts</h1>
-              </div>
-              {user?.type === 'business' && (
-                <div className="flex justify-center items-center">
-                  <h1 className="mr-2">{other ? otherCollabs.length : collabs.length}</h1>
-                  <h1>Collabs</h1>
-                </div>
-              )}
-            </div>
           </div>
 
           <div className="flex justify-around w-full gap-1">
@@ -90,49 +70,12 @@ const ProfileHeader = ({ other = false }: Props) => {
               <CloutCapsule text={user.website} bg="bg-primary" />
             )}
           </div>
-
-          {other && otherProfile && (
-            <div className="flex justify-center items-center gap-3 w-full">
-              <Button
-                variant={otherProfile.is_following ? 'outlined' : 'filled'}
-                onPress={() => {
-                  if (otherProfile.is_following) {
-                    setUnFollowConfirm(true);
-                  } else {
-                    dispatch(
-                      handleFollow({
-                        username: otherProfile.username,
-                        follow: true,
-                      }),
-                    );
-                  }
-                }}
-              >
-                {otherProfile?.is_following ? 'Following' : 'Follow'}
-              </Button>
-
-              <div
-                className="w-10 h-10 border rounded-full flex justify-center 
-              items-center cursor-pointer transition-transform duration-300 
-              ease-in-out transform hover:scale-105 hover:shadow"
-                onClick={() => setShowMenu(true)}
-              >
-                <FontAwesomeIcon icon={faBars} />
-              </div>
-            </div>
-          )}
         </div>
 
         <div className="p-3 w-full flex flex-col justify-start items-start font-normal text-base">
           <span className="whitespace-pre-line">{user?.bio}</span>
         </div>
       </div>
-
-      {!other && (
-        <div className="w-full">
-          <Settings />
-        </div>
-      )}
 
       <CloutAlert
         isOpen={unFollowConfirm}

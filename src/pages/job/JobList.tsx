@@ -3,6 +3,11 @@ import type { CampaignModel, JobModel } from '@/types/jobTypes';
 import { timeAgo } from '@/utils/timeAgo';
 import collabImage from '@/assets/isometric/office.png';
 import { useAppSelector } from '@/app/hooks';
+import { Button } from 'actify';
+import { Plus } from 'lucide-react';
+import { useState } from 'react';
+import CloutModal from '@/components/CloutModal';
+import CreateCampaign from '../create/CreateCampaign';
 
 interface JobListScope {
   jobs: JobModel[] | CampaignModel[];
@@ -10,6 +15,8 @@ interface JobListScope {
 }
 
 const JobList = ({ jobs, onSelect }: JobListScope) => {
+  const [showCreateCampaign, setShowCreateCampaign] = useState(false);
+
   const { jobLoading } = useAppSelector((state) => state.job);
   const { user, type } = useAppSelector((state) => state.auth);
 
@@ -20,7 +27,7 @@ const JobList = ({ jobs, onSelect }: JobListScope) => {
     >
       <h1 className="font-semibold text-xl my-3">Campaigns</h1>
 
-      <div className="h-full w-full overflow-y-auto rounded-xl bg-white shadow">
+      <div className="h-full w-full overflow-y-auto rounded-xl bg-white shadow relative">
         {jobs.length > 0 ? (
           <ul className="w-full divide-y">
             {jobs.map((job) => (
@@ -41,8 +48,10 @@ const JobList = ({ jobs, onSelect }: JobListScope) => {
                     <div className="flex w-full flex-col">
                       <span className="text-sm font-semibold">{job.title}</span>
                       <span className="text-xs text-slate-500">
-                      {type == 'creator' && 'posted_by' in job && <span>{job.posted_by.name} • </span>}{' '}
-                      {timeAgo(job.created_at)}
+                        {type == 'creator' && 'posted_by' in job && (
+                          <span>{job.posted_by.name} • </span>
+                        )}{' '}
+                        {timeAgo(job.created_at)}
                       </span>
                     </div>
                   </div>
@@ -53,7 +62,24 @@ const JobList = ({ jobs, onSelect }: JobListScope) => {
         ) : (
           <CloutEmpty icon={collabImage} message="No new campaigns!" isLoading={jobLoading} />
         )}
+
+        {type == 'business' && (
+          <div className="absolute bottom-5 right-5 group">
+            <Button onClick={() => setShowCreateCampaign(true)}>
+              Create Campaign{' '}
+              <Plus className="w-4 group-hover:rotate-180 transition-transform duration-500" />
+            </Button>
+          </div>
+        )}
       </div>
+
+      <CloutModal
+        isOpen={showCreateCampaign}
+        onClose={() => setShowCreateCampaign(false)}
+        title="Create Campaign"
+      >
+        <CreateCampaign onClose={() => setShowCreateCampaign(false)} />
+      </CloutModal>
     </div>
   );
 };

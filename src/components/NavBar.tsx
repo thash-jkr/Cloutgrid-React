@@ -10,18 +10,7 @@ import Create from '@/pages/create/Create';
 import CreatePost from '@/pages/create/CreatePost';
 import Search from '@/pages/create/Search';
 import type { MenuAction } from './CloutMenu';
-import {
-  Bell,
-  BriefcaseBusiness,
-  Dot,
-  Handshake,
-  Search as Magnifier,
-  Menu,
-  Plus,
-  User,
-  UserKey,
-  UserPlus,
-} from 'lucide-react';
+import { Bell, BriefcaseBusiness, Dot, Menu, User, UserKey, UserPlus } from 'lucide-react';
 import CloutMenu from './CloutMenu';
 import CloutModalAlt from './CloutModalAlt';
 import CreateCampaign from '@/pages/create/CreateCampaign';
@@ -34,7 +23,7 @@ export default function NavBar() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [showCreateCampaign, setShowCreateCampaign] = useState(false);
 
-  const { user, isAuth } = useAppSelector((state) => state.auth);
+  const { user, isAuth, type } = useAppSelector((state) => state.auth);
 
   const navigate = useNavigate();
   const location = window.location.pathname;
@@ -42,9 +31,7 @@ export default function NavBar() {
   const actions: MenuAction[] = [
     ...(isAuth
       ? [
-          { icon: Magnifier, label: 'Connect', action: () => setShowConnect(true) },
-          { icon: Plus, label: 'Create', action: () => setShowCreate(true) },
-          { icon: Handshake, label: 'Collaborate', action: () => navigate('/campaigns') },
+          { icon: BriefcaseBusiness, label: 'Campaigns', action: () => navigate('/campaigns') },
           { icon: Bell, label: 'Notifications', action: () => setShowNotifications(true) },
           { icon: User, label: 'Profile', action: () => navigate('/profile') },
         ]
@@ -85,18 +72,20 @@ export default function NavBar() {
 
         {isAuth ? (
           <div className="hidden lg:flex items-center gap-3 pr-3">
-            <Button
-              color="primary"
-              variant="outlined"
-              onPress={() => navigate('/campaigns')}
-              className="group"
-            >
-              <div className="center flex gap-3 items-center">
-                <h3 className="">Campaigns</h3>
+            {type == 'creator' && (
+              <Button
+                color="primary"
+                variant="outlined"
+                onPress={() => navigate('/campaigns')}
+                className="group"
+              >
+                <div className="center flex gap-3 items-center">
+                  <h3 className="">Campaigns</h3>
 
-                <BriefcaseBusiness className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
-              </div>
-            </Button>
+                  <BriefcaseBusiness className="transition-transform duration-1000 group-hover:rotate-360 h-5 w-5" />
+                </div>
+              </Button>
+            )}
 
             <Link to="/profile">
               <img

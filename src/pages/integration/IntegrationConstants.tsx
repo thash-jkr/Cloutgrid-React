@@ -53,7 +53,6 @@ function SmallPrint({ text }: { text: string }) {
   return <p className="mb-2 text-xs text-gray-500">{text}</p>;
 }
 
-// Equivalent of Flutter's ExpansionTile with no padding or divider
 function Details({ title, items }: { title: string; items: string[] }) {
   const [open, setOpen] = useState(false);
 
@@ -97,15 +96,15 @@ interface ConnectInfoProps {
 
 function ConnectInfo({ benefits, steps, requirement, details }: ConnectInfoProps) {
   return (
-    <div className="flex flex-col items-start px-4">
+    <div className="flex flex-col items-start gap-3 px-3 w-full">
       <SectionTitle>Show brands your real numbers</SectionTitle>
-      <div className="mt-3 w-full">
+      <div className="w-full">
         {benefits.map((b) => (
           <IconLine key={b.text} icon={b.icon} text={b.text} />
         ))}
       </div>
 
-      <div className="mt-5 w-full">
+      <div className="w-full">
         <SectionTitle>How it works</SectionTitle>
         <div className="mt-3">
           {steps.map((text, i) => (
@@ -114,7 +113,7 @@ function ConnectInfo({ benefits, steps, requirement, details }: ConnectInfoProps
         </div>
       </div>
 
-      <div className="mt-4 w-full">
+      <div className="w-full">
         <Callout text={requirement} />
       </div>
 

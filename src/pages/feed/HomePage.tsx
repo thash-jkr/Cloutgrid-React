@@ -2,9 +2,10 @@ import { useAppSelector } from '@/app/hooks';
 import CloutLoading from '@/components/CloutLoading';
 import LandingPage from '@/pages/auth/LandingPage';
 import FeedPage from '@/pages/feed/FeedPage';
+import JobPage from '../job/JobPage';
 
 export default function HomePage() {
-  const { isAuth, isInitializing } = useAppSelector((state) => state.auth);
+  const { isAuth, isInitializing, type } = useAppSelector((state) => state.auth);
 
   if (isInitializing) {
     return (
@@ -14,5 +15,5 @@ export default function HomePage() {
     );
   }
 
-  return isAuth ? <FeedPage /> : <LandingPage />;
+  return isAuth ? type == "creator" ? <FeedPage /> : <JobPage /> : <LandingPage />;
 }
