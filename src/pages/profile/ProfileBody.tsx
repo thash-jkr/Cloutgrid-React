@@ -46,7 +46,7 @@ const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) 
   const renderContent = () => {
     switch (activeTab) {
       case 'rates':
-        return <RateCard />;
+        return <RateCard id={user.id} />;
       case 'instagram':
         return other ? <OtherInstagram user={user} /> : <Instagram />;
       case 'youtube':

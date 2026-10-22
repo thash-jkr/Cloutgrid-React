@@ -115,7 +115,6 @@ const profileSlice = createSlice({
         if (action.payload.other) {
           state.otherProfile = action.payload.user;
         }
-        // own-profile case handled by authSlice via the saveUser dispatch above
       })
       .addCase(fetchProfile.rejected, (state, action) => {
         state.profileLoading = false;

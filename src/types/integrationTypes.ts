@@ -108,6 +108,21 @@ export interface IntegrationState {
   integrationError: string | null;
 }
 
+export interface InstagramRateState {
+  story: number | null;
+  post: number | null;
+  reel: number | null;
+  carousel: number | null;
+  live: number | null;
+}
+
+export interface YoutubeRateState {
+  shorts: number | null;
+  video: number | null;
+  post: number | null;
+  live: number | null;
+}
+
 export const initialIntegrationState: IntegrationState = {
   instagramPage: null,
   instagramMedia: [],

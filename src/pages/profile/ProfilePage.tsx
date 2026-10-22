@@ -30,7 +30,7 @@ const ProfilePage = () => {
       </div>
 
       <div className="flex w-full lg:basis-3/4 px-3 lg:px-0">
-        <RateCard />
+        <RateCard id={null} />
       </div>
     </div>
   );
