@@ -16,7 +16,7 @@ const OtherProfile = () => {
   const navigate = useNavigate();
 
   const { user } = useAppSelector((state) => state.auth);
-  const { otherProfile, otherPosts, otherCollabs } = useAppSelector((state) => state.profile);
+  const { otherProfile } = useAppSelector((state) => state.profile);
 
   const dispatch = useAppDispatch();
 
@@ -70,7 +70,7 @@ const OtherProfile = () => {
 
           <div className="flex w-full lg:basis-3/4 px-3 lg:px-0">
             {otherProfile && (
-              <ProfileBody posts={otherPosts} collabs={otherCollabs} user={otherProfile} other={true} />
+              <ProfileBody user={otherProfile} other={true} />
             )}
           </div>
         </div>

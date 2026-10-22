@@ -1,11 +1,10 @@
 import { useState } from 'react';
-import PostGrid from './PostGrid';
 import type { PostModel } from '@/types/feedTypes';
 import Instagram from '../integration/Instagram';
 import YouTube from '../integration/YouTube';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faYoutube } from '@fortawesome/free-brands-svg-icons';
-import { faImages, faBriefcase, faDollar } from '@fortawesome/free-solid-svg-icons';
+import { faImages, faDollar } from '@fortawesome/free-solid-svg-icons';
 import type { UserProfile } from '@/types/authTypes';
 import { Button } from 'actify';
 import CloutModal from '@/components/CloutModal';
@@ -31,13 +30,11 @@ const TABS: TabConfig[] = [
 ];
 
 interface ProfileBodyProps {
-  posts: PostModel[];
-  collabs: PostModel[];
   user: UserProfile;
   other?: boolean;
 }
 
-const ProfileBody = ({ posts, collabs, user, other = false }: ProfileBodyProps) => {
+const ProfileBody = ({ user, other = false }: ProfileBodyProps) => {
   const [selectedPost, setSelectedPost] = useState<PostModel | null>(null);
   const [activeTab, setActiveTab] = useState<ProfileTab>('rates');
 
