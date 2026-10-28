@@ -11,6 +11,7 @@ import CategoryModal from '@/components/CategoryModal';
 import { useAppDispatch } from '@/app/hooks';
 import { handleOTP, register } from '@/slices/authSlice';
 import { CircleCheckBig } from 'lucide-react';
+import { sanitizeUsername, validateUsername } from '@/utils/username';
 
 const VALID_TYPES = ['creator', 'brand'] as const;
 type RegisterType = (typeof VALID_TYPES)[number];
@@ -24,6 +25,7 @@ const RegistrationFlow = () => {
 
   const [name, setName] = useState('');
   const [username, setUsername] = useState('');
+  const [touched, setTouched] = useState(false);
   const [email, setEmail] = useState('');
   const [otp, setOTP] = useState('');
   const [password, setPassword] = useState('');
@@ -33,6 +35,9 @@ const RegistrationFlow = () => {
   const [emailVerified, setEmailVerified] = useState(false);
   const [isFirst, setIsFirst] = useState(true);
   const [showCategories, setShowCategories] = useState(false);
+
+  const usernameError = validateUsername(username);
+  const showError = touched && username.length > 0 && usernameError;
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -127,8 +132,19 @@ const RegistrationFlow = () => {
           label="Username"
           variant="outlined"
           value={username}
-          onChange={setUsername}
+          onChange={(v) => setUsername(sanitizeUsername(v))}
+          onBlur={() => setTouched(true)}
+          isInvalid={Boolean(showError)}
           isDisabled={emailSent || emailVerified}
+          inputProps={{
+            autoCapitalize: 'none',
+            autoCorrect: 'off',
+            spellCheck: false,
+            autoComplete: 'username',
+            value: username,
+            onChange: (e: React.ChangeEvent<HTMLInputElement>) =>
+              setUsername(sanitizeUsername(e.target.value)),
+          }}
           trailingIcon={
             emailSent ? <CircleCheckBig className="text-secondary w-5 h-5" /> : undefined
           }
