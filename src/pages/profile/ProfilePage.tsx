@@ -1,6 +1,5 @@
 import NavBar from '@/components/NavBar';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import ProfileBody from './ProfileBody';
 import { useEffect } from 'react';
 import { fetchPosts, fetchProfile } from '@/slices/profileSlice';
 import FeedLeft from '../feed/FeedLeft';
@@ -9,7 +8,7 @@ import RateCard from './RateCard';
 
 const ProfilePage = () => {
   const { user } = useAppSelector((state) => state.auth);
-  const { posts, collabs } = useAppSelector((state) => state.profile);
+  const { posts } = useAppSelector((state) => state.profile);
 
   const dispatch = useAppDispatch();
 

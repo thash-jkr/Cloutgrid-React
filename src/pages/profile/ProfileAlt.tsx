@@ -1,8 +1,5 @@
 import NavBar from '@/components/NavBar';
-import FeedLeft from '../feed/FeedLeft';
-import RateCard from './RateCard';
 import Settings from './Settings';
-import Notifications from '../feed/Notifications';
 import FeedRight from '../feed/FeedRight';
 import ProfileHeader from './ProfileHeader';
 

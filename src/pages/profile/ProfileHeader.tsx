@@ -1,13 +1,9 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { getCategoryLabel } from '@/utils/categories';
-import Settings from './Settings';
 import CloutCapsule from '@/components/CloutCapsule';
-import { Button } from 'actify';
 import { handleBlock, handleFollow } from '@/slices/profileSlice';
 import { useState } from 'react';
 import CloutAlert from '@/components/CloutAlert';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
 import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
 import { AlertTriangle, Ban } from 'lucide-react';
@@ -23,7 +19,7 @@ const ProfileHeader = ({ other = false }: Props) => {
   const [showBlockAlert, setShowBlockAlert] = useState(false);
 
   const { user: authUser } = useAppSelector((state) => state.auth);
-  const { posts, collabs, otherProfile, otherPosts, otherCollabs } = useAppSelector(
+  const { otherProfile} = useAppSelector(
     (state) => state.profile,
   );
 

@@ -10,7 +10,6 @@ import CloutModal from '@/components/CloutModal';
 import Questions from './Questions';
 import CloutAlert from '@/components/CloutAlert';
 import { Flag, Menu, SquareArrowOutUpRight, User } from 'lucide-react';
-import { useNavigate } from 'react-router';
 import type { MenuAction } from '@/components/CloutMenu';
 import CloutMenu from '@/components/CloutMenu';
 import type { UserProfile } from '@/types/authTypes';
@@ -33,7 +32,6 @@ const JobDetail = ({ id }: JobDetailScope) => {
   const job = jobs.find((j) => j.id === id) ?? null;
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const handleApply = (answers: Record<number, string>) => {
     const loadingToast = toast.loading('Submitting...');
